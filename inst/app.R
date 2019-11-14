@@ -7,8 +7,11 @@ library(dsCustom)
 source("compute.R")
 source("viz.R")
 
-styles <- "
-app-container {
+styles <- '
+h2,h3,h4,label,span{
+  color: #8096a3;
+}
+.app-container {
  background-color: #F2F7F9;
 }
 .top-olive {
@@ -20,17 +23,70 @@ app-container {
 .icon-close--olive line {
 	stroke: #b0d361;
 }
-"
+
+.btn:hover {
+    background: #89a53d;
+}
+.btn {
+    border-radius: 2px;
+    color:
+    #fff;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.7px;
+    padding: 10px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background 0.1s linear;
+    background-color: #b0d361;
+    display: block;
+    width: 100%;
+}
+input[type="radio"]:active, input[type="radio"]:checked:active, input[type="radio"]:checked {
+    background-color: #2e4856;
+}
+input[type="radio"] {
+    -webkit-appearance: none;
+    background-color: #E5EBEE;
+    border-radius: 50%;
+    border: 3px solid #E5EBEE;
+    cursor: pointer;
+    margin: 0px;
+    outline: none;
+    padding: 3px;
+    position: relative;
+    transition: all 0.1s;
+}
+hr {
+    border-width: 4px;
+    border-style: none none dotted;
+    border-color: #ddd;
+}
+.img-center{
+    display: block;
+    margin: 0 auto;
+}
+.input-autosuggest {
+    border: 1px solid #dddddd;
+    border-radius: 2px;
+    overflow: hidden;
+    padding: 5px 0;
+    background-color: #ffffff;
+    margin-bottom: 10px;
+}
+.selectize-input{
+  border-radius: 2px;
+}
+.form-group input, .form-group textarea{
+  padding: 7px;
+}
+'
 
 municipios <- read_csv("municipios.csv")[[2]]
 
-calculate_result <- function(l){
-  sum(l)
-}
-
 ui <- dsAppPanels( styles = styles,
                    verbatimTextOutput("debug"),
-                   panel(title = "Información de ayuda", color = "olive", collapsed = FALSE, width =  400,
+                   panel(title = "Información de ayuda", color = "olive", collapsed = TRUE, width =  400,
                          head = h2("Head"),
                          body = div(
                            h2("Metodología"),
@@ -86,12 +142,15 @@ ui <- dsAppPanels( styles = styles,
                    panel(title = "INFORMACIÓN DEL PREDIO", color = "olive", collapsed = FALSE,
                          head = NULL,
                          body = list(
+                           h2("RESULTADOS"),
+                           radioButtons("result_type", "", choices = c("Carbono", "Biodiversidad"), inline = TRUE),
                            h2("UBICACIÓN"),
                            searchInput("municipio", data = municipios, placeholder = "Buscar municipio"),
                            radioButtons("data_type", "TIPO DE DATO", choices = c("Área Total", "Porcentaje de área"), inline = TRUE),
-                           selectizeInput("init_year", "AÑO INICIAL", choices = 1980:2010),
-                           numericInput("n_years", "NÚMERO DE AÑOS INTERVENCIONES", value = 1, width = '50px'),
-                           radioButtons("results", "RESULTADOS", choices = c("First", "Second"), inline = TRUE),
+                           div(style = "display:flex;",
+                               div(style = "padding:0 0px;",selectizeInput("init_year", "AÑO INICIAL", choices = 1980:2010)),
+                               div(style = "padding:0 10px;", numericInput("n_years", "NÚMERO AÑOS", value = 1, width = '50px'))
+                           ),
                            box(title = "BOSQUE SECUNDARIO", collapsed = FALSE,
                                uiOutput("controls_bosque_secundario")
                            ),
@@ -114,9 +173,7 @@ ui <- dsAppPanels( styles = styles,
                    panel(title = "RESULTADOS", color = "olive", collapsed = FALSE,
                          head = NULL,
                          body = list(
-                           uiOutput("result_text"),
-                           highchartOutput("result_viz")
-                           #uiOutput("result_viz")
+                           uiOutput("result_viz")
                          ),
                          footer = list(
                            actionButton("download_chart", "DESCARGAR GRÁFICA")
@@ -126,10 +183,14 @@ ui <- dsAppPanels( styles = styles,
                          head = NULL,
                          body = list(
                            uiOutput("result_adv_text"),
+                           hr(),
                            uiOutput("result_adv_viz")
                          ),
                          footer = list(
-                           actionButton("download_chart", "DESCARGAR GRÁFICA")
+                           div(style = "display:flex;",
+                               actionButton("download_chart2", "DESCARGAR GRÁFICA"),
+                               actionButton("download_tables", "DESCARGAR TABLAS")
+                           )
                          )
                    )
 )
@@ -137,7 +198,8 @@ ui <- dsAppPanels( styles = styles,
 server <- function(input, output, session) {
 
   output$debug <- renderText({
-    str(result())
+    #str(result())
+    # input$result_type
   })
 
   region <- reactive({
@@ -206,20 +268,39 @@ server <- function(input, output, session) {
 
   })
 
-  output$result_text <- renderUI({
-    result <- result()
-    text <- result$text
-    div(class = "result-text",
-        h3("CONTAMINACIÓN EVITADA "),
-        h2(text)
-        )
+
+  output$result_viz <- renderUI({
+    if(is.null(input$result_type)) return()
+    if(input$result_type == "Carbono"){
+      result <- result()
+      text <- result$text
+      viz <- list(
+        div(class = "result-text",
+            h3("CONTAMINACIÓN EVITADA "),
+            h2(text)
+        ),
+        hr(),
+        highchartOutput("result_viz_carbono")
+      )
+    }
+    if(input$result_type == "Biodiversidad"){
+      viz <- list(
+        h3("Especies conservadas"),
+        h2("450 Especies de Aves"),
+        img(src = "aves.png", class = "img-center", width = "150px"),
+        hr(),
+        h3("Especies conservadas"),
+        h2("450 Especies de Aves"),
+        img(src = "escarabajos.png", class = "img-center", width = "150px")
+      )
+    }
+    viz
   })
 
-  output$result_viz <- renderHighchart({
+  output$result_viz_carbono <- renderHighchart({
     if(is.null(result())) return()
     total <- result()
     h <- viz_bar(total$coberturas)
-    #renderHighchart(h)
     h
   })
 
