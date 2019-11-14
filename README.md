@@ -23,7 +23,8 @@ notes.
 
 [App Preview](https://randommonkey.shinyapps.io/GanaderiaSostenible)
 
-![GanaderiaSostenible App Preview](inst/app_preview.png)
+![GanaderiaSostenible App
+Preview](https://raw.githubusercontent.com/datasketch/GanaderiaSostenible/master/inst/app_preview.png)
 
 ## Installation
 
