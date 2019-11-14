@@ -1,18 +1,20 @@
 Package: GanaderiaSostenible
-Title: What the Package Does (One Line, Title Case)
+Title: Carbon capture in Colombian farms
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Juan Pablo",
+           family = "Marin Diaz",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+           email = "jpmarindiaz@gmail.com")
+Description: Provides an interface to calculate carbon capture in Colombia
 License: What license it uses
 Encoding: UTF-8
 LazyData: true
+Depends:
+    dsAppLayout,
+    dsCustom
 Imports: 
-    shiny
+    shiny,
 Suggests: 
     knitr,
     rmarkdown
