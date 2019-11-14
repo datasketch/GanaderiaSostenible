@@ -27,6 +27,10 @@ This package comes with its own webpage. Check out the following package notes.
 - [How to use the package to calculate carbon capture for a given region in Colombia](https://datasketch.github.io/GanaderiaSostenible/articles/how-to-run-the-app.html)
 - And more...
 
+[App Preview](https://randommonkey.shinyapps.io/GanaderiaSostenible)
+
+
+![GanaderiaSostenible App Preview](inst/app_preview.png)
 
 ## Installation
 

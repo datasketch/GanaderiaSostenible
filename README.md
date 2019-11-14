@@ -21,6 +21,10 @@ notes.
     Colombia](https://datasketch.github.io/GanaderiaSostenible/articles/how-to-run-the-app.html)
   - And more…
 
+[App Preview](https://randommonkey.shinyapps.io/GanaderiaSostenible)
+
+![GanaderiaSostenible App Preview](inst/app_preview.png)
+
 ## Installation
 
 You can install the released version of GanaderiaSostenible from
