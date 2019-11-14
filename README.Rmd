@@ -19,7 +19,14 @@ knitr::opts_chunk$set(
 [![Travis build status](https://travis-ci.org/datasketch/GanaderiaSostenible.svg?branch=master)](https://travis-ci.org/datasketch/GanaderiaSostenible)
 <!-- badges: end -->
 
-The goal of GanaderiaSostenible is to ...
+Make sure to read the methodology (included in the package)
+
+This package comes with its own webpage. Check out the following package notes.
+
+- [How to run the app](https://datasketch.github.io/GanaderiaSostenible/articles/how-to-run-the-app.html)
+- [How to use the package to calculate carbon capture for a given region in Colombia](https://datasketch.github.io/GanaderiaSostenible/articles/how-to-run-the-app.html)
+- And more...
+
 
 ## Installation
 
@@ -40,22 +47,11 @@ devtools::install_github("datasketch/GanaderiaSostenible")
 This is a basic example which shows you how to solve a common problem:
 
 ```{r example}
-library(GanaderiaSostenible)
+## library(GanaderiaSostenible)
 ## basic example code
+## GanaderiaSostenible::runApp()
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
 
-```{r cars}
-summary(cars)
-```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date.
 
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!
