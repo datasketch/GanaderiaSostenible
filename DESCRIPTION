@@ -12,6 +12,7 @@ Encoding: UTF-8
 LazyData: true
 Depends:
     dsAppLayout,
+    highcharter,
     dsCustom
 Imports: 
     shiny,

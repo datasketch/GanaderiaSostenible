@@ -4,12 +4,15 @@ library(highcharter)
 library(dsCustom)
 # library(GanaderiaSostenible)
 
-source("compute.R")
-source("viz.R")
+source("../R/compute.R")
+source("../R/viz.R")
 
 styles <- '
 h2,h3,h4,label,span{
   color: #8096a3;
+}
+p {
+  font-size: 10pt;
 }
 .app-container {
  background-color: #F2F7F9;
@@ -80,66 +83,131 @@ hr {
 .form-group input, .form-group textarea{
   padding: 7px;
 }
+.topbar {
+  padding: 10px 30px;
+  background-color: #2e4856;
+}
+.topbar__title {
+    color: #fff;
+}
+.modal-wrapper {
+  height: auto;
+}
+.modal-title {
+  margin: 10px 30px;
+}
+.modal-content {
+  margin: 10px 30px;
+}
+.topbar__img {
+ width: 40px;
+}
 '
+# topbar(title = 'Herramienta | Estimación de Biodiversidad y Captura de CO2',
+#        image = 'logo_GCS.png',
+#        background_color = '#2e4856 '),
 
-municipios <- read_csv("municipios.csv")[[2]]
+municipios <- suppressMessages(read_csv("municipios.csv")[[2]])
 
 ui <- dsAppPanels( styles = styles,
-                   verbatimTextOutput("debug"),
-                   panel(title = "Información de ayuda", color = "olive", collapsed = TRUE, width =  400,
+                   header =  div(style="", class="topbar",
+                                 img(class="topbar__img", src = "logo_GCS.png", height = 60, width = 30),
+                                 h3(class = "topbar__title", "Herramienta | Estimación de Biodiversidad y Captura de CO2"),
+                                 modalBtn(modal_id = 'info_modal', label = '?')
+                   ),
+                   modal(id = 'info_modal',
+                         title = div(class = 'info_modal_title',
+                                     h2('Herramienta | Estimación de Biodiversidad y Captura de CO2')
+                         ),
+                         div(style = "display:flex;",
+                             img(src="logo_GCS.png", width = 80, height = 126, style = "margin:20px;"),
+                             p("Esta es la herramienta de estimación de biodiversidad y captura de carbono del 479,580 (tCOe) proyecto Ganadería Colombiana Sostenible. Esta aplicación te permitirá calcular la
+                              cantidad de carbono atmosférico que estás contribuyendo a reducir al implementar
+                              sistemas silvopastoriles en tus predios. También podrás estimar el número de especies
+                              de aves y escarabajos que estás ayudando a preservar y hacer proyecciones futuras
+                              sobre el uso de tus suelos.")
+                         ),
+                         h2("¿POR QUÉ ES IMPORTANTE?"),
+                         div(style = "display:flex;",
+                             p('Los sistemas tradicionales ganaderos han sido comúnmente asociados con
+                            altas emisiones de gases de efecto invernadero (como el dióxido de carbono
+                            y el metano), que son parte de las mayores causas del calentamiento global.
+                            Por medio de la fotosíntesis, los árboles y arbustos ayudan a reducir una
+                            parte del carbono atmosférico al almacenarlo en sus organismos. Es por
+                            esto que el proyecto Ganadería Colombiana Sostenible busca promover, en
+                            fincas ganaderas colombianas, la adopción de sistemas silvopastoriles,
+                            cercas vivas y árboles dispersos en potreros, así como conservar áreas
+                            de bosques primarios y secundarios.'),
+                             img(src="arboles_dispersos.png", width = 120, height = 120, style = "margin:20px;")
+                         )
+                   ),
+                   panel(title = "Información de ayuda", color = "olive", collapsed = TRUE, width =  300,
                          head = h2("Head"),
                          body = div(
+                           verbatimTextOutput("debug"),
                            h2("Metodología"),
                            p("Si quieres conocer la forma en que se recogieron los datos, las fórmulas utilizadas para los cálculos
             y las fuentes bibliográficas descarga nuestra metodología"),
                            actionButton("download_methodology", "Descargar Metodología"),
                            hr(),
                            h2("Glosario"),
-                           img(src="captura_carbono.png", width = 60),
                            h3("CAPTURA DE CARBONO O CO2"),
-                           p("Algunos organismos como las plantas, por medio de la
+                           div(style = "display:flex;",
+                               img(src="captura_carbono.png", width = 80, height = 80, style="margin:20px;"),
+                               p("Algunos organismos como las plantas, por medio de la
                               fotosíntesis, capturan el carbono que se encuentra en
                               la atmósfera y así ayudan a reducir la concentración de
                               gases de efecto invernadero que forman parte de las
                               mayores causas del calentamiento global."),
-                           img(src="arboles_dispersos.png", width = 60),
+                           ),
                            h3("ÁRBOLES DISPERSOS"),
-                           p("Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                           div(style = "display:flex;",
+                               img(src="arboles_dispersos.png", width = 80, height = 80, style="margin:20px;"),
+                               p("Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                              Suspendisse tempor nisl eget arcu euismod pulvinar. Ut eleifend euismod sapien
                              eget laoreet. Morbi consectetur enim ut mi sodales."),
-                           img(src="bosque_primario.png", width = 60),
+                           ),
                            h3("BOSQUE PRIMARIO"),
-                           p("Áreas de bosque maduro que no han sido intervenidas
+                           div(style = "display:flex;",
+                               img(src="bosque_primario.png", width = 80, height = 80, style="margin:20px;"),
+                               p("Áreas de bosque maduro que no han sido intervenidas
                               por los humanos en los últimos 30 años y cuyo uso es
                               de conservación estricta. Actividades como la
                               extracción de madera, la cacería y las prácticas
                               agropecuarias están restringidas en estas áreas."),
-                           img(src="bosque_secundario.png", width = 60),
+                           ),
                            h3("BOSQUE SECUNDARIO"),
-                           p("Áreas de bosque en proceso de regeneración natural
+                           div(style = "display:flex;",
+                               img(src="bosque_secundario.png", width = 80, height = 80, style="margin:20px;"),
+                               p("Áreas de bosque en proceso de regeneración natural
                               en respuesta a daños causados por actividades del ser
                               humano. Su uso es de conservación estricta y
                               actividades como la extracción de madera, la cacería y
                               las prácticas agropecuarias están restringidas en estas
                               áreas."),
-                           img(src="cercas_vivas.png", width = 60),
+                           ),
                            h3("CERCAS VIVAS"),
-                           p("Áreas de bosque maduro que no han sido intervenidas
+                           div(style = "display:flex;",
+                               img(src="cercas_vivas.png", width = 80, height = 80, style="margin:20px;"),
+                               p("Áreas de bosque maduro que no han sido intervenidas
                               por los humanos en los últimos 30 años y cuyo uso es
                               de conservación estricta. Actividades como la
                               extracción de madera, la cacería y las prácticas
                               agropecuarias están restringidas en estas áreas."),
-                           img(src="sistemas_silvopastoriles.png", width = 60),
+                           ),
                            h3("SISTEMAS SILVOPASTORILES"),
-                           p("Áreas de bosque maduro que no han sido intervenidas
+                           div(style = "display:flex;",
+                               img(src="sistemas_silvopastoriles.png", width = 80, height = 80, style="margin:20px;"),
+                               p("Áreas de bosque maduro que no han sido intervenidas
                               por los humanos en los últimos 30 años y cuyo uso es
                               de conservación estricta. Actividades como la
                               extracción de madera, la cacería y las prácticas
                               agropecuarias están restringidas en estas áreas.")
+                           )
                          ),
                          footer = NULL
                    ),
-                   panel(title = "INFORMACIÓN DEL PREDIO", color = "olive", collapsed = FALSE,
+                   panel(title = "INFORMACIÓN DEL PREDIO", color = "olive", collapsed = FALSE, width = 300,
                          head = NULL,
                          body = list(
                            h2("RESULTADOS"),
@@ -165,15 +233,30 @@ ui <- dsAppPanels( styles = styles,
                            )
                          ),
                          footer = list(
-                           box(title = "TOTAL",
-                               uiOutput("controls_total")
-                           )
+                           # box(title = "TOTAL",
+                           #     uiOutput("controls_total")
+                           # )
                          )
                    ),
-                   panel(title = "RESULTADOS", color = "olive", collapsed = FALSE,
+                   panel(title = "RESULTADOS", color = "olive", collapsed = FALSE, width = 350,
                          head = NULL,
                          body = list(
-                           uiOutput("result_viz")
+                           conditionalPanel("input.result_type == 'Carbono'",
+                                            div(id = "results_carbono",
+                                                uiOutput("result_text_carbono"),
+                                                highchartOutput("result_viz_carbono", height = 400)
+                                            )),
+                           conditionalPanel("input.result_type == 'Biodiversidad'",
+                                            div(id = "results_biodiversidad",
+                                                h3("Especies conservadas"),
+                                                h2("450 Especies de Aves"),
+                                                img(src = "aves.png", class = "img-center", width = "150px"),
+                                                hr(),
+                                                h3("Especies conservadas"),
+                                                h2("450 Especies de Aves"),
+                                                img(src = "escarabajos.png", class = "img-center", width = "150px")
+                                            )
+                           )
                          ),
                          footer = list(
                            actionButton("download_chart", "DESCARGAR GRÁFICA")
@@ -182,9 +265,9 @@ ui <- dsAppPanels( styles = styles,
                    panel(title = "RESULTADOS AVANZADOS", color = "olive", collapsed = FALSE,
                          head = NULL,
                          body = list(
-                           uiOutput("result_adv_text"),
+                           uiOutput("result_adv_text_carbono"),
                            hr(),
-                           uiOutput("result_adv_viz")
+                           highchartOutput("result_adv_viz_carbono")
                          ),
                          footer = list(
                            div(style = "display:flex;",
@@ -199,6 +282,8 @@ server <- function(input, output, session) {
 
   output$debug <- renderText({
     #str(result())
+    #capture.output(result())
+    paste(capture.output(str(result()$coberturas)), collapse="\n")
     # input$result_type
   })
 
@@ -248,7 +333,7 @@ server <- function(input, output, session) {
       arboles_dispersos = as.numeric(unlist(res_arboles_dispersos)),
       bosque_secundario = as.numeric(unlist(res_bosque_secundario)),
       cercas_vivas = as.numeric(unlist(res_cercas_vivas)),
-      silvopastoril = as.numeric(unlist(res_silvopastoriles))
+      silvopastoriles = as.numeric(unlist(res_silvopastoriles))
     )
     region <- region()
     total <- captura_areas(coberturas, region, t = 0)
@@ -268,43 +353,27 @@ server <- function(input, output, session) {
 
   })
 
-
-  output$result_viz <- renderUI({
-    if(is.null(input$result_type)) return()
-    if(input$result_type == "Carbono"){
-      result <- result()
-      text <- result$text
-      viz <- list(
-        div(class = "result-text",
-            h3("CONTAMINACIÓN EVITADA "),
-            h2(text)
-        ),
-        hr(),
-        highchartOutput("result_viz_carbono")
-      )
-    }
-    if(input$result_type == "Biodiversidad"){
-      viz <- list(
-        h3("Especies conservadas"),
-        h2("450 Especies de Aves"),
-        img(src = "aves.png", class = "img-center", width = "150px"),
-        hr(),
-        h3("Especies conservadas"),
-        h2("450 Especies de Aves"),
-        img(src = "escarabajos.png", class = "img-center", width = "150px")
-      )
-    }
-    viz
+  output$result_text_carbono <- renderUI({
+    result <- result()
+    text <- result$text
+    list(
+      div(class = "result-text",
+          h3("CONTAMINACIÓN EVITADA "),
+          h2(text)
+      ),
+      hr()
+    )
   })
 
   output$result_viz_carbono <- renderHighchart({
     if(is.null(result())) return()
-    total <- result()
-    h <- viz_bar(total$coberturas)
+    result <- result()
+    h <- viz_bar(result$coberturas)
     h
   })
 
-  output$result_adv_text <- renderUI({
+  output$result_adv_text_carbono<- renderUI({
+    if(is.null(result())) return()
     result <- result()
     text <- result$text_adv
     div(class = "result-text",
@@ -313,10 +382,7 @@ server <- function(input, output, session) {
     )
   })
 
-  output$result_adv_viz <- renderUI({
-    highchartOutput("result_adv_viz_chart")
-  })
-  output$result_adv_viz_chart <- renderHighchart({
+  output$result_adv_viz_carbono <- renderHighchart({
     if(is.null(result())) return()
     d <- result()$coberturas_proyeccion
     h <- viz_lines(d)
