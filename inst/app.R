@@ -108,6 +108,7 @@ hr {
 #        background_color = '#2e4856 '),
 
 municipios <- suppressMessages(read_csv("municipios.csv")[[2]])
+this_year <- as.numeric(substr(Sys.time(), 1, 4))
 
 ui <- dsAppPanels( styles = styles,
                    header =  div(style="", class="topbar",
@@ -141,10 +142,10 @@ ui <- dsAppPanels( styles = styles,
                              img(src="arboles_dispersos.png", width = 120, height = 120, style = "margin:20px;")
                          )
                    ),
-                   panel(title = "Información de ayuda", color = "olive", collapsed = TRUE, width =  300,
+                   panel(title = "Información de ayuda", color = "olive", collapsed = TRUE, width =  400,
                          head = h2("Head"),
                          body = div(
-                           verbatimTextOutput("debug"),
+                           #verbatimTextOutput("debug"),
                            h2("Metodología"),
                            p("Si quieres conocer la forma en que se recogieron los datos, las fórmulas utilizadas para los cálculos
             y las fuentes bibliográficas descarga nuestra metodología"),
@@ -207,18 +208,22 @@ ui <- dsAppPanels( styles = styles,
                          ),
                          footer = NULL
                    ),
-                   panel(title = "INFORMACIÓN DEL PREDIO", color = "olive", collapsed = FALSE, width = 300,
+                   panel(title = "INFORMACIÓN DEL PREDIO", color = "olive", collapsed = FALSE, width = 400,
                          head = NULL,
                          body = list(
-                           h2("RESULTADOS"),
-                           radioButtons("result_type", "", choices = c("Carbono", "Biodiversidad"), inline = TRUE),
                            h2("UBICACIÓN"),
                            searchInput("municipio", data = municipios, placeholder = "Buscar municipio"),
                            radioButtons("data_type", "TIPO DE DATO", choices = c("Área Total", "Porcentaje de área"), inline = TRUE),
+                           conditionalPanel("input.data_type == 'Porcentaje de área'",
+                                            numericInput("pct_area_total", "Ingrese área total del predio", value = 10)),
+                           h2("RESULTADOS"),
+                           radioButtons("result_type", "", choices = c("Carbono", "Biodiversidad"), inline = TRUE),
                            div(style = "display:flex;",
-                               div(style = "padding:0 0px;",selectizeInput("init_year", "AÑO INICIAL", choices = 1980:2010)),
+                               div(style = "padding:0 0px;",selectizeInput("init_year", "AÑO INICIAL", choices = (this_year-20):this_year)),
                                div(style = "padding:0 10px;", numericInput("n_years", "NÚMERO AÑOS", value = 1, width = '50px'))
                            ),
+                           conditionalPanel("input.data_type == 'Área Total'",p("Ingrese el área de su predio en hectáreas")),
+                           conditionalPanel("input.data_type == 'Porcentaje de área'",p("Ingrese el área de su predio en porcentaje")),
                            box(title = "BOSQUE SECUNDARIO", collapsed = FALSE,
                                uiOutput("controls_bosque_secundario")
                            ),
