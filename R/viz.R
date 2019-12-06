@@ -1,7 +1,7 @@
 
 
 #' @export
-viz_bar <- function(total){
+viz_bar <- function(total) {
 
   highchart() %>%
     hc_chart(type = "column",

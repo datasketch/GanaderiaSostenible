@@ -7,7 +7,7 @@ availableRegiones <- function() c("Eje Cafetero", "Piedemonte del Meta", "Valle 
 availableTipoCobertura <- function() c("arboles_dispersos", "cercas_vivas", "silvopastoriles", "bosque_secundario")
 
 #' @export
-captura_carbono <- function(region, tipo_cobertura, t = 0){
+captura_carbono <- function(region, tipo_cobertura, t = 0) {
   if(!region %in% availableRegiones()){
     stop("regions must be one of: ", availableRegiones())
   }
