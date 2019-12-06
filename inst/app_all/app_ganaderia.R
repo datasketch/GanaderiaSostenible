@@ -237,6 +237,12 @@ margin: 0px !important;
     height: 20px;
     padding: 0 !important;
     text-align: center;
+    margin-left: 10px;
+}
+
+.text-btn {
+ color: #8096a3;
+font-size: 15px;
 }
 
 .mas-anios-primario,.mas-anios-secundario,.mas-anios-potreros,.mas-anios-cercas,.mas-anios-pastoriles {
@@ -269,7 +275,12 @@ div[id^="annios_"] {
 }
 
 .width-annio-uno {
-width: 110px !important;
+    display: flex;
+    justify-content: space-between;
+}
+
+#anio_inicial_primario,#anio_inicial_secundario,#anio_inicial_potrero,#anio_inicial_cercas,#anio_inicial_pastoriles {
+ width: 115px !important;
 }
 
 .collapsible {
@@ -341,62 +352,57 @@ ui <- dsAppPanels( styles = styles,
                   box(title = div(class = 'title-filters', 'BOSQUE PRIMARIO'), collapsed = 'F', 
                       body =     div(class = 'panel-primario',
                                      div(class = 'width-annio-uno',
-                                         uiOutput('anio_inicial_primario')),
-                                     div(class = 'anios-terrenos',
+                                         uiOutput('anio_inicial_primario'),
+                                         uiOutput('add_anio_primario')),
                                          div(class="mas-anios-primario",
                                              uiOutput('annios_primario0'),
                                              uiOutput('annios_primario1'),
                                              uiOutput('annios_primario2')
-                                         ),
-                                         uiOutput('add_anio_primario'))
+                                         )
                       )),
                   box(title = div(class = 'title-filters', 'BOSQUE SECUNDARIO'), collapsed = 'F', 
                       body =     div(class = 'panel-secundario',
                                      div(class = 'width-annio-uno',
-                                         uiOutput('anio_inicial_secundario')),
-                                     div(class = 'anios-terrenos',
+                                         uiOutput('anio_inicial_secundario'),
+                                         uiOutput('add_anio_secundario')),
                                          div(class="mas-anios-secundario",
                                              uiOutput('annios_secundario0'),
                                              uiOutput('annios_secundario1'),
                                              uiOutput('annios_secundario2')
-                                         ),
-                                         uiOutput('add_anio_secundario'))
+                                         )
                       )),
                   box(title = div(class = 'title-filters', 'ÁRBOLES DISPERSOS EN POTREROS'), collapsed = 'F', 
                       body =     div(class = 'panel-potreros',
                                      div(class = 'width-annio-uno',
-                                         uiOutput('anio_inicial_potreros')),
-                                     div(class = 'anios-terrenos',
+                                         uiOutput('anio_inicial_potreros'),
+                                         uiOutput('add_anio_potreros')),
                                          div(class="mas-anios-potreros",
                                              uiOutput('annios_potreros0'),
                                              uiOutput('annios_potreros1'),
                                              uiOutput('annios_potreros2')
-                                         ),
-                                         uiOutput('add_anio_potreros'))
+                                         )
                       )),
                   box(title = div(class = 'title-filters', 'CERCAS VIVAS'), collapsed = 'F', 
                       body =     div(class = 'panel-cercas',
                                      div(class = 'width-annio-uno',
-                                         uiOutput('anio_inicial_cercas')),
-                                     div(class = 'anios-terrenos',
+                                         uiOutput('anio_inicial_cercas'),
+                                         uiOutput('add_anio_cercas')),
                                          div(class="mas-anios-cercas",
                                              uiOutput('annios_cercas0'),
                                              uiOutput('annios_cercas1'),
                                              uiOutput('annios_cercas2')
-                                         ),
-                                         uiOutput('add_anio_cercas'))
+                                         )
                       )),
                   box(title = div(class = 'title-filters', 'SISTEMAS SILVOPASTORILES INTENSIVOS'), collapsed = 'F', 
                       body =     div(class = 'panel-pastoriles',
                                      div(class = 'width-annio-uno',
-                                         uiOutput('anio_inicial_pastoriles')),
-                                     div(class = 'anios-terrenos',
+                                         uiOutput('anio_inicial_pastoriles'),
+                                         uiOutput('add_anio_pastoriles')),
                                          div(class="mas-anios-pastoriles",
                                              uiOutput('annios_pastoriles0'),
                                              uiOutput('annios_pastoriles1'),
                                              uiOutput('annios_pastoriles2')
-                                         ),
-                                         uiOutput('add_anio_pastoriles'))
+                                        )
                       ))
                      )
                      )
@@ -460,7 +466,7 @@ server <- function(input, output, session) {
   map(c('primario', 'secundario', 'potreros', 'cercas', 'pastoriles'), function(z) {
     map(0:2, function(i) {
       output[[paste0('annios_', z, i)]] <- renderUI({
-        textInput(paste0('id_anios_', z, i), paste0('Año ', i), 'dadas')
+        textInput(paste0('id_anios_', z, i), paste0('Año ', i), value = NULL)
       })
     })
   })
@@ -468,8 +474,8 @@ server <- function(input, output, session) {
   map(c('primario', 'secundario', 'potreros', 'cercas', 'pastoriles'), function(i) {
     output[[paste0('add_anio_', i)]] <- renderUI({
       div(class = 'add-anio',
-          'Agregar año', 
-          actionButton(paste0('add_', i, '_3'), HTML('<div class = "text-btn"> + </div>')))
+          HTML('<div class = "text-btn"> Agregar año</div>'), 
+          actionButton(paste0('add_', i, '_3'), HTML('+')))
     })
   })
   
@@ -478,7 +484,7 @@ server <- function(input, output, session) {
       if (is.null(click_i[[z]])) click_i[[z]] <- 2
       map(click_i[[z]], function(i) {
         output[[paste0('annios_', z, i)]] <- renderUI({
-          textInput(paste0('id_anios_', z, i), paste0('Año ', i), 'dadas')
+          textInput(paste0('id_anios_', z, i), paste0('Año ', i),  value = NULL)
         })
       })
     })
