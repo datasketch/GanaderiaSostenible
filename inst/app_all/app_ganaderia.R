@@ -104,6 +104,9 @@ hr {
 .form-group input, .form-group textarea{
   padding: 7px;
 }
+
+
+
 .topbar,.modal-title {
     padding: 20px 55px;
     background-color: #2e4856;
@@ -237,12 +240,15 @@ margin: 0px !important;
     height: 20px;
     padding: 0 !important;
     text-align: center;
-    margin-left: 10px;
 }
 
 .text-btn {
  color: #8096a3;
 font-size: 15px;
+margin-right: 10px;
+font-weight: 600;
+white-space: nowrap;
+margin: 10px 10px 10px 0px;
 }
 
 .mas-anios-primario,.mas-anios-secundario,.mas-anios-potreros,.mas-anios-cercas,.mas-anios-pastoriles {
@@ -280,7 +286,7 @@ div[id^="annios_"] {
 }
 
 #anio_inicial_primario,#anio_inicial_secundario,#anio_inicial_potrero,#anio_inicial_cercas,#anio_inicial_pastoriles {
- width: 115px !important;
+ width: 152px !important;
 }
 
 .collapsible {
@@ -311,6 +317,13 @@ div[id^="annios_"] {
 .margin-panel-info {
   margin: 0px 10px;
 }
+
+.flex-filters {
+ display: flex;
+ align-items: center;
+ width: 100px;
+}
+
 
 
 '
@@ -349,7 +362,7 @@ ui <- dsAppPanels( styles = styles,
                            ),
                            uiOutput('resultados')
                          ),
-                  box(title = div(class = 'title-filters', 'BOSQUE PRIMARIO'), collapsed = 'F', 
+                  box(title = div(class = 'title-filters', 'BOSQUE PRIMARIO'), collapsed = 'T', 
                       body =     div(class = 'panel-primario',
                                      div(class = 'width-annio-uno',
                                          uiOutput('anio_inicial_primario'),
@@ -466,7 +479,10 @@ server <- function(input, output, session) {
   map(c('primario', 'secundario', 'potreros', 'cercas', 'pastoriles'), function(z) {
     map(0:2, function(i) {
       output[[paste0('annios_', z, i)]] <- renderUI({
-        textInput(paste0('id_anios_', z, i), paste0('Año ', i), value = NULL)
+        div(class = 'flex-filters',
+            HTML(paste0('<span class = "text-btn">', paste0('Año ', i, '</span>'))),
+        textInput(paste0('id_anios_', z, i), ' ', value = NULL)
+        )
       })
     })
   })
@@ -484,7 +500,10 @@ server <- function(input, output, session) {
       if (is.null(click_i[[z]])) click_i[[z]] <- 2
       map(click_i[[z]], function(i) {
         output[[paste0('annios_', z, i)]] <- renderUI({
-          textInput(paste0('id_anios_', z, i), paste0('Año ', i),  value = NULL)
+          div(class = 'flex-filters',
+              HTML(paste0('<span class = "text-btn">Año ', i, '</span>')),
+          textInput(paste0('id_anios_', z, i), ' ',  value = NULL)
+          )
         })
       })
     })
