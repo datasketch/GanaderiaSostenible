@@ -14,7 +14,7 @@ test_that("Captura works",{
 
   l <- captura_carbono(region, tipo_cobertura, t = 0:20)
 
-  path <- system.file("test_captura_eje_cafetero.csv", package = "GanaderiaSostenible")
+  path <- system.file("dataR/test_captura_eje_cafetero.csv", package = "GanaderiaSostenible")
   test_eje_cafetero <- read_csv(path)
   arboles_dispersos_eje_cafetero <- test_eje_cafetero[["arboles_dispersos"]]
   expect_equal(l, arboles_dispersos_eje_cafetero)
@@ -70,7 +70,7 @@ test_that("Viz",{
 
 
   # need to calculate proyeccion
-  path <- system.file("test_captura_eje_cafetero.csv", package = "GanaderiaSostenible")
+  path <- system.file("dataR/test_captura_eje_cafetero.csv", package = "GanaderiaSostenible")
   d  <- read_csv(path)
   d <- captura_areas(areas, region, t = 0:20)
   viz_lines(d)
@@ -80,4 +80,9 @@ test_that("Viz",{
 
 
 
+test_that("Match_municipalities",{
 
+ regiones_match('atlantico', 'Juan de Acosta')
+ regiones_match(departamento = NULL, municipio = 'usiacuri')
+
+})

@@ -1,7 +1,0 @@
-region_colombia,tipo,d,c,z,formula
-Eje Cafetero,bosque_secundario,745.75,336910,1.0232,d/(1 + c * A^(-z))
-Eje Cafetero,silvopastoriles,,4.89E-07,1.6917,c * A^z
-Eje Cafetero,arboles_dispersos,24.814,1.4006E-15,3.2847,d*(1 - exp(-c * A^z))
-Piedemonte del Meta,bosque_secundario,340.5,,5.9101E-06,d * (1 - exp(-z * A))
-Piedemonte del Meta,silvopastoriles,176.47,8.4434E-05,0.77596,d*(1 - exp(-c * A^z))
-Piedemonte del Meta,arboles_dispersos,,-99.30506,11.072134,c + z * log(A)

@@ -356,11 +356,8 @@ ui <- dsAppPanels( styles = styles,
                        div(
                          div(class = 'margin-panel-info',
                            div(class = 'title-filters', 'UBICACIÓN'),
-                           uiOutput('deptos'),
                            uiOutput('buscador'),
-                           div(class = 'title-filters margin-button-null', 'RESULTADOS'
-                           ),
-                           uiOutput('resultados')
+                           br(),
                          ),
                   box(title = div(class = 'title-filters', 'BOSQUE PRIMARIO'), collapsed = 'T', 
                       body =     div(class = 'panel-primario',
@@ -422,7 +419,10 @@ ui <- dsAppPanels( styles = styles,
                   ),
                    panel(
                      title = "RESULTADOS", color = "olive", collapsed = F, width = 450,
-                     body = 'hola'
+                     body = div(
+                       div(class = 'title-filters margin-button-null', 'RESULTADOS'),
+                         uiOutput('resultados')
+                     )
                    ),
                    panel(
                      title = "RESULTADOS AVANZADOS", color = "olive", collapsed = F,  
@@ -435,29 +435,11 @@ server <- function(input, output, session) {
   
   # panel de filtros
   
-  output$deptos <- renderUI({
-    dta_dep <- unique(data_mun$DEPARTAMEN)
-    l_d <- setNames(dta_dep, Hmisc::capitalize(tolower(dta_dep)))
-    
-    selectizeInput('name_depto',  ' ', l_d, selected = NULL, multiple = T, options = list(
-      placeholder = "Todos los departamentos",
-      plugins= list('remove_button'),
-      maxItems = 1)
-    )
-  })
-  
+
   output$buscador <- renderUI({
-    
-    dep_sel <- input$name_depto
-    
-    if (is.null(dep_sel)) {
-      d_m <- data_mun
-    } else {
-      d_m <- data_mun %>% 
-        filter(DEPARTAMEN %in% dep_sel)
-    }
-    dta_mun <- d_m$NOMBRE_ENT
-    l_m <-  setNames(Hmisc::capitalize(tolower(dta_mun)), dta_mun)
+  
+    dta_mun <- paste0(Hmisc::capitalize(tolower(data_mun$DEPARTAMEN)), ' - ', Hmisc::capitalize(tolower(data_mun$NOMBRE_ENT)))
+    l_m <-  setNames(dta_mun, toupper(dta_mun))
     searchInput('name_mun', l_m, 'Búsqueda por municipio')
   })
   
