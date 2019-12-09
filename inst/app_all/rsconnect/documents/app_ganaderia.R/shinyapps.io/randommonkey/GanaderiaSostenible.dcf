@@ -1,0 +1,13 @@
+name: GanaderiaSostenible
+title: GanaderiaSostenible
+username:
+account: randommonkey
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 1473614
+bundleId: 2652919
+url: https://randommonkey.shinyapps.io/GanaderiaSostenible/
+when: 1575907292.38392
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: data/holdridge_carbon.tif|data/MunicipiosColombia_geo.json
