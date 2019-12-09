@@ -13,7 +13,8 @@ LazyData: true
 Depends:
     dsAppLayout,
     highcharter,
-    dsCustom
+    dsCustom,
+    tidyverse
 Imports: 
     shiny,
 Suggests: 
