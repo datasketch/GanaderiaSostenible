@@ -426,8 +426,6 @@ ui <- dsAppPanels( styles = styles,
                    panel(
                      title = "RESULTADOS AVANZADOS", color = "olive", collapsed = F,  
                      body = div(uiOutput('vista_avanzados'))
-                       #verbatimTextOutput('blala'),
-                        #        highchartOutput('viz_lineas'))
                    )
                    
 )
@@ -514,7 +512,6 @@ server <- function(input, output, session) {
         as.numeric(input[[paste0("id_anios_", z, i)]])
       })
     })
-    print(l)
     names(l) <- c('primario', 'secundario', 'potreros', 'cercas', 'pastoriles')
     
     bosque_primario <- unlist(l$primario)
@@ -531,8 +528,8 @@ server <- function(input, output, session) {
     anio_secundario <- input$id_aniosecundario
     if (is.null(anio_secundario)) anio_secundario <- 0
     anio_secundario <- as.numeric(anio_secundario)
-    cb_carbono <- cambio_carbono(region = region, tipo_cobertura = 'bosque_secundario', t_f = length(bosque_secundario))
-    fc_emision <- factor_emision(cb_carbono = cb_carbono, region = region)
+    cb_secundario <- cambio_carbono(region = region, tipo_cobertura = 'bosque_secundario', t_f = length(bosque_secundario))
+    fc_emision <- factor_emision(cb_carbono = cb_secundario, region = region)
     captura_secundario <- carbono_capturado(area = bosque_secundario, factor_emision = fc_emision)
     captura_secundario <- data.frame(Año = anio_secundario:(anio_secundario + length(captura_secundario) - 1), 
                                    Suelo = 'Bosque secundario',
@@ -564,16 +561,12 @@ server <- function(input, output, session) {
     captura_cercas$Suelo <- as.character(captura_cercas$Suelo)
     
     pastoriles <- unlist(l$pastoriles)
-    print(pastoriles)
     anio_pastoriles <- input$id_aniopastoriles
     if (is.null(anio_pastoriles)) anio_pastoriles <- 0
     anio_pastoriles <- as.numeric(anio_pastoriles)
     cb_carbono <- cambio_carbono(region = region, tipo_cobertura = 'silvopastoriles', t_f = length(pastoriles))
-    print(cb_carbono)
     fc_emision <- factor_emision(cb_carbono = cb_carbono, region = region)
-    print(fc_emision)
     captura_pastoriles <- carbono_capturado(area = pastoriles, factor_emision = fc_emision)
-    print(captura_pastoriles)
     captura_pastoriles <- data.frame(Año = anio_pastoriles:(anio_pastoriles + length(captura_pastoriles) - 1), 
                                    Suelo = 'Silvopastoriles',
                                    carbono = captura_pastoriles)
@@ -585,9 +578,6 @@ server <- function(input, output, session) {
     
   })
   
-  output$blala <- renderPrint({
-    result()
-  })
   
   output$viz_porcentaje <- renderHighchart({
     if (is.null(input$name_mun)) return()

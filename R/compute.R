@@ -26,12 +26,7 @@ cambio_carbono <- function(region, tipo_cobertura, t_f = 0) {
   t <- 0:t_f
   if(tipo_cobertura == "bosque_secundario"){
     captura <- ((((1-exp((t*0.064)*(-1)))^1.964)*111.51)*0.5)*(44/12)
-  } else if (tipo_cobertura == 'silvopastoriles') {
-    path <- system.file("dataR/captura_pasturas.csv", package = "GanaderiaSostenible")
-    captura_region_pasturas <- suppressMessages(read_csv(path))
-    captura <- captura_region_pasturas %>% filter(region_colombia == region) %>% .$captura
-    captura <- rep(captura, length(t) - 1)
-  } else {
+  }  else {
     path <- system.file("dataR/captura_region_tipo.csv", package = "GanaderiaSostenible")
     captura_region_tipo <- suppressMessages(read_csv(path))
     captura <- captura_region_tipo %>% filter(region_colombia == region, tipo == tipo_cobertura)
@@ -52,11 +47,12 @@ cambio_carbono <- function(region, tipo_cobertura, t_f = 0) {
 #' factor_emision(c(1.3, 3, 4), 'Eje Cafetero')
 #'
 #' @export
-factor_emision <- function(cb_carbono, region) {
+factor_emision <- function(cb_carbono,  region) {
 
   if(!region %in% availableRegiones()){
     stop("regions must be one of: ", availableRegiones())
   }
+
 
   if (is.null(cb_carbono)) {
     stop("You must type the carbono change")
