@@ -111,7 +111,8 @@ viz_lines <- function(data){
 
 
   highchart() %>%
-    hc_chart(type =  "spline") %>%
+    hc_chart(type =  "spline"
+             ) %>%
     hc_xAxis(
       categories = purrr::map(as.character(unique(d$Año)), function(z) z),
       type= 'category'

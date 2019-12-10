@@ -5,7 +5,7 @@ library(dsCustom)
 library(GanaderiaSostenible)
 
 styles <- '
-@import url("https://fonts.googleapis.com/css?family=Ubuntu:400,500&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Ubuntu:400,500,700&display=swap");
 *,
 *:before,
 *:after{
@@ -31,12 +31,15 @@ p {
 .app-container {
  background-color: #F2F7F9;
 }
+
+
 .top-olive {
 	border-top: 2px solid #b0d361;
 }
 .text-olive {
 	color: #b0d361;
 }
+
 .icon-close--olive line {
 	stroke: #b0d361;
 }
@@ -59,11 +62,31 @@ p {
     display: block;
     width: 100%;
     cursor: pointer;
+    text-align: center;
+}
+
+#download_lineas {
+ background:  #89a53d;
 }
 
 .btn#download_methodology {
   width: 130px !important;
   border-radius: 3px;
+}
+
+
+.content-intro {
+  text-align: center;
+  padding: 50px 50px;
+}
+
+.text-intro {
+    text-transform: uppercase;
+    font-size: 13pt;
+    color: #8096a3;
+    letter-spacing: 0.7px;
+    font-weight: bold;
+    margin-top: 11px;
 }
 
 input[type="radio"]:active, input[type="radio"]:checked:active, input[type="radio"]:checked {
@@ -123,7 +146,7 @@ display: flex;
 
 .title-filters {
  color: #8096a3;
- font-weight: 500;
+ font-weight: 700;
  letter-spacing: 1px;
  margin-bottom: 11px;
 }
@@ -153,7 +176,7 @@ h2 {
 
 .titlte-info {
     color: #B0D361;
-    font-weight: 600;
+    font-weight: 700;
     margin: 7px 0px;
     letter-spacing: 0.7px;
     font-size: 15px;
@@ -287,6 +310,9 @@ div[id^="annios_"] {
 }
 
 
+#resultados-padding {
+  padding-bottom: 0px !important;
+}
 
 /*
 #remove-padding {
@@ -316,7 +342,22 @@ div[id^="annios_"] {
  padding-bottom: 0px !important;
 }
 
+.panel-footer {
+padding: 0px !important;
+}
 
+.title-viz {
+    color: #8096a3;
+    font-family: inherit;
+     letter-spacing: 1px;
+}
+
+.subtitle-viz {
+font-size: 23px;
+    color: #8096a3;
+    font-weight: 700;
+    font-family: inherit;
+}
 
 '
 source('info.R')
@@ -401,19 +442,23 @@ ui <- dsAppPanels( styles = styles,
                      )
                    ),
                    panel(
-                     title = "RESULTADOS", color = "olive", collapsed = F, width = 450,
+                     title = "RESULTADOS", color = "olive", collapsed = F, width = 450, id = 'resultados-padding',
                      body = div(
-                       div(class = 'title-filters margin-button-null', 'RESULTADOS'),
+                       #div(class = 'title-filters margin-button-null', 'RESULTADOS'),
                        uiOutput('resultados'),
                        uiOutput('vista_resultados')
-                     )#,
-                     # footer = list(
-                     #   actionButton("download_chart", "DESCARGAR GRÁFICA")
-                     # )
+                     ),
+                     footer = list(
+                       downloadButton("download_bar", "DESCARGAR GRÁFICA")
+                     )
                    ),
                    panel(
-                     title = "RESULTADOS AVANZADOS", color = "olive", collapsed = F,  
-                     body = div(uiOutput('vista_avanzados'))
+                     title = "RESULTADOS AVANZADOS", color = "olive", collapsed = F,  id = 'resultados-padding',
+                     body = div(uiOutput('vista_avanzados')),
+                     footer = div( style = "display:flex;",
+                       downloadButton("download_lineas", "DESCARGAR GRÁFICA"),
+                       downloadButton("download_data", "DESCARGAR DATOS")
+                     )
                    )
                    
 )
@@ -431,7 +476,7 @@ server <- function(input, output, session) {
   })
   
   output$resultados <- renderUI({
-    radioButtons('id_resultados', ' ', c('Biodiversidad', 'Captura de carbono'), inline = T)
+    radioButtons('id_resultados', ' ', c('Captura de carbono', 'Biodiversidad'), inline = T)
   })
   
   
@@ -578,16 +623,16 @@ server <- function(input, output, session) {
   output$vista_resultados <- renderUI({
     
     if (is.null(input$name_mun)) return()
-    if (input$name_mun == "") return('Ingrese el municipio de ubicación de las categorías de uso del suelo')
+    if (input$name_mun == "") return(HTML('<div class = "content-intro"><img style = "width:130px;" src = "img/placeholder.png"><div class = "text-intro">Llena los campos de información de tú predio</div></div>'))
     
     data <- result()[,-1]
-    if (sum(data$carbono) == 0) return('Ingrese el área (en hectáreas) implementada por año en cada una de las categorías de uso del suelo')
+    if (sum(data$carbono) == 0)  return(HTML('<div class = "content-intro"><img style = "width:130px;" src = "img/placeholder.png"><div class = "text-intro">Llena los campos de información de tú predio</div></div>'))
     options(scipen = 9999)
     co2_car <- format(round(co2_carros(sum(data$carbono))), big.mark = ',', small.mark = '.')
     
     
     div(
-      HTML(paste0('<div>CONTAMINACIÓN EVITADA</div><div>', co2_car, ' carros</div>')),
+      HTML(paste0('<div style = "text-align:center;"><div class = "title-viz">CONTAMINACIÓN EVITADA</div><div class = "subtitle-viz">', co2_car, ' carros</div></div>')),
       highchartOutput('viz_porcentaje')
     )
     
@@ -603,15 +648,17 @@ server <- function(input, output, session) {
   output$vista_avanzados <- renderUI({
     
     if (is.null(input$name_mun)) return()
-    
+    if (input$name_mun == "") return(HTML('<div class = "content-intro" style = "margin-top:45px;"><img style = "width:130px;" src = "img/placeholder.png"><div class = "text-intro">Llena los campos de <br/> información de tú predio</div></div>'))
     data <- result()
-    if (sum(data$carbono) == 0) return()
+    
+    if (sum(data$carbono) == 0)  return(HTML('<div class = "content-intro" style = "margin-top:45px;"><img style = "width:130px;" src = "img/placeholder.png"><div class = "text-intro">Llena los campos de <br/> información de tú predio</div></div>'))
+   
     options(scipen = 9999)
     car_tot <- format(round(sum(data$carbono)), big.mark = ',', small.mark = '.')
     
     
     div(
-      HTML(paste0('<div>CARBONO TOTAL EQUIVALENTE</div><div>', car_tot, ' tCO<sub>2</sub>e</div>')),
+      HTML(paste0('<div style = "text-align:center;"><div class = "title-viz">CARBONO TOTAL EQUIVALENTE</div><div class = "subtitle-viz">', car_tot, ' tCO<sub>2</sub>e</div></div>')),
       highchartOutput('viz_lineas')
     )
     
