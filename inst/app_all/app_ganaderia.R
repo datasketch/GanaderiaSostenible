@@ -5,7 +5,7 @@ library(dsCustom)
 library(GanaderiaSostenible)
 
 styles <- '
-@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Ubuntu:400,500&display=swap");
 *,
 *:before,
 *:after{
@@ -123,7 +123,7 @@ display: flex;
 
 .title-filters {
  color: #8096a3;
- font-weight: 600;
+ font-weight: 500;
  letter-spacing: 1px;
  margin-bottom: 11px;
 }
@@ -286,27 +286,13 @@ div[id^="annios_"] {
  width: 152px !important;
 }
 
-.collapsible {
- position: relative;
- margin-top: 15px;
-}
 
-.collapsible:before {
-     content: "";
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: 100%;
-    height: calc(30px + 100%);
-    z-index: -1;
-    background-color: #eef3f5;
-    transform: translateY(-50%);
-}
 
+/*
 #remove-padding {
   padding: 0px !important;
   background: #f0f5f7;
-}
+}*/
 
 .box-collapsible-content {
     overflow: auto !important;
@@ -326,7 +312,9 @@ div[id^="annios_"] {
  width: 100px;
 }
 
-
+#panel-info {
+ padding-bottom: 0px !important;
+}
 
 
 
@@ -349,13 +337,13 @@ ui <- dsAppPanels( styles = styles,
                    ),
                    panel(
                      id = "info_panel",
-                     title = "Información de ayuda", color = "olive", collapsed = T,
+                     title = "Información de ayuda", color = "olive", collapsed = T, show_footer = FALSE,
                      body = div(
                        text_info()
                      )
                    ),
                    panel(
-                     title = "INFORMACIÓN DEL PREDIO", color = "olive", collapsed = F, width = 400, id = 'panel-info', id_body = 'remove-padding',
+                     title = "INFORMACIÓN DEL PREDIO",show_footer = FALSE, color = "olive", collapsed = F, width = 400, id = 'panel-info', id_body = 'remove-padding',
                      body = (
                        div(
                          div(style = 'background: #ffffff;',

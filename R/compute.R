@@ -102,7 +102,7 @@ carbono_capturado <- function(area, factor_emision) {
 
 
 #' @export
-regiones_match <- function(departamento, municipio, ...) {
+regiones_match <- function(departamento = NULL, municipio, ...) {
 
   if (is.null(municipio)) {
     stop("you must type at least one municipality")
@@ -132,6 +132,9 @@ regiones_match <- function(departamento, municipio, ...) {
 
 #' @export
 co2_carros <- function(carbono_capturado) {
+
+  if (is.null(carbono_capturado)) return()
+
   ce <- carbono_capturado / 2.26
   ce
 }
