@@ -98,8 +98,52 @@ carbono_capturado <- function(area, factor_emision) {
   }) %>% unlist()
   captura <- captura[!is.na(captura)]
   captura
+
 }
 
+
+#'
+#' Estimación de factores de emisión según categorías de uso del suelo
+#'
+#' @param factor_emision Cambio (t CO2e ha-1) por tipo de suelo
+#' @param area  área (en hectáreas) implementada por año en cada una de las categorías de uso del suelo
+#'
+#' @return None
+#'
+#' @examples
+#' carbono_capturado(area = c(6418.8, 43, 0, 69.5), factor_emision = c(-0.4, 2.3, 3.5, 4.4))
+#'
+#' @export
+carbono_capturado_estimacion <- function(area, t_e, region, tipo_cobertura) {
+
+  if(!region %in% availableRegiones()){
+    stop("regions must be one of: ", availableRegiones())
+  }
+  if(!tipo_cobertura %in% availableTipoCobertura()){
+    stop("tipo_cobertura must be one of", availableTipoCobertura())
+  }
+
+  if (is.null(area)) return()
+  if (length(area) == 0) area <- 0
+  area[is.na(area)] <- 0
+  area_i <- area
+  cambioCarbono <- cambio_carbono(region = region, tipo_cobertura = tipo_cobertura, t_f = t_e)
+  factorEmision <- factor_emision(cambioCarbono, region = region)
+ l <- map(1:length(area_i) , function(z) {
+  area <- area[z]
+  area <- c(area, rep(area, t_e-length(area)))
+  captura  <- area * factorEmision
+  captura <- captura[!is.na(captura)]
+  captura
+  })
+
+ l_e <- map(seq_along(l), function(i) {
+         l[[i]] <- c(rep(0, i-1), l[[i]])
+         l[[i]] <- l[[i]][1:t_e]
+         }) %>% bind_cols()
+ dt_estimacion <- data.frame(Tiempo = 1:t_e, co2 = rowSums(l_e))
+ dt_estimacion
+}
 
 #' @export
 regiones_match <- function(departamento = NULL, municipio, ...) {

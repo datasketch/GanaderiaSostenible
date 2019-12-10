@@ -3,6 +3,7 @@
 export(cambio_carbono)
 export(captura_carbono_bosques)
 export(carbono_capturado)
+export(carbono_capturado_estimacion)
 export(co2_carros)
 export(factor_emision)
 export(regiones_match)
