@@ -83,35 +83,7 @@ factor_emision <- function(cb_carbono,  region) {
 #' @return None
 #'
 #' @examples
-#' carbono_capturado(area = c(6418.8, 43, 0, 69.5), factor_emision = c(-0.4, 2.3, 3.5, 4.4))
-#'
-#' @export
-carbono_capturado <- function(area, factor_emision) {
-
-  if (length(area) == 0) area <- 0
-
-  area[is.na(area)] <- 0
-
-  captura <-  map(0:length(area), function(i) {
-    a <- sum(area[i + 1] * factor_emision[1:(length(area) - i)])
-    a
-  }) %>% unlist()
-  captura <- captura[!is.na(captura)]
-  captura
-
-}
-
-
-#'
-#' Estimación de factores de emisión según categorías de uso del suelo
-#'
-#' @param factor_emision Cambio (t CO2e ha-1) por tipo de suelo
-#' @param area  área (en hectáreas) implementada por año en cada una de las categorías de uso del suelo
-#'
-#' @return None
-#'
-#' @examples
-#' carbono_capturado(area = c(6418.8, 43, 0, 69.5), factor_emision = c(-0.4, 2.3, 3.5, 4.4))
+#' carbono_capturado_estimacion(area = c(6418.8, 43, 0, 69.5), t_e = 20, region = 'Eje Cafetero', tipo_cobertura = 'cercas_vivas')
 #'
 #' @export
 carbono_capturado_estimacion <- function(area, t_e, region, tipo_cobertura) {

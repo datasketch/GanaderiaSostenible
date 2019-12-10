@@ -20,13 +20,11 @@ test_that("Factor de emisión", {
 
 test_that("Captura de carbono", {
   pastoriles_area <- c(10.6,	142.5, 0.0,	131.0, 170.0, 222.7, 95.4 )
-  pastoriles_carbono <- round(cambio_carbono('Bajo Magdalena', 'silvopastoriles', 20), 1)
-  pastoriles_factor <- factor_emision(pastoriles_carbono, 'Bajo Magdalena')
-  cb_capturado <- carbono_capturado(pastoriles_area, pastoriles_factor)
+  cb_capturado <- carbono_capturado_estimacion(pastoriles_area, t_e = 7, region = 'Bajo Magdalena', tipo_cobertura = 'silvopastoriles')
   path <- system.file("data_test/test_total_mag.csv", package = "GanaderiaSostenible")
   test_tts_pm <- read_csv(path)
   xx <- test_tts_pm$silvopastoriles
-  expect_equal(cb_capturado, c(187.62, 2223.00, 0, 1493.40, 1581.00, 1603.44, 486.54))
+  expect_equal(round(cb_capturado$co2), c(54, 753, 320, 992, 1466, 2092, 1905))
 })
 
 

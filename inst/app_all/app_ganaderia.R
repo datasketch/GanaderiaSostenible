@@ -484,10 +484,10 @@ ui <- dsAppPanels( styles = styles,
                    ),
                    panel(
                      title = "RESULTADOS AVANZADOS", color = "olive", collapsed = F,  id = 'resultados-padding',
-                     body = div(uiOutput('vista_avanzados')),
+                     body =  div(uiOutput('vista_avanzados')),
                      footer = div( style = "display:flex;",
-                       downloadButton("download_lineas", "DESCARGAR GRÁFICA"),
-                       downloadButton("download_data", "DESCARGAR DATOS")
+                                   downloadButton("download_lineas", "DESCARGAR GRÁFICA"),
+                                   downloadButton("download_data", "DESCARGAR DATOS")
                      )
                    )
                    
@@ -562,7 +562,7 @@ server <- function(input, output, session) {
   
   
   output$blabla <- renderPrint({
-  result()  
+    result()  
   })
   
   result <- reactive({
@@ -582,48 +582,48 @@ server <- function(input, output, session) {
     })
     names(l) <- c('primario', 'secundario', 'potreros', 'cercas', 'pastoriles')
     
-     bosque_primario <- unlist(l$primario)
-     anio_primario <- input$id_anioprimario
-     if (is.null(anio_primario)) anio_primario <- 0
-     anio_primario <- as.numeric(anio_primario)
-     captura_primario <- captura_carbono_bosques(departamento = lugar[1], municipio = lugar[2], area_bosque = bosque_primario)
-     captura_primario <- data.frame(Suelo = 'Bosque primario',
-                                    carbono = captura_primario)
-     captura_primario$Suelo <- as.character(captura_primario$Suelo)
-     # estimacion_primario <- estimacion_carbono_bosques(departamento = lugar[1], municipio = lugar[2], area_bosque = bosque_primario)
-     # estimacion_primario <- data.frame(Suelo = 'Bosque primario',
-     #                                carbono = estimacion_primario)
-     # estimacion_primario$Suelo <- as.character(estimacion_primario$Suelo)
-     
+    bosque_primario <- unlist(l$primario)
+    bosque_primario[is.na(bosque_primario)] <- 0
+    anio_primario <- input$id_anioprimario
+    if (is.null(anio_primario)) anio_primario <- 0
+    anio_primario <- as.numeric(anio_primario)
+    captura_primario <- captura_carbono_bosques(departamento = lugar[1], municipio = lugar[2], area_bosque = cumsum(bosque_primario))
+    captura_primario <- data.frame(Suelo = 'Bosque primario',
+                                   carbono = captura_primario)
+    captura_primario$Suelo <- as.character(captura_primario$Suelo)
+    estimacion_primario <- captura_carbono_bosques(departamento = lugar[1], municipio = lugar[2], area_bosque = c(cumsum(bosque_primario), rep(sum(bosque_primario), 20-length(bosque_primario))))
+    estimacion_primario <- data.frame(Año = anio_primario + 0:19,
+                                      Suelo = 'Bosque primario',
+                                      carbono = estimacion_primario)
+    estimacion_primario$Suelo <- as.character(estimacion_primario$Suelo)
     
-     bosque_secundario <- unlist(l$secundario)
-     anio_secundario <- input$id_aniosecundario
-     if (is.null(anio_secundario)) anio_secundario <- 0
-     anio_secundario <- as.numeric(anio_secundario)
-     captura_secundario <- carbono_capturado_estimacion(area = bosque_secundario, region = region, tipo_cobertura = 'bosque_secundario', t_e = length(bosque_secundario))
-     captura_secundario <- data.frame(Suelo = 'Bosque secundario',
-                                      carbono = captura_secundario$co2)
-     captura_secundario$Suelo <- as.character(captura_secundario$Suelo)
-     estimacion_secundario <- carbono_capturado_estimacion(area = bosque_secundario, region = region, tipo_cobertura = 'bosque_secundario', t_e = 20)
-     estimacion_secundario <- data.frame(Suelo = 'Bosque secundario',
-                                         carbono = estimacion_secundario$co2)
-     estimacion_secundario$Año <- anio_secundario + 0:19
-     estimacion_secundario$Suelo <- as.character(estimacion_secundario$Suelo)
-  
-
+    bosque_secundario <- unlist(l$secundario)
+    anio_secundario <- input$id_aniosecundario
+    if (is.null(anio_secundario)) anio_secundario <- 0
+    anio_secundario <- as.numeric(anio_secundario)
+    captura_secundario <- carbono_capturado_estimacion(area = bosque_secundario, region = region, tipo_cobertura = 'bosque_secundario', t_e = length(bosque_secundario))
+    captura_secundario <- data.frame(Suelo = 'Bosque secundario',
+                                     carbono = captura_secundario$co2)
+    captura_secundario$Suelo <- as.character(captura_secundario$Suelo)
+    estimacion_secundario <- carbono_capturado_estimacion(area = bosque_secundario, region = region, tipo_cobertura = 'bosque_secundario', t_e = 20)
+    estimacion_secundario <- data.frame(Suelo = 'Bosque secundario',
+                                        carbono = estimacion_secundario$co2)
+    estimacion_secundario$Año <- anio_secundario + 0:19
+    estimacion_secundario$Suelo <- as.character(estimacion_secundario$Suelo)
+    
+    
     potreros <- unlist(l$potreros)
     anio_potreros <- input$id_aniopotreros
     if (is.null(anio_potreros)) anio_potreros <- 0
     anio_potreros <- as.numeric(anio_potreros)
     captura_potreros <- carbono_capturado_estimacion(area = potreros, region = region, tipo_cobertura = 'arboles_dispersos', t_e = length(potreros))
-    captura_potreros <- data.frame(Año = anio_potreros:(anio_potreros + length(captura_potreros) - 1),
-                                     Suelo = 'Árboles dispersos',
-                                     carbono = captura_potreros$co2)
+    captura_potreros <- data.frame(Suelo = 'Árboles dispersos',
+                                   carbono = captura_potreros$co2)
     captura_potreros$Suelo <- as.character(captura_potreros$Suelo)
     estimacion_potreros <- carbono_capturado_estimacion(area = potreros, region = region, tipo_cobertura = 'arboles_dispersos', t_e = 20)
     estimacion_potreros <- data.frame(Año = anio_potreros + 0:19,
-                                        Suelo = 'Árboles dispersos',
-                                        carbono = estimacion_potreros$co2)
+                                      Suelo = 'Árboles dispersos',
+                                      carbono = estimacion_potreros$co2)
     estimacion_potreros$Suelo <-  as.character(estimacion_potreros$Suelo)
     
     cercas <- unlist(l$cercas)
@@ -636,8 +636,8 @@ server <- function(input, output, session) {
     captura_cercas$Suelo <- as.character(captura_cercas$Suelo)
     estimacion_cercas <- carbono_capturado_estimacion(area = cercas, region = region, tipo_cobertura = 'cercas_vivas', t_e = 20)
     estimacion_cercas <- data.frame(Año = anio_cercas + 0:19,
-                                        Suelo = 'Cercas vivas',
-                                        carbono = estimacion_cercas$co2)
+                                    Suelo = 'Cercas vivas',
+                                    carbono = estimacion_cercas$co2)
     estimacion_cercas$Suelo <-  as.character(estimacion_cercas$Suelo)
     
     pastoriles <- unlist(l$pastoriles)
@@ -654,15 +654,13 @@ server <- function(input, output, session) {
                                         carbono = estimacion_pastoriles$co2)
     estimacion_pastoriles$Suelo <-  as.character(estimacion_pastoriles$Suelo)
     
-   # 
-   # #  captura_primario,
     captura_general <- bind_rows(captura_primario, captura_secundario, captura_potreros, captura_cercas, captura_pastoriles)
-    estimacion_general <- bind_rows( estimacion_secundario, estimacion_potreros, estimacion_cercas, estimacion_pastoriles)
+    estimacion_general <- bind_rows(estimacion_primario, estimacion_secundario, estimacion_potreros, estimacion_cercas, estimacion_pastoriles)
     list("captura_general" = captura_general, "estimacion_general" = estimacion_general)
     
   })
   
-
+  
   output$viz_porcentaje <- renderHighchart({
     if (is.null(input$name_mun)) return()
     data <- result()$captura_general
@@ -670,49 +668,49 @@ server <- function(input, output, session) {
     data$carbono <- round(data$carbono, 2)
     viz_bar(data)
   })
-
+  
   output$vista_resultados <- renderUI({
-
+    
     if (is.null(input$name_mun)) return()
     if (input$name_mun == "") return(HTML('<div class = "content-intro"><img style = "width:78px;" src = "img/placeholder.png"><div class = "text-intro">Llena los campos de información de tú predio</div></div>'))
-
-    data <- result()$captura_general[,-1]
+    
+    data <- result()$captura_general
     if (sum(data$carbono) == 0)  return(HTML('<div class = "content-intro"><img style = "width:78px;" src = "img/placeholder.png"><div class = "text-intro">Llena los campos de información de tú predio</div></div>'))
     options(scipen = 9999)
     co2_car <- format(round(co2_carros(sum(data$carbono))), big.mark = ',', small.mark = '.')
-
-
+    
+    
     div(
       HTML(paste0('<div style = "text-align:center;"><div class = "title-viz">CONTAMINACIÓN EVITADA</div><div class = "info-tool subtitle-viz">', co2_car, ' carros <div class="tooltip-inf"> <i class="fa fa-info-circle"></i><span class="tooltiptext">El cálculo se realiza según la distancia promedio recorrida en grandes ciudades durante un año (12500 km), por un carro promedio de motor 1.5 litros.</span</div></div></div></div>')),
       highchartOutput('viz_porcentaje')
     )
-
+    
   })
-
+  
   output$viz_lineas <- renderHighchart({
     if (is.null(input$name_mun)) return()
     data <- result()$estimacion_general
     if (sum(data$carbono) == 0) return()
     viz_lines(data)
   })
-
+  
   output$vista_avanzados <- renderUI({
-
+    
     if (is.null(input$name_mun)) return()
     if (input$name_mun == "") return(HTML('<div class = "content-intro" style = "margin-top:45px;"><img style = "width:78px;" src = "img/placeholder.png"><div class = "text-intro">Llena los campos de <br/> información de tú predio</div></div>'))
     data <- result()$estimacion_general
-
+    
     if (sum(data$carbono) == 0)  return(HTML('<div class = "content-intro" style = "margin-top:45px;"><img style = "width:78px;" src = "img/placeholder.png"><div class = "text-intro">Llena los campos de <br/> información de tú predio</div></div>'))
-
+    
     options(scipen = 9999)
     car_tot <- format(round(sum(data$carbono)), big.mark = ',', small.mark = '.')
-
-
+    
+    
     div(
       HTML(paste0('<div style = "text-align:center;"><div class = "title-viz">PROYECCIÓN CAPTURA DE CARBONO </div><div class = "subtitle-viz">', car_tot, ' tCO<sub>2</sub>e</div></div>')),
       highchartOutput('viz_lineas')
     )
-
+    
   })
   
 }
