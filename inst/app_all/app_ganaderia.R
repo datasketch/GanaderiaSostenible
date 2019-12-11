@@ -687,12 +687,16 @@ server <- function(input, output, session) {
   })
   
   
-  output$viz_porcentaje <- renderHighchart({
+  plot_bar <- reactive({
     if (is.null(input$name_mun)) return()
     data <- result()$captura_general
     if (sum(data$carbono) == 0) return()
     data$carbono <- round(data$carbono, 2)
     viz_bar(data)
+  })
+  
+  output$viz_porcentaje <- renderHighchart({
+    print(plot_bar())
   })
   
   output$total_aves <- renderUI({
@@ -734,11 +738,15 @@ server <- function(input, output, session) {
     
   })
   
-  output$viz_lineas <- renderHighchart({
+  plot_lineas <- reactive({
     if (is.null(input$name_mun)) return()
     data <- result()$estimacion_general
     if (sum(data$carbono) == 0) return()
     viz_lines(data)
+  })
+  
+  output$viz_lineas <- renderHighchart({
+    plot_lineas()
   })
   
   output$vista_avanzados <- renderUI({
@@ -759,6 +767,54 @@ server <- function(input, output, session) {
     )
     
   })
+  
+  output$download_bar <- downloadHandler(
+    filename = function() {
+      ext <- ifelse(input$id_resultados == 'Biodiversidad', '.txt', '.html')
+      paste('plot-', Sys.Date(), ext, sep='')
+    },
+    content = function(file) {
+      if (input$id_resultados == 'Biodiversidad') {
+      write_lines('No hay gráfico disponible', file)
+      } else {
+      htmlwidgets::saveWidget(plot_bar(), file)
+      }
+    }
+  )
+  
+  
+  output$download_lineas <- downloadHandler(
+    filename = function() {
+      ext <- ifelse(input$id_resultados == 'Biodiversidad', '.txt', '.html')
+      paste('plot-lineas', Sys.Date(), ext, sep='')
+    },
+    content = function(file) {
+      if (input$id_resultados == 'Biodiversidad') {
+        write_lines('No hay gráfico disponible', file)
+      } else {
+        htmlwidgets::saveWidget(plot_lineas(), file)
+      }
+    }
+  )
+  
+  
+  output$download_data <- downloadHandler(
+    filename = function() {
+      paste('data', Sys.Date(), '.csv', sep='')
+    },
+    content = function(file) {
+      if (input$id_resultados == 'Biodiversidad') {
+        write_lines('No hay data disponible', file)
+      } else {
+        data <- as.data.frame(result()$estimacion_general)
+        write_csv(data, file)
+      }
+    }
+  )
+  
+  
+  
+  
   
 }
 
