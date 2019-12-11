@@ -5,9 +5,8 @@ account: randommonkey
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1473614
-bundleId: 2657688
+bundleId: 2659781
 url: https://randommonkey.shinyapps.io/GanaderiaSostenible/
-when: 1576031695.81737
+when: 1576089296.52785
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: data/holdridge_carbon.tif|data/MunicipiosColombia_geo.json
