@@ -2,22 +2,22 @@
 % Please edit documentation in R/compute.R
 \name{carbono_capturado_estimacion}
 \alias{carbono_capturado_estimacion}
-\title{Estimación de factores de emisión según categorías de uso del suelo}
+\title{Estimación de carbono capturado}
 \usage{
 carbono_capturado_estimacion(area, t_e, region, tipo_cobertura)
 }
 \arguments{
 \item{area}{área (en hectáreas) implementada por año en cada una de las categorías de uso del suelo}
 
-\item{factor_emision}{Cambio (t CO2e ha-1) por tipo de suelo}
+\item{t_e}{tiempo de estimación}
 }
 \value{
 None
 }
 \description{
-Estimación de factores de emisión según categorías de uso del suelo
+Estimación de carbono capturado
 }
 \examples{
-carbono_capturado(area = c(6418.8, 43, 0, 69.5), factor_emision = c(-0.4, 2.3, 3.5, 4.4))
+carbono_capturado_estimacion(area = c(6418.8, 43, 0, 69.5), t_e = 20, region = 'Eje Cafetero', tipo_cobertura = 'cercas_vivas')
 
 }

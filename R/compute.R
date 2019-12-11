@@ -75,10 +75,10 @@ factor_emision <- function(cb_carbono,  region) {
 
 
 #'
-#' Estimación de factores de emisión según categorías de uso del suelo
+#' Estimación de carbono capturado
 #'
-#' @param factor_emision Cambio (t CO2e ha-1) por tipo de suelo
 #' @param area  área (en hectáreas) implementada por año en cada una de las categorías de uso del suelo
+#' @param t_e tiempo de estimación
 #'
 #' @return None
 #'
@@ -185,4 +185,26 @@ captura_carbono_bosques <- function(departamento = NULL, municipio, area_bosque 
   factor_em <- data_mun$MeanCO2e/data_mun$AREA_KM
   co2 <- factor_em * area_bosque
   co2
+}
+
+
+#' @export
+biodiv_area <- function(area, region, tipo_cobertura, t = 0) {
+  if(!region %in% availableRegiones()){
+    stop("regions must be one of: ", availableRegiones())
+  }
+  if(!tipo_cobertura %in% availableTipoCobertura()){
+    stop("tipo_cobertura must be one of", availableTipoCobertura())
+  }
+  if(tipo_cobertura == "cercas_vivas") return(0)
+  path <- system.file("dataR/biodiversidad_region_tipo.csv", package = "GanaderiaSostenible")
+  biodiversidad_region_tipo <- suppressMessages(read_csv(path))
+  especies <- biodiversidad_region_tipo %>% filter(region_colombia == region, tipo == tipo_cobertura)
+  d <- especies$d
+  c <- especies$c
+  z <- especies$z
+  A <- area
+  f <- especies$formula
+  especies <- eval(parse(text=f))
+  especies
 }

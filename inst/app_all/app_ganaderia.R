@@ -596,6 +596,11 @@ server <- function(input, output, session) {
                                       Suelo = 'Bosque primario',
                                       carbono = estimacion_primario)
     estimacion_primario$Suelo <- as.character(estimacion_primario$Suelo)
+    if (region != 'Otras Áreas') {
+    pajaros_bosque_primario <- biodiv_area(area = sum(bosque_primario, na.rm = T), region = region, tipo_cobertura = 'bosque_secundario')
+    } else {
+    pajaros_bosque_primario <- NULL
+    }
     
     bosque_secundario <- unlist(l$secundario)
     anio_secundario <- input$id_aniosecundario
@@ -610,7 +615,11 @@ server <- function(input, output, session) {
                                         carbono = estimacion_secundario$co2)
     estimacion_secundario$Año <- anio_secundario + 0:19
     estimacion_secundario$Suelo <- as.character(estimacion_secundario$Suelo)
-    
+    if (region != 'Otras Áreas') {
+      pajaros_bosque_secundario <- biodiv_area(area = sum(bosque_secundario, na.rm = T), region = region, tipo_cobertura = 'bosque_secundario')
+    } else {
+      pajaros_bosque_secundario <- NULL
+    }
     
     potreros <- unlist(l$potreros)
     anio_potreros <- input$id_aniopotreros
@@ -625,6 +634,12 @@ server <- function(input, output, session) {
                                       Suelo = 'Árboles dispersos',
                                       carbono = estimacion_potreros$co2)
     estimacion_potreros$Suelo <-  as.character(estimacion_potreros$Suelo)
+    if (region != 'Otras Áreas') {
+      pajaros_potreros <- biodiv_area(area = sum(potreros, na.rm = T), region = region, tipo_cobertura = 'silvopastoriles')
+    } else {
+      pajaros_potreros <- NULL
+    }
+    
     
     cercas <- unlist(l$cercas)
     anio_cercas <- input$id_aniocercas
@@ -639,6 +654,11 @@ server <- function(input, output, session) {
                                     Suelo = 'Cercas vivas',
                                     carbono = estimacion_cercas$co2)
     estimacion_cercas$Suelo <-  as.character(estimacion_cercas$Suelo)
+    if (region != 'Otras Áreas') {
+      pajaros_cercas <- biodiv_area(area = sum(cercas, na.rm = T), region = region, tipo_cobertura = 'silvopastoriles')
+    } else {
+      pajaros_cercas <- NULL
+    }
     
     pastoriles <- unlist(l$pastoriles)
     anio_pastoriles <- input$id_aniopastoriles
@@ -653,10 +673,16 @@ server <- function(input, output, session) {
                                         Suelo = 'Silvopastoriles',
                                         carbono = estimacion_pastoriles$co2)
     estimacion_pastoriles$Suelo <-  as.character(estimacion_pastoriles$Suelo)
+    if (region != 'Otras Áreas') {
+      pajaros_pastoriles <- biodiv_area(area = sum(pastoriles, na.rm = T), region = region, tipo_cobertura = 'silvopastoriles')
+    } else {
+      pajaros_pastoriles <- NULL
+    }
     
     captura_general <- bind_rows(captura_primario, captura_secundario, captura_potreros, captura_cercas, captura_pastoriles)
     estimacion_general <- bind_rows(estimacion_primario, estimacion_secundario, estimacion_potreros, estimacion_cercas, estimacion_pastoriles)
-    list("captura_general" = captura_general, "estimacion_general" = estimacion_general)
+    estimacion_pajaros <- list(pajaros_bosque_primario, pajaros_bosque_secundario, pajaros_potreros, pajaros_cercas, pajaros_pastoriles)
+    list("captura_general" = captura_general, "estimacion_general" = estimacion_general,  "pajaros" = estimacion_pajaros)
     
   })
   
@@ -669,6 +695,21 @@ server <- function(input, output, session) {
     viz_bar(data)
   })
   
+  output$total_aves <- renderUI({
+   
+    if (all(is.null(unlist(result()$pajaros)))) {
+      tx <- 'No hay resultados para este municipio'
+    } else {
+      tx <- div(
+        HTML(paste0('<div style = "text-align:center;"><div class = "title-viz">ESPECIES CONSERVADAS</div><div class = "subtitle-viz">',  round(sum(unlist(result()$pajaros), na.rm = T)), ' ESPECIES DE AVES</div></div></div>')),
+        tags$img(style = "text-align: center; padding: 0px 20px;margin-top:20px;", src = "img/aves.png")
+        )
+    }    
+    
+    tx
+    
+  })
+  
   output$vista_resultados <- renderUI({
     
     if (is.null(input$name_mun)) return()
@@ -677,13 +718,19 @@ server <- function(input, output, session) {
     data <- result()$captura_general
     if (sum(data$carbono) == 0)  return(HTML('<div class = "content-intro"><img style = "width:78px;" src = "img/placeholder.png"><div class = "text-intro">Llena los campos de información de tú predio</div></div>'))
     options(scipen = 9999)
+    
+    id_res <- input$id_resultados
+    if (is.null(id_res)) return()
+    
+    if (id_res == 'Biodiversidad') {
+      uiOutput('total_aves')
+    } else {
     co2_car <- format(round(co2_carros(sum(data$carbono))), big.mark = ',', small.mark = '.')
-    
-    
     div(
       HTML(paste0('<div style = "text-align:center;"><div class = "title-viz">CONTAMINACIÓN EVITADA</div><div class = "info-tool subtitle-viz">', co2_car, ' carros <div class="tooltip-inf"> <i class="fa fa-info-circle"></i><span class="tooltiptext">El cálculo se realiza según la distancia promedio recorrida en grandes ciudades durante un año (12500 km), por un carro promedio de motor 1.5 litros.</span</div></div></div></div>')),
       highchartOutput('viz_porcentaje')
     )
+    }
     
   })
   
