@@ -256,7 +256,7 @@ align-items: center;
 margin: 0px !important;
 }
 
-#add_primario_2,#add_secundario_2,#add_potreros_2,#add_cercas_2,#add_pastoriles_2 {
+#add_primario_1,#add_secundario_1,#add_potreros_1,#add_cercas_1,#add_pastoriles_1 {
     border-radius: 50%;
     background-color: #8096a3;
     border: 1px solid #8096a3;
@@ -276,14 +276,22 @@ white-space: nowrap;
 margin: 10px 10px 10px 0px;
 }
 
+/*
 .mas-anios-primario,.mas-anios-secundario,.mas-anios-potreros,.mas-anios-cercas,.mas-anios-pastoriles {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
 }
 
+
 div[id^="annios_"] {
  width: 48% !important;
+}
+*/
+
+input {
+     margin-right: 10px !important;
+     margin-bottom: 10px !important;
 }
 
 .add-anio {
@@ -305,21 +313,26 @@ div[id^="annios_"] {
  font-weight: 400 !important;
 }
 
-
-#anio_inicial_primario,#anio_inicial_secundario,#anio_inicial_potreros,#anio_inicial_cercas,#anio_inicial_pastoriles {
- width: 152px !important;
+.anios-valor {
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
 }
-
 
 
 #resultados-padding {
   padding-bottom: 0px !important;
 }
 
-/*
-#remove-padding {
+/*#remove-padding {
   padding: 0px !important;
   background: #f0f5f7;
+}
+.margin-panel-info {
+  margin: 0px 10px;
+}
+#anio_inicial_primario,#anio_inicial_secundario,#anio_inicial_potreros,#anio_inicial_cercas,#anio_inicial_pastoriles {
+ width: 152px !important;
 }*/
 
 .box-collapsible-content {
@@ -330,9 +343,6 @@ div[id^="annios_"] {
     margin: 10px 0px 0px 0px;
 }
 
-.margin-panel-info {
-  margin: 0px 10px;
-}
 
 .flex-filters {
  display: flex;
@@ -438,6 +448,8 @@ display: flex;
     align-items: baseline;
 }
 
+
+
 '
 source('info.R')
 data_mun <- read_csv('data/MunicipiosColombia_geo.csv')
@@ -476,56 +488,56 @@ ui <- dsAppPanels( styles = styles,
                                  br()
                              )),
                          box(title = div(class = 'title-filters', 'BOSQUE PRIMARIO'), collapsed = FALSE,
-                                         div(class = 'panel-primario',
-                                             div(style = "width: 152px !important;",
-                                             selectizeInput('id_anioprimario', ' ', 1990:3000, selected = NULL, multiple = T,  options = list(
-                                               placeholder = "Año inicial",
-                                               plugins= list('remove_button'),
-                                               maxItems = 1)
-                                             )),
+                             div(class = 'panel-primario',
                                             div(class="mas-anios-primario",
-                                                uiOutput('annios_primario0'),
-                                                uiOutput('annios_primario1')
+                                                div(class = "anios-valor",
+                                                    textInput(paste0('aniosprimario0'), ' ', value = NULL, placeholder = 'Año'),
+                                                    textInput(paste0('id_anios_primario0'), ' ', value = NULL, placeholder = 'Hectáreas')
+                                                )
                                             ),
                                              uiOutput('add_anio_primario'),
                                             br()
                              )),
                          box(title = div(class = 'title-filters', 'BOSQUE SECUNDARIO'), collapsed = T, 
                                    div(class = 'panel-secundario',
-                                            uiOutput('anio_inicial_secundario'),
                                             div(class="mas-anios-secundario",
-                                                uiOutput('annios_secundario0'),
-                                                uiOutput('annios_secundario1')
+                                                div(class = "anios-valor",
+                                                    textInput(paste0('aniossecundario0'), ' ', value = NULL, placeholder = 'Año'),
+                                                    textInput(paste0('id_anios_secundario0'), ' ', value = NULL, placeholder = 'Hectáreas')
+                                                )
                                             ),
                                             uiOutput('add_anio_secundario'),
                                        br()
                              )),
                          box(title = div(class = 'title-filters', 'ÁRBOLES DISPERSOS EN POTREROS'), collapsed = T, 
                                    div(class = 'panel-potreros',
-                                            uiOutput('anio_inicial_potreros'),
                                             div(class="mas-anios-potreros",
-                                                uiOutput('annios_potreros0'),
-                                                uiOutput('annios_potreros1')
+                                                div(class = "anios-valor",
+                                                    textInput(paste0('aniospotreros0'), ' ', value = NULL, placeholder = 'Año'),
+                                                    textInput(paste0('id_anios_potreros0'), ' ', value = NULL, placeholder = 'Hectáreas')
+                                                )
                                             ),
                                             uiOutput('add_anio_potreros'),
                                        br()
                              )),
                          box(title = div(class = 'title-filters', 'CERCAS VIVAS'), collapsed = T, 
                                  div(class = 'panel-cercas',
-                                            uiOutput('anio_inicial_cercas'),
                                             div(class="mas-anios-cercas",
-                                                uiOutput('annios_cercas0'),
-                                                uiOutput('annios_cercas1')
+                                                div(class = "anios-valor",
+                                                    textInput(paste0('anioscercas0'), ' ', value = NULL, placeholder = 'Año'),
+                                                    textInput(paste0('id_anios_cercas0'), ' ', value = NULL, placeholder = 'Hectáreas')
+                                                )
                                             ),
                                             uiOutput('add_anio_cercas'),
                                      br()
                              )),
                          box(title = div(class = 'title-filters', 'SISTEMAS SILVOPASTORILES INTENSIVOS'), collapsed = T, 
                                     div(class = 'panel-pastoriles',
-                                            uiOutput('anio_inicial_pastoriles'),
                                             div(class="mas-anios-pastoriles",
-                                                uiOutput('annios_pastoriles0'),
-                                                uiOutput('annios_pastoriles1')
+                                                div(class = "anios-valor",
+                                                    textInput(paste0('aniospastoriles0'), ' ', value = NULL, placeholder = 'Año'),
+                                                    textInput(paste0('id_anios_pastoriles0'), ' ', value = NULL, placeholder = 'Hectáreas')
+                                                )
                                             ),
                                             uiOutput('add_anio_pastoriles'),
                                         br()
@@ -535,7 +547,7 @@ ui <- dsAppPanels( styles = styles,
                    panel(
                      title = "RESULTADOS", color = "olive", collapsed = F, width = 450, id = 'resultados-padding',
                      body = div(
-                       #div(class = 'title-filters margin-button-null', 'RESULTADOS'),
+                       div(class = 'title-filters margin-button-null', 'RESULTADOS'),
                        #verbatimTextOutput('aver'),
                        uiOutput('resultados'),
                        uiOutput('vista_resultados')
@@ -578,59 +590,44 @@ server <- function(input, output, session) {
   })
   
   
-  map(c('secundario', 'potreros', 'cercas', 'pastoriles'), function(z) {
-    output[[paste0('anio_inicial_', z)]] <- renderUI({
-      selectizeInput(paste0('id_anio', z), ' ', 1990:3000, selected = NULL, multiple = T,  options = list(
-        placeholder = "Año inicial",
-        plugins= list('remove_button'),
-        maxItems = 1)
-      )
-    })
-  })
-  
-  map(c('primario', 'secundario', 'potreros', 'cercas', 'pastoriles'), function(z) {
-    map(0:1, function(i) {
-      output[[paste0('annios_', z, i)]] <- renderUI({
-        div(class = 'flex-filters',
-            HTML(paste0('<span class = "text-btn">', paste0('Año ', i, '</span>'))),
-            textInput(paste0('id_anios_', z, i), ' ', value = NULL)
-        )
-      })
-    })
-  })
+
   
   map(c('primario', 'secundario', 'potreros', 'cercas', 'pastoriles'), function(i) {
     output[[paste0('add_anio_', i)]] <- renderUI({
       div(class = 'add-anio',
           HTML('<div class = "text-btn"> Agregar año</div>'), 
-          actionButton(paste0('add_', i, '_2'), HTML('+')))
+          actionButton(paste0('add_', i, '_1'), HTML('+')))
     })
   })
+  
+  
   
   map(c('primario', 'secundario', 'potreros', 'cercas', 'pastoriles'), function(z) {
     observe({
       if (is.null(click_i[[z]])) click_i[[z]] <- 1
       map(click_i[[z]], function(i) {
-        output[[paste0('annios_', z, i)]] <- renderUI({
-          div(class = 'flex-filters',
-              HTML(paste0('<span class = "text-btn">Año ', i, '</span>')),
-              textInput(paste0('id_anios_', z, i), ' ',  value = NULL)
-          )
-        })
+        output[[paste0('annios_', z, i)]]  <- renderUI({
+        div(class = "anios-valor",
+            textInput(paste0('anios', z, i), ' ', value = NULL, placeholder = 'Año'),
+            textInput(paste0('id_anios_',  z, i), ' ', value = NULL, placeholder = 'Hectáreas')
+        )
+           
+        })  
       })
     })
   })
-  click_i <- reactiveValues(primario = 1, secundario = 1, potreros = 1, cercas = 1, pastoriles = 1)
+  
+  
+  click_i <- reactiveValues(primario = 0, secundario = 0, potreros = 0, cercas = 0, pastoriles = 0)
   map(c('primario', 'secundario', 'potreros', 'cercas', 'pastoriles'), function(i) {
-    observeEvent(input[[paste0('add_', i, '_2')]], {
+    observeEvent(input[[paste0('add_', i, '_1')]], {
       click_i[[i]] <- click_i[[i]] + 1
       insertUI(paste0('.mas-anios-', i), ui = uiOutput(paste0('annios_', i, click_i[[i]])), multiple = T)
     })  
   })  
   
-  
-  output$blabla <- renderPrint({
-    result()  
+  output$aver <- renderPrint({
+    result()
   })
   
   result <- reactive({
@@ -644,116 +641,109 @@ server <- function(input, output, session) {
     
     l <-  map(c('primario', 'secundario', 'potreros', 'cercas', 'pastoriles'), function(z) {
       n_years <- 0:click_i[[z]]
+      annios <- c()
+      hectareas <- c()
       map(n_years, function(i) {
-        as.numeric(input[[paste0("id_anios_", z, i)]])
+        annios <- as.numeric(input[[paste0('anios', z, i)]])
+        if (is.na(annios)) annios <- i
+        hectareas <- as.numeric(input[[paste0("id_anios_", z, i)]])
+        if (is.na(hectareas)) hectareas <- 0
+        data.frame(año = annios, valor = hectareas)
       })
-    })
+    }) 
     names(l) <- c('primario', 'secundario', 'potreros', 'cercas', 'pastoriles')
     
-    bosque_primario <- unlist(l$primario)
-    bosque_primario[is.na(bosque_primario)] <- 0
-    anio_primario <- input$id_anioprimario
-    if (is.null(anio_primario)) anio_primario <- 0
-    anio_primario <- as.numeric(anio_primario)
-    captura_primario <- captura_carbono_bosques(departamento = lugar[1], municipio = lugar[2], area_bosque = cumsum(bosque_primario))
+    # bosque_primario <- l$primario %>% bind_rows()
+    # bosque_primario$suelo <- 'Bosque primario'
+    bosque_primario <- l$primario  %>% bind_rows()
+    captura_primario <- captura_carbono_bosques(departamento = lugar[1], municipio = lugar[2], area_bosque = cumsum(bosque_primario$valor))
     captura_primario <- data.frame(Suelo = 'Bosque primario',
                                    carbono = captura_primario)
     captura_primario$Suelo <- as.character(captura_primario$Suelo)
-    estimacion_primario <- captura_carbono_bosques(departamento = lugar[1], municipio = lugar[2], area_bosque = c(cumsum(bosque_primario), rep(sum(bosque_primario), 20-length(bosque_primario))))
-    estimacion_primario <- data.frame(Año = anio_primario + 0:19,
+   
+    estimacion_primario <- captura_carbono_bosques(departamento = lugar[1], municipio = lugar[2], area_bosque = c(cumsum(bosque_primario$valor), rep(sum(bosque_primario$valor), 20-length(bosque_primario$valor))))
+    estimacion_primario <- data.frame(Año =  0:19,
                                       Suelo = 'Bosque primario',
                                       carbono = estimacion_primario)
     estimacion_primario$Suelo <- as.character(estimacion_primario$Suelo)
     if (region != 'Otras Áreas') {
-    pajaros_bosque_primario <- biodiv_area(area = sum(bosque_primario, na.rm = T), region = region, tipo_cobertura = 'bosque_secundario')
+      pajaros_bosque_primario <- biodiv_area(area = sum(bosque_primario$valor, na.rm = T), region = region, tipo_cobertura = 'bosque_secundario')
     } else {
-    pajaros_bosque_primario <- NULL
+      pajaros_bosque_primario <- NULL
     }
-    
-    bosque_secundario <- unlist(l$secundario)
-    anio_secundario <- input$id_aniosecundario
-    if (is.null(anio_secundario)) anio_secundario <- 0
-    anio_secundario <- as.numeric(anio_secundario)
-    captura_secundario <- carbono_capturado_estimacion(area = bosque_secundario, region = region, tipo_cobertura = 'bosque_secundario', t_e = length(bosque_secundario))
+  
+    bosque_secundario <- l$secundario %>% bind_rows()
+    captura_secundario <- carbono_capturado_estimacion(area = bosque_secundario$valor, region = region, tipo_cobertura = 'bosque_secundario', t_e = length(bosque_secundario$valor))
     captura_secundario <- data.frame(Suelo = 'Bosque secundario',
                                      carbono = captura_secundario$co2)
     captura_secundario$Suelo <- as.character(captura_secundario$Suelo)
-    estimacion_secundario <- carbono_capturado_estimacion(area = bosque_secundario, region = region, tipo_cobertura = 'bosque_secundario', t_e = 20)
-    estimacion_secundario <- data.frame(Suelo = 'Bosque secundario',
+    estimacion_secundario <- carbono_capturado_estimacion(area = bosque_secundario$valor, region = region, tipo_cobertura = 'bosque_secundario', t_e = 20)
+    estimacion_secundario <- data.frame(Año =  0:19,
+                                        Suelo = 'Bosque secundario',
                                         carbono = estimacion_secundario$co2)
-    estimacion_secundario$Año <- anio_secundario + 0:19
     estimacion_secundario$Suelo <- as.character(estimacion_secundario$Suelo)
     if (region != 'Otras Áreas') {
-      pajaros_bosque_secundario <- biodiv_area(area = sum(bosque_secundario, na.rm = T), region = region, tipo_cobertura = 'bosque_secundario')
+      pajaros_bosque_secundario <- biodiv_area(area = sum(bosque_secundario$valor, na.rm = T), region = region, tipo_cobertura = 'bosque_secundario')
     } else {
       pajaros_bosque_secundario <- NULL
     }
-    
-    potreros <- unlist(l$potreros)
-    anio_potreros <- input$id_aniopotreros
-    if (is.null(anio_potreros)) anio_potreros <- 0
-    anio_potreros <- as.numeric(anio_potreros)
-    captura_potreros <- carbono_capturado_estimacion(area = potreros, region = region, tipo_cobertura = 'arboles_dispersos', t_e = length(potreros))
+  
+    potreros <- l$potreros %>% bind_rows()
+    captura_potreros <- carbono_capturado_estimacion(area = potreros$valor, region = region, tipo_cobertura = 'arboles_dispersos', t_e = length(potreros$valor))
     captura_potreros <- data.frame(Suelo = 'Árboles dispersos',
                                    carbono = captura_potreros$co2)
     captura_potreros$Suelo <- as.character(captura_potreros$Suelo)
-    estimacion_potreros <- carbono_capturado_estimacion(area = potreros, region = region, tipo_cobertura = 'arboles_dispersos', t_e = 20)
-    estimacion_potreros <- data.frame(Año = anio_potreros + 0:19,
+    estimacion_potreros <- carbono_capturado_estimacion(area = potreros$valor, region = region, tipo_cobertura = 'arboles_dispersos', t_e = 20)
+    estimacion_potreros <- data.frame(Año =  0:19,
                                       Suelo = 'Árboles dispersos',
                                       carbono = estimacion_potreros$co2)
     estimacion_potreros$Suelo <-  as.character(estimacion_potreros$Suelo)
     if (region != 'Otras Áreas') {
-      pajaros_potreros <- biodiv_area(area = sum(potreros, na.rm = T), region = region, tipo_cobertura = 'silvopastoriles')
+      pajaros_potreros <- biodiv_area(area = sum(potreros$valor, na.rm = T), region = region, tipo_cobertura = 'silvopastoriles')
     } else {
       pajaros_potreros <- NULL
     }
-    
-    
-    cercas <- unlist(l$cercas)
-    anio_cercas <- input$id_aniocercas
-    if (is.null(anio_cercas)) anio_cercas <- 0
-    anio_cercas <- as.numeric(anio_cercas)
-    captura_cercas <- carbono_capturado_estimacion(area = cercas, region = region, tipo_cobertura = 'cercas_vivas', t_e = length(cercas))
+
+
+    cercas <- l$cercas %>% bind_rows()
+    captura_cercas <- carbono_capturado_estimacion(area = cercas$valor, region = region, tipo_cobertura = 'cercas_vivas', t_e = length(cercas$valor))
     captura_cercas <- data.frame( Suelo = 'Cercas vivas',
                                   carbono = captura_cercas$co2)
     captura_cercas$Suelo <- as.character(captura_cercas$Suelo)
-    estimacion_cercas <- carbono_capturado_estimacion(area = cercas, region = region, tipo_cobertura = 'cercas_vivas', t_e = 20)
-    estimacion_cercas <- data.frame(Año = anio_cercas + 0:19,
+    estimacion_cercas <- carbono_capturado_estimacion(area = cercas$valor, region = region, tipo_cobertura = 'cercas_vivas', t_e = 20)
+    estimacion_cercas <- data.frame(Año =  0:19,
                                     Suelo = 'Cercas vivas',
                                     carbono = estimacion_cercas$co2)
     estimacion_cercas$Suelo <-  as.character(estimacion_cercas$Suelo)
     if (region != 'Otras Áreas') {
-      pajaros_cercas <- biodiv_area(area = sum(cercas, na.rm = T), region = region, tipo_cobertura = 'silvopastoriles')
+      pajaros_cercas <- biodiv_area(area = sum(cercas$valor, na.rm = T), region = region, tipo_cobertura = 'silvopastoriles')
     } else {
       pajaros_cercas <- NULL
     }
-    
-    pastoriles <- unlist(l$pastoriles)
-    anio_pastoriles <- input$id_aniopastoriles
-    if (is.null(anio_pastoriles)) anio_pastoriles <- 0
-    anio_pastoriles <- as.numeric(anio_pastoriles)
-    captura_pastoriles <- carbono_capturado_estimacion(area = pastoriles, region = region, tipo_cobertura = 'silvopastoriles', t_e = length(pastoriles))
+
+    pastoriles <- l$pastoriles %>% bind_rows()
+    captura_pastoriles <- carbono_capturado_estimacion(area = pastoriles$valor, region = region, tipo_cobertura = 'silvopastoriles', t_e = length(pastoriles$valor))
     captura_pastoriles <- data.frame(Suelo = 'Silvopastoriles',
                                      carbono = captura_pastoriles$co2)
     captura_pastoriles$Suelo <- as.character(captura_pastoriles$Suelo)
-    estimacion_pastoriles <- carbono_capturado_estimacion(area = pastoriles, region = region, tipo_cobertura = 'silvopastoriles', t_e = 20)
-    estimacion_pastoriles <- data.frame(Año = anio_pastoriles + 0:19,
+    estimacion_pastoriles <- carbono_capturado_estimacion(area = pastoriles$valor, region = region, tipo_cobertura = 'silvopastoriles', t_e = 20)
+    estimacion_pastoriles <- data.frame(Año =  0:19,
                                         Suelo = 'Silvopastoriles',
                                         carbono = estimacion_pastoriles$co2)
     estimacion_pastoriles$Suelo <-  as.character(estimacion_pastoriles$Suelo)
     if (region != 'Otras Áreas') {
-      pajaros_pastoriles <- biodiv_area(area = sum(pastoriles, na.rm = T), region = region, tipo_cobertura = 'silvopastoriles')
+      pajaros_pastoriles <- biodiv_area(area = sum(pastoriles$valor, na.rm = T), region = region, tipo_cobertura = 'silvopastoriles')
     } else {
       pajaros_pastoriles <- NULL
     }
-    
+
     captura_general <- bind_rows(captura_primario, captura_secundario, captura_potreros, captura_cercas, captura_pastoriles)
     estimacion_general <- bind_rows(estimacion_primario, estimacion_secundario, estimacion_potreros, estimacion_cercas, estimacion_pastoriles)
     estimacion_pajaros <- list(pajaros_bosque_primario, pajaros_bosque_secundario, pajaros_potreros, pajaros_cercas, pajaros_pastoriles)
     list("region" = region,"captura_general" = captura_general, "estimacion_general" = estimacion_general,  "pajaros" = estimacion_pajaros)
-    
+
+   
   })
-  
   
   plot_bar <- reactive({
     if (is.null(input$name_mun)) return()
@@ -768,14 +758,14 @@ server <- function(input, output, session) {
   })
   
   output$total_aves <- renderUI({
-   
+    
     if (all(is.null(unlist(result()$pajaros)))) {
       tx <- 'No hay resultados para este municipio'
     } else {
       tx <- div(
         HTML(paste0('<div style = "text-align:center;"><div class = "title-viz">ESPECIES CONSERVADAS</div><div class = "subtitle-viz">',  round(sum(unlist(result()$pajaros), na.rm = T)), ' ESPECIES DE AVES</div></div></div>')),
         tags$img(style = "text-align: center; padding: 0px 20px;margin-top:20px;", src = "img/aves.png")
-        )
+      )
     }    
     
     tx
@@ -797,11 +787,11 @@ server <- function(input, output, session) {
     if (id_res == 'Biodiversidad') {
       uiOutput('total_aves')
     } else {
-    co2_car <- format(round(co2_carros(sum(data$carbono))), big.mark = ',', small.mark = '.')
-    div(
-      HTML(paste0('<div style = "text-align:center;"><div class = "title-viz">CONTAMINACIÓN EVITADA</div><div class = "info-tool subtitle-viz">', co2_car, ' carros <div class="tooltip-inf"> <i class="fa fa-info-circle"></i><span class="tooltiptext">El cálculo se realiza según la distancia promedio recorrida en grandes ciudades durante un año (12500 km), por un carro promedio de motor 1.5 litros.</span</div></div></div></div>')),
-      highchartOutput('viz_porcentaje')
-    )
+      co2_car <- format(round(co2_carros(sum(data$carbono))), big.mark = ',', small.mark = '.')
+      div(
+        HTML(paste0('<div style = "text-align:center;"><div class = "title-viz">CONTAMINACIÓN EVITADA</div><div class = "info-tool subtitle-viz">', co2_car, ' carros <div class="tooltip-inf"> <i class="fa fa-info-circle"></i><span class="tooltiptext">El cálculo se realiza según la distancia promedio recorrida en grandes ciudades durante un año (12500 km), por un carro promedio de motor 1.5 litros.</span</div></div></div></div>')),
+        highchartOutput('viz_porcentaje')
+      )
     }
     
   })
@@ -822,7 +812,7 @@ server <- function(input, output, session) {
       "No hay información disponible para este municipio"
     } else {
       div(HTML('<div class = "title-sliders">Área bosque primario o secundario</div>'),
-    sliderInput('id_area_primario', ' ', min = 1000, max = 1000000, value = 3000, step = 100)
+          sliderInput('id_area_primario', ' ', min = 1000, max = 1000000, value = 3000, step = 100)
       )
     }
   })
@@ -832,7 +822,7 @@ server <- function(input, output, session) {
       "No hay información disponible para este municipio"
     } else {
       div(HTML('<div class = "title-sliders" style="margin-top:15px;">Área Silvopastorales, cercas vivas <br/>o árboles dispersos</div>'),
-      sliderInput('id_pastoriles', ' ', min = 1000, max = 1000000, value = 5000, step = 100)
+          sliderInput('id_pastoriles', ' ', min = 1000, max = 1000000, value = 5000, step = 100)
       )
     }
   })
@@ -851,7 +841,7 @@ server <- function(input, output, session) {
   })
   
   output$text_aves_pastoriles <- renderUI({
-   
+    
     area_otras <- input$id_pastoriles
     if (is.null(area_otras)) return()
     region <- result()$region
@@ -883,12 +873,12 @@ server <- function(input, output, session) {
         uiOutput('text_aves_pastoriles')
       )
     } else {
-    car_tot <- format(round(sum(data$carbono)), big.mark = ',', small.mark = '.')
-
-    div(
-      HTML(paste0('<div style = "text-align:center;"><div class = "title-viz">PROYECCIÓN CAPTURA DE CARBONO </div><div class = "subtitle-viz">', car_tot, ' tCO<sub>2</sub>e</div></div>')),
-      highchartOutput('viz_lineas')
-    )
+      car_tot <- format(round(sum(data$carbono)), big.mark = ',', small.mark = '.')
+      
+      div(
+        HTML(paste0('<div style = "text-align:center;"><div class = "title-viz">PROYECCIÓN CAPTURA DE CARBONO </div><div class = "subtitle-viz">', car_tot, ' tCO<sub>2</sub>e</div></div>')),
+        highchartOutput('viz_lineas')
+      )
     }
     
   })
@@ -900,9 +890,9 @@ server <- function(input, output, session) {
     },
     content = function(file) {
       if (input$id_resultados == 'Biodiversidad') {
-      write_lines('No hay gráfico disponible', file)
+        write_lines('No hay gráfico disponible', file)
       } else {
-      htmlwidgets::saveWidget(plot_bar(), file)
+        htmlwidgets::saveWidget(plot_bar(), file)
       }
     }
   )
@@ -936,7 +926,6 @@ server <- function(input, output, session) {
       }
     }
   )
-  
   
   
   
