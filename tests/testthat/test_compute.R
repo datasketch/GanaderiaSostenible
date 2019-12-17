@@ -33,6 +33,10 @@ test_that("Región a la cual pertenece un municipio", {
   reg_m <- regiones_match(municipio = municipio)
   expect_equal(reg_m, 'Eje Cafetero')
 
+  municipio <- 'Caldas'
+  reg_m <- regiones_match(municipio = municipio)
+  expect_equal(reg_m, 'Eje Cafetero')
+
   departamento <- 'Nariño'
   municipio <- 'Potosí'
   reg_p <- regiones_match(departamento, municipio)
