@@ -123,6 +123,11 @@ hr {
     background-color: #ffffff;
     margin-bottom: 10px;
 }
+
+.input-autosuggest input{
+margin-bottom: 0px !important;
+}
+
 .selectize-input{
   border-radius: 2px;
 }
@@ -545,29 +550,23 @@ ui <- dsAppPanels( styles = styles,
                      ))
                    )),
                    panel(
-                     title = "RESULTADOS", color = "olive", collapsed = F, width = 450, id = 'resultados-padding',
+                     title = "RESULTADOS", color = "olive", collapsed = F, width = 450,show_footer = FALSE, id = 'resultados-padding',
                      body = div(
-                       div(class = 'title-filters margin-button-null', 'RESULTADOS'),
                        #verbatimTextOutput('aver'),
                        uiOutput('resultados'),
                        uiOutput('vista_resultados')
-                     ),
-                     footer = list(
-                       downloadButton("download_bar", "DESCARGAR GRÁFICA")
                      )
                    ),
                    panel(
-                     title = "RESULTADOS AVANZADOS", color = "olive", collapsed = F,  id = 'resultados-padding',
-                     body =  div(uiOutput('vista_avanzados')),
-                     footer = div( style = "display:flex;",
-                                   downloadButton("download_lineas", "DESCARGAR GRÁFICA"),
-                                   downloadButton("download_data", "DESCARGAR DATOS")
-                     )
+                     title = "RESULTADOS AVANZADOS", color = "olive", collapsed = F, show_footer = FALSE, id = 'resultados-padding',
+                     body =  div(uiOutput('vista_avanzados'))
                    )
                    
 )
 
 server <- function(input, output, session) {
+  
+  
   
   # panel de filtros
   output$aver <- renderPrint({
@@ -588,6 +587,7 @@ server <- function(input, output, session) {
   output$resultados <- renderUI({
     radioButtons('id_resultados', ' ', c('Captura de carbono', 'Biodiversidad'), inline = T)
   })
+  
   
   
 
@@ -800,6 +800,7 @@ server <- function(input, output, session) {
     if (is.null(input$name_mun)) return()
     data <- result()$estimacion_general
     if (sum(data$carbono) == 0) return()
+    data$carbono <- cumsum(data$carbono)
     viz_lines(data)
   })
   
@@ -812,7 +813,7 @@ server <- function(input, output, session) {
       "No hay información disponible para este municipio"
     } else {
       div(HTML('<div class = "title-sliders">Área bosque primario o secundario</div>'),
-          sliderInput('id_area_primario', ' ', min = 1000, max = 1000000, value = 3000, step = 100)
+          sliderInput('id_area_primario', ' ', min = 1000, max = 100000, value = 3000, step = 100)
       )
     }
   })
@@ -822,7 +823,7 @@ server <- function(input, output, session) {
       "No hay información disponible para este municipio"
     } else {
       div(HTML('<div class = "title-sliders" style="margin-top:15px;">Área Silvopastorales, cercas vivas <br/>o árboles dispersos</div>'),
-          sliderInput('id_pastoriles', ' ', min = 1000, max = 1000000, value = 5000, step = 100)
+          sliderInput('id_pastoriles', ' ', min = 1000, max = 100000, value = 5000, step = 100)
       )
     }
   })

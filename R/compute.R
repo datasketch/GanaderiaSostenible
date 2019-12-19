@@ -86,7 +86,10 @@ factor_emision <- function(cb_carbono,  region) {
 #' carbono_capturado_estimacion(area = c(6418.8, 43, 0, 69.5), t_e = 20, region = 'Eje Cafetero', tipo_cobertura = 'cercas_vivas')
 #'
 #' @export
-carbono_capturado_estimacion <- function(area, t_e, region, tipo_cobertura) {
+carbono_capturado_estimacion <- function(area, años, t_e, region, tipo_cobertura) {
+
+  area <- c(123, 21, 3)
+  años <- c(2000, 2007, 2013)
 
   if(!region %in% availableRegiones()){
     stop("regions must be one of: ", availableRegiones())
@@ -97,8 +100,14 @@ carbono_capturado_estimacion <- function(area, t_e, region, tipo_cobertura) {
 
   if (is.null(area)) return()
   if (length(area) == 0) area <- 0
-  area[is.na(area)] <- 0
-  area_i <- area
+  area <- data.frame(area, años)
+  annios <- max(area$año) - min(area$año)
+  todos_anios <- data.frame(años = min(area$año) + 0:annios)
+  area <- left_join(todos_anios, area)
+
+  area$area[is.na(area$area)] <- 0
+  area_i <- area$area
+
   cambioCarbono <- cambio_carbono(region = region, tipo_cobertura = tipo_cobertura, t_f = t_e)
   factorEmision <- factor_emision(cambioCarbono, region = region)
  l <- map(1:length(area_i) , function(z) {
@@ -182,8 +191,7 @@ captura_carbono_bosques <- function(departamento = NULL, municipio, area_bosque 
   }
 
   data_mun <- data_mun %>% filter(NOMBRE_ENT %in% municipio)
-  factor_em <- data_mun$MeanCO2e/data_mun$AREA_KM
-  co2 <- factor_em * area_bosque
+  co2 <- data_mun$MeanCO2e * area_bosque
   co2
 }
 
@@ -203,7 +211,7 @@ biodiv_area <- function(area, region, tipo_cobertura, t = 0) {
   d <- especies$d
   c <- especies$c
   z <- especies$z
-  A <- area
+  A <- area * 10000
   f <- especies$formula
   especies <- eval(parse(text=f))
   especies
