@@ -34,10 +34,11 @@ viz_bar <- function(data) {
   })
 
 
-  global_options(',', '.')
+  global_options(' ', '.')
 
   highchart() %>%
     hc_chart(type =  "column",
+             height = 550,
              margin = c(0,0,0,0),
              padding = c(0,0,0,0)) %>%
     hc_xAxis(
@@ -108,7 +109,7 @@ viz_lines <- function(data, type_plot = "spline") {
                "marker" = list(symbol = 'circle'))
   })
 
-
+  global_options(' ', '.')
 
   highchart() %>%
     hc_chart(type =  type_plot
@@ -130,23 +131,23 @@ viz_lines <- function(data, type_plot = "spline") {
 
 }
 
-thm <- hc_theme(colors = c('#b0d361', '#dbefa5', '#3d894d', '#2e4856'))
+
 
 thm <- hc_theme(
-  colors = c('#dbefa5','#b0d361', '#3d894d', '#2e4856'),
+  colors = c('#dbefa5', '#ea640d', '#fdbc00', '#3d894d', '#2e4856'),
   chart = list(
     backgroundColor = "#ffffff"
   ),
   title = list(
     style = list(
       color = '#333333',
-      fontFamily = "Erica One"
+      fontFamily = "Ubuntu"
     )
   ),
   subtitle = list(
     style = list(
       color = '#666666',
-      fontFamily = "Shadows Into Light"
+      fontFamily = "Ubuntu"
     )
   ),
   legend = list(

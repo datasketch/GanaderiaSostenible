@@ -4,7 +4,7 @@
 \alias{carbono_capturado_estimacion}
 \title{Estimación de carbono capturado}
 \usage{
-carbono_capturado_estimacion(area, t_e, region, tipo_cobertura)
+carbono_capturado_estimacion(area, años, t_e, region, tipo_cobertura)
 }
 \arguments{
 \item{area}{área (en hectáreas) implementada por año en cada una de las categorías de uso del suelo}

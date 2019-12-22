@@ -32,6 +32,13 @@ cambio_carbono <- function(region, tipo_cobertura, t_f = 0) {
     captura <- captura_region_tipo %>% filter(region_colombia == region, tipo == tipo_cobertura)
     captura <- captura$b + captura$m * t
   }
+
+  if (tipo_cobertura == 'cercas_vivas') {
+    captura <- captura * 3.5
+  } else {
+    captura <- captura
+  }
+
   captura
 }
 
@@ -88,8 +95,6 @@ factor_emision <- function(cb_carbono,  region) {
 #' @export
 carbono_capturado_estimacion <- function(area, años, t_e, region, tipo_cobertura) {
 
-  area <- c(123, 21, 3)
-  años <- c(2000, 2007, 2013)
 
   if(!region %in% availableRegiones()){
     stop("regions must be one of: ", availableRegiones())
@@ -100,20 +105,23 @@ carbono_capturado_estimacion <- function(area, años, t_e, region, tipo_cobertur
 
   if (is.null(area)) return()
   if (length(area) == 0) area <- 0
+  if (is.null(años)) años <- rep(0, length(area))
+  if (length(años) == 0) años <- 0
   area <- data.frame(area, años)
-  annios <- max(area$año) - min(area$año)
-  todos_anios <- data.frame(años = min(area$año) + 0:annios)
+  annios <- max(area$años) - min(area$años)
+  todos_anios <- data.frame(años = min(area$años) + 0:annios)
   area <- left_join(todos_anios, area)
 
   area$area[is.na(area$area)] <- 0
+  area_end <- area$area
   area_i <- area$area
 
-  cambioCarbono <- cambio_carbono(region = region, tipo_cobertura = tipo_cobertura, t_f = t_e)
+cambioCarbono <- cambio_carbono(region = region, tipo_cobertura = tipo_cobertura, t_f = t_e)
   factorEmision <- factor_emision(cambioCarbono, region = region)
  l <- map(1:length(area_i) , function(z) {
-  area <- area[z]
-  area <- c(area, rep(area, t_e-length(area)))
-  captura  <- area * factorEmision
+   area_end <- area_end[z]
+   area_end <- c(area_end, rep(area_end, t_e-length(area_end)))
+  captura  <- area_end * factorEmision
   captura <- captura[!is.na(captura)]
   captura
   })
@@ -122,7 +130,7 @@ carbono_capturado_estimacion <- function(area, años, t_e, region, tipo_cobertur
          l[[i]] <- c(rep(0, i-1), l[[i]])
          l[[i]] <- l[[i]][1:t_e]
          }) %>% bind_cols()
- dt_estimacion <- data.frame(Tiempo = 1:t_e, co2 = rowSums(l_e))
+ dt_estimacion <- data.frame(Tiempo = min(area$años)+(0:(t_e - 1)), co2 = rowSums(l_e))
  dt_estimacion
 }
 
@@ -165,14 +173,32 @@ co2_carros <- function(carbono_capturado) {
 }
 
 #' @export
-captura_carbono_bosques <- function(departamento = NULL, municipio, area_bosque = NULL, ...) {
+captura_carbono_bosques <- function(departamento, municipio, area_bosque, años, t_e, ...) {
 
   if (is.null(municipio)) {
     stop("you must type at least one municipality")
   }
 
-  if (is.null(area_bosque)) area_bosque <- 0
-  area_bosque[is.na(area_bosque)] <- 0
+  if (is.null(area_bosque)) return()
+  if (length(area_bosque) == 0) area_bosque <- 0
+  if (is.null(años)) años <- rep(0, length(area_bosque))
+  if (length(años) == 0) años <- 0
+
+
+  area_bosque <- data.frame(area_bosque, años)
+  annios <- max(area_bosque$años, na.rm = TRUE) - min(area_bosque$años, na.rm = TRUE)
+  annios_t <-  min(area_bosque$años, na.rm = TRUE) + 0:annios
+
+  if (is.null(t_e)) t_e <- as.numeric(format(Sys.Date(), '%Y')) - max(annios_t,  na.rm = TRUE)
+  t_e <- t_e - length(annios_t)
+
+  if (t_e > 0 ) {
+   annios_t <- c( annios_t, max(annios_t, na.rm = TRUE) + 1:t_e)
+  }
+
+  todos_anios <- data.frame(años = annios_t)
+  area_bosque <- left_join(todos_anios, area_bosque)
+  area_bosque$area_bosque[is.na(area_bosque$area_bosque)] <- 0
 
   path <- system.file("dataR/co2_municipios.csv", package = "GanaderiaSostenible")
   data_mun <-  suppressMessages(read_csv(path))
@@ -191,8 +217,9 @@ captura_carbono_bosques <- function(departamento = NULL, municipio, area_bosque 
   }
 
   data_mun <- data_mun %>% filter(NOMBRE_ENT %in% municipio)
-  co2 <- data_mun$MeanCO2e * area_bosque
-  co2
+  area_bosque$co2 <- cumsum(data_mun$MeanCO2e * area_bosque$area_bosque)
+  area_bosque <- area_bosque %>% select(Tiempo = años, co2)
+  area_bosque
 }
 
 
