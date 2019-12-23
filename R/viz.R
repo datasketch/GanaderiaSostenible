@@ -1,10 +1,14 @@
-global_options <- function(marksMil, marksDec){
+hcoptslang <- getOption("highcharter.lang")
+hcoptslang$contextButtonTitle <- 'Descargar Imagen'
+hcoptslang$printChart <- "Imprimir Gráfico"
+hcoptslang$downloadJPEG <- "Descarga en JPEG"
+hcoptslang$downloadPNG <- "Descarga en PNG"
+hcoptslang$downloadPDF <- "Descarga en PDF"
+hcoptslang$downloadSVG <- "Descarga en SVG"
+hcoptslang$thousandsSep <- " "
+hcoptslang$decimalPoint <- "."
 
-  hcoptslang <- getOption("highcharter.lang")
-  hcoptslang$thousandsSep <- marksMil
-  hcoptslang$decimalPoint <- marksDec
-  options(highcharter.lang = hcoptslang)
-}
+
 
 #' @export
 viz_bar <- function(data) {
@@ -34,7 +38,7 @@ viz_bar <- function(data) {
   })
 
 
-  global_options(' ', '.')
+  options(highcharter.lang = hcoptslang)
 
   highchart() %>%
     hc_chart(type =  "column",
@@ -79,7 +83,18 @@ viz_bar <- function(data) {
     hc_legend(
       enabled = F
     )%>%
-    hc_add_theme(thm)
+    hc_add_theme(thm)  %>%
+    hc_exporting(enabled = TRUE, buttons= list(
+      contextButton= list(
+        symbol= 'url(https://cdn1.iconfinder.com/data/icons/feather-2/24/download-32.png)',
+        height= 30,
+        width= 33,
+        symbolSize= 24,
+        symbolX= 30,
+        symbolY= 30,
+        menuItems = list('printChart', 'downloadJPEG', 'downloadPNG', 'downloadSVG', 'downloadPDF')
+      )
+    ))
 
 }
 
@@ -108,9 +123,10 @@ viz_lines <- function(data, type_plot = "spline") {
                "marker" = list(symbol = 'circle'))
   })
 
-  global_options(' ', '.')
+
  p_i <- grep( format(Sys.Date(), '%Y'), data$Año) - 1
  if (identical(p_i, integer(0))) p_i <- 2019
+ options(highcharter.lang = hcoptslang)
 
  highchart() %>%
     hc_chart(type =  type_plot
@@ -126,12 +142,23 @@ viz_lines <- function(data, type_plot = "spline") {
     hc_add_series_list(series) %>%
     hc_tooltip(useHTML=TRUE,
                headerFormat = '<b>{series.name}</b><br/>',
-               pointFormat = 'Captura de carbono: {point.y} (tCO2e)<br/>') %>%
+               pointFormat = 'Captura de carbono: {point.y:.2f} (tCO2e)<br/>') %>%
     hc_legend( align = 'center',
                verticalAlign = 'top',
                backgroundColor = 'transparent',
                symbolWidth = 3) %>%
-    hc_add_theme(thm)
+    hc_add_theme(thm)  %>%
+   hc_exporting(enabled = TRUE, buttons= list(
+     contextButton= list(
+       symbol= 'url(https://cdn1.iconfinder.com/data/icons/feather-2/24/download-32.png)',
+       height= 30,
+       width= 33,
+       symbolSize= 24,
+       symbolX= 30,
+       symbolY= 30,
+       menuItems = list('printChart', 'downloadJPEG', 'downloadPNG', 'downloadSVG', 'downloadPDF')
+     )
+   ))
 
 
 }

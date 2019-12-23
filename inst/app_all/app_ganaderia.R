@@ -719,9 +719,12 @@ server <- function(input, output, session) {
     }
   
     captura_general <- bind_rows(captura_primario, captura_secundario, captura_potreros, captura_cercas, captura_pastoriles) 
-    captura_general <- captura_general %>% select(Tiempo, Suelo, carbono = co2, Estimacion)
+    captura_general <- captura_general %>% select(Tiempo, Suelo, carbono = co2, Estimacion) %>% filter(carbono != 0)
+    captura_total <- captura_general %>% group_by(Tiempo) %>% summarise(Estimacion = sum(Estimacion, na.rm = T))
+    captura_total$Suelo <- 'Todos los suelos'
+    captura_total <- captura_total %>% select(Tiempo, Suelo, Estimacion) 
     estimacion_pajaros <- list(pajaros_bosque_primario, pajaros_bosque_secundario, pajaros_potreros, pajaros_cercas, pajaros_pastoriles)
-    list("region" = region,"captura_general" = captura_general,  "pajaros" = estimacion_pajaros)
+    list("region" = region,"captura_general" = captura_general, "captura_total" = captura_total,  "pajaros" = estimacion_pajaros)
 
   })
   
@@ -783,15 +786,21 @@ server <- function(input, output, session) {
   plot_lineas <- reactive({
     if (is.null(input$name_mun)) return()
     data <- result()$captura_general
+    type_p <- 'spline'
+    if (input$id_lines) {
+      data <- result()$captura_total  
+      type_p <- 'area'
+    }
+  
     if (sum(data$Estimacion) == 0) return()
 
     #data$carbono <- round(cumsum(data$carbono), 2)
 
     data <- data %>%
-              select(Año = Tiempo, Suelo, carbono = Estimacion) %>%
-                filter(carbono != 0)
+              select(Año = Tiempo, Suelo, carbono = Estimacion) 
+    
 
-    viz_lines(data) 
+    viz_lines(data, type_plot = type_p) 
   })
 
   output$viz_lineas <- renderHighchart({
@@ -868,59 +877,14 @@ server <- function(input, output, session) {
 
       div(
         HTML(paste0('<div style = "text-align:center;"><div class = "title-viz">PROYECCIÓN CAPTURA DE CARBONO </div><div class = "subtitle-viz">', car_tot, ' tCO<sub>2</sub>e</div></div>')),
-        highchartOutput('viz_lineas')
+        highchartOutput('viz_lineas'),
+        checkboxInput('id_lines', 'Ver resultados por total', value = FALSE)
       )
     }
 
   })
 
-  # output$download_bar <- downloadHandler(
-  #   filename = function() {
-  #     ext <- ifelse(input$id_resultados == 'Biodiversidad', '.txt', '.html')
-  #     paste('plot-', Sys.Date(), ext, sep='')
-  #   },
-  #   content = function(file) {
-  #     if (input$id_resultados == 'Biodiversidad') {
-  #       write_lines('No hay gráfico disponible', file)
-  #     } else {
-  #       htmlwidgets::saveWidget(plot_bar(), file)
-  #     }
-  #   }
-  # )
-  # 
-  # 
-  # output$download_lineas <- downloadHandler(
-  #   filename = function() {
-  #     ext <- ifelse(input$id_resultados == 'Biodiversidad', '.txt', '.html')
-  #     paste('plot-lineas', Sys.Date(), ext, sep='')
-  #   },
-  #   content = function(file) {
-  #     if (input$id_resultados == 'Biodiversidad') {
-  #       write_lines('No hay gráfico disponible', file)
-  #     } else {
-  #       htmlwidgets::saveWidget(plot_lineas(), file)
-  #     }
-  #   }
-  # )
-  # 
-  # 
-  # output$download_data <- downloadHandler(
-  #   filename = function() {
-  #     paste('data', Sys.Date(), '.csv', sep='')
-  #   },
-  #   content = function(file) {
-  #     if (input$id_resultados == 'Biodiversidad') {
-  #       write_lines('No hay data disponible', file)
-  #     } else {
-  #       data <- as.data.frame(result()$estimacion_general)
-  #       write_csv(data, file)
-  #     }
-  #   }
-  # )
-  
-  
-  
-  
+
 }
 
 shinyApp(ui, server)
