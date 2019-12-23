@@ -791,7 +791,7 @@ server <- function(input, output, session) {
               select(Año = Tiempo, Suelo, carbono = Estimacion) %>%
                 filter(carbono != 0)
 
-    viz_lines(data)
+    viz_lines(data) 
   })
 
   output$viz_lineas <- renderHighchart({

@@ -92,7 +92,6 @@ viz_lines <- function(data, type_plot = "spline") {
     stop("Load an available dataset")
   }
 
-
   d <- data %>%
     dplyr::group_by(Año, Suelo) %>%
     dplyr::summarise(total = sum(carbono, na.rm = T)) %>%
@@ -110,13 +109,18 @@ viz_lines <- function(data, type_plot = "spline") {
   })
 
   global_options(' ', '.')
+ p_i <- grep( format(Sys.Date(), '%Y'), data$Año) - 1
+ if (identical(p_i, integer(0))) p_i <- 2019
 
-  highchart() %>%
+ highchart() %>%
     hc_chart(type =  type_plot
-             ) %>%
+    ) %>%
     hc_xAxis(
       categories = purrr::map(as.character(unique(d$Año)), function(z) z),
-      type= 'category'
+      type= 'category',
+      plotLines = list(list(value = p_i, color = "black",
+                            dashStyle = "shortdash", zIndex = 5, width = 2
+      ))
     ) %>%
     hc_yAxis(title = list(text = 'Captura de carbono (tCO2e)')) %>%
     hc_add_series_list(series) %>%
@@ -128,6 +132,7 @@ viz_lines <- function(data, type_plot = "spline") {
                backgroundColor = 'transparent',
                symbolWidth = 3) %>%
     hc_add_theme(thm)
+
 
 }
 
