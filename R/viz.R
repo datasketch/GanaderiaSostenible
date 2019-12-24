@@ -42,7 +42,6 @@ viz_bar <- function(data) {
 
   highchart() %>%
     hc_chart(type =  "column",
-             height = 550,
              margin = c(0,0,0,0),
              padding = c(0,0,0,0)) %>%
     hc_xAxis(
