@@ -9,7 +9,13 @@ carbono_capturado_estimacion(area, años, t_e, region, tipo_cobertura)
 \arguments{
 \item{area}{área (en hectáreas) implementada por año en cada una de las categorías de uso del suelo}
 
+\item{años}{años donde se agregan hectáreas al suelo}
+
 \item{t_e}{tiempo de estimación}
+
+\item{region}{Lugar de ubicación del suelo}
+
+\item{tipo_cobertura}{Categoría de uso del suelo en la cuál tiene ganado.}
 }
 \value{
 None

@@ -85,7 +85,10 @@ factor_emision <- function(cb_carbono,  region) {
 #' Estimación de carbono capturado
 #'
 #' @param area  área (en hectáreas) implementada por año en cada una de las categorías de uso del suelo
+#' @param años años donde se agregan hectáreas al suelo
 #' @param t_e tiempo de estimación
+#' @param region Lugar de ubicación del suelo
+#' @param tipo_cobertura Categoría de uso del suelo en la cuál tiene ganado.
 #'
 #' @return None
 #'
@@ -134,6 +137,17 @@ cambioCarbono <- cambio_carbono(region = region, tipo_cobertura = tipo_cobertura
  dt_estimacion
 }
 
+#'
+#' Región
+#'
+#' @param departamento Departamento
+#' @param municipio Municipio
+#'
+#' @return None
+#'
+#' @examples
+#' regiones_match('Boyaca', 'Caldas')
+#'
 #' @export
 regiones_match <- function(departamento = NULL, municipio, ...) {
 
@@ -163,6 +177,17 @@ regiones_match <- function(departamento = NULL, municipio, ...) {
   region
 }
 
+
+#'
+#' Estimación de carros por carbono capturado
+#'
+#' @param cambio_carbono Valor del total de carbono según tipo de terreno
+#'
+#' @return None
+#'
+#' @examples
+#' co2_carros(3425)
+#'
 #' @export
 co2_carros <- function(carbono_capturado) {
 
@@ -172,6 +197,18 @@ co2_carros <- function(carbono_capturado) {
   ce
 }
 
+#'
+#'  Estimación de carbono capturado en bosques primarios
+#'
+#' @param area  área (en hectáreas) implementada por año en cada una de las categorías de uso del suelo
+#' @param años años donde se agregan hectáreas al suelo
+#' @param t_e tiempo de estimación
+#' @param departamento Departamento de ubicación del suelo
+#' @param municipio municipio de ubicación del suelo
+#'
+#' @examples
+#' captura_carbono_bosques('Nariño', 'cordoba', c(12, 324, 211, 89), 2000:2004, 20)
+#'
 #' @export
 captura_carbono_bosques <- function(departamento, municipio, area_bosque, años, t_e, ...) {
 
@@ -222,7 +259,17 @@ captura_carbono_bosques <- function(departamento, municipio, area_bosque, años,
   area_bosque
 }
 
-
+#'
+#'  Estimación de carbono capturado en bosques primarios
+#'
+#' @param area  área (en hectáreas) implementada por año en cada una de las categorías de uso del suelo
+#' @param región lugar estimado según Departamento y municipio del predio
+#' @param tipo_cobertura Tipo de terreno
+#' @param t tiempo de estimación
+#'
+#' @examples
+#' biodiv_area(c(1.3, 3, 4), 'Eje Cafetero', 'bosque_primario')
+#'
 #' @export
 biodiv_area <- function(area, region, tipo_cobertura, t = 0) {
   if(!region %in% availableRegiones()){
