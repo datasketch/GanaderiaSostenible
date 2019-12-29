@@ -5,9 +5,9 @@ account: randommonkey
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1473614
-bundleId: 2688286
+bundleId: 2689857
 url: https://randommonkey.shinyapps.io/GanaderiaSostenible/
-when: 1577125039.31571
+when: 1577206077.84255
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: temp.R|data/shp/MunicipiosColombia_geo.dbf|data/shp/MunicipiosColombia_geo.prj|data/shp/MunicipiosColombia_geo.shp|data/shp/MunicipiosColombia_geo.shx
