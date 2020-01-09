@@ -2,20 +2,20 @@
 % Please edit documentation in R/compute.R
 \name{factor_emision}
 \alias{factor_emision}
-\title{Estimación de factores de emisión según categorías de uso del suelo}
+\title{Carbon Emision Factor}
 \usage{
 factor_emision(cb_carbono, region)
 }
 \arguments{
-\item{region}{Nombre de la zona en la cual estan ubicados los terrenos.}
+\item{cb_carbono}{Vector of carbon emissions changes for each land coverage type}
 
-\item{cambio_carbono}{Valor o vector de valores del cambio de carbono según tipo de terreno}
+\item{region}{geographic region name}
 }
 \value{
 None
 }
 \description{
-Estimación de factores de emisión según categorías de uso del suelo
+Carbon Emision Factor
 }
 \examples{
 factor_emision(c(1.3, 3, 4), 'Eje Cafetero')

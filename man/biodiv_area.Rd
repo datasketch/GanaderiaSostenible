@@ -2,23 +2,25 @@
 % Please edit documentation in R/compute.R
 \name{biodiv_area}
 \alias{biodiv_area}
-\title{Estimación de carbono capturado en bosques primarios}
+\title{Bird biodiversity for a given area}
 \usage{
 biodiv_area(area, region, tipo_cobertura, t = 0)
 }
 \arguments{
-\item{area}{área (en hectáreas) implementada por año en cada una de las categorías de uso del suelo}
+\item{area}{Area in hectares}
 
-\item{tipo_cobertura}{Tipo de terreno}
+\item{region}{Region}
 
-\item{t}{tiempo de estimación}
+\item{tipo_cobertura}{Land coverage type}
 
-\item{región}{lugar estimado según Departamento y municipio del predio}
+\item{t}{time}
+}
+\value{
+None
 }
 \description{
-Estimación de carbono capturado en bosques primarios
+Bird biodiversity for a given area
 }
 \examples{
-biodiv_area(c(1.3, 3, 4), 'Eje Cafetero', 'bosque_primario')
-
+biodiv_area(10, "Eje Cafetero", "bosque_secundario")
 }

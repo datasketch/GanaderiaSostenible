@@ -2,22 +2,21 @@
 % Please edit documentation in R/compute.R
 \name{regiones_match}
 \alias{regiones_match}
-\title{Región}
+\title{Match geographic regions to municipalities}
 \usage{
-regiones_match(departamento = NULL, municipio, ...)
+regiones_match(departamento = NULL, municipio)
 }
 \arguments{
-\item{departamento}{Departamento}
+\item{departamento}{Department}
 
-\item{municipio}{Municipio}
+\item{municipio}{Municipality}
 }
 \value{
 None
 }
 \description{
-Región
+Match geographic regions to municipalities
 }
 \examples{
-regiones_match('Boyaca', 'Caldas')
-
+regiones_match(departamento = NULL, municipio = 'usiacuri')
 }

@@ -1,6 +1,6 @@
 hcoptslang <- getOption("highcharter.lang")
 hcoptslang$contextButtonTitle <- 'Descargar Imagen'
-hcoptslang$printChart <- "Imprimir Gráfico"
+hcoptslang$printChart <- "Imprimir Gr\\u00e1fico"
 hcoptslang$downloadJPEG <- "Descarga en JPEG"
 hcoptslang$downloadPNG <- "Descarga en PNG"
 hcoptslang$downloadPDF <- "Descarga en PDF"
@@ -9,7 +9,15 @@ hcoptslang$thousandsSep <- " "
 hcoptslang$decimalPoint <- "."
 
 
-
+#' Bar visualization of carbon capture
+#'
+#' @param data Data frame with carbon capture for each land coverage type
+#' @return None
+#' @examples
+#' \dontrun{
+#' viz_bar()
+#' }
+#' @import highcharter
 #' @export
 viz_bar <- function(data) {
 
@@ -17,14 +25,14 @@ viz_bar <- function(data) {
     stop("Load an available dataset")
   }
 
-  data <- data %>% filter(carbono != 0)
+  data <- data %>% dplyr::filter(carbono != 0)
 
   d <- data %>%
     dplyr::group_by(Suelo) %>%
     dplyr::summarise(carbono = sum(carbono, na.rm = T))
 
 
-  d <- d %>% ungroup() %>%
+  d <- d %>% dplyr::ungroup() %>%
     dplyr::mutate(porcentaje = (carbono / sum(carbono, na.rm = TRUE)) * 100)
 
 
@@ -97,7 +105,15 @@ viz_bar <- function(data) {
 
 }
 
-
+#' Lines visualization of carbon capture
+#'
+#' @param data Data frame with carbon capture for each land coverage type and year
+#' @param type_plot Plot type
+#' @return None
+#' @examples
+#' \dontrun{
+#' viz_lines()
+#' }
 #' @export
 viz_lines <- function(data, type_plot = "spline") {
 
@@ -107,10 +123,10 @@ viz_lines <- function(data, type_plot = "spline") {
   }
 
   d <- data %>%
-    dplyr::group_by(Año, Suelo) %>%
+    dplyr::group_by(Ano, Suelo) %>%
     dplyr::summarise(total = sum(carbono, na.rm = T)) %>%
     tidyr::spread(Suelo, total) %>%
-    tidyr::gather(Suelo, total, -Año)
+    tidyr::gather(Suelo, total, -Ano)
 
 
 
@@ -123,7 +139,7 @@ viz_lines <- function(data, type_plot = "spline") {
   })
 
 
- p_i <- grep( format(Sys.Date(), '%Y'), data$Año) - 1
+ p_i <- grep( format(Sys.Date(), '%Y'), data$Ano) - 1
  if (identical(p_i, integer(0))) p_i <- 2019
  options(highcharter.lang = hcoptslang)
 
@@ -131,7 +147,7 @@ viz_lines <- function(data, type_plot = "spline") {
     hc_chart(type =  type_plot
     ) %>%
     hc_xAxis(
-      categories = purrr::map(as.character(unique(d$Año)), function(z) z),
+      categories = purrr::map(as.character(unique(d$Ano)), function(z) z),
       type= 'category',
       plotLines = list(list(value = p_i, color = "black",
                             dashStyle = "shortdash", zIndex = 5, width = 2

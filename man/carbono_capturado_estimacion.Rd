@@ -2,28 +2,29 @@
 % Please edit documentation in R/compute.R
 \name{carbono_capturado_estimacion}
 \alias{carbono_capturado_estimacion}
-\title{Estimación de carbono capturado}
+\title{Carbon capture estimation}
 \usage{
-carbono_capturado_estimacion(area, años, t_e, region, tipo_cobertura)
+carbono_capturado_estimacion(area, anos, t_e, region, tipo_cobertura)
 }
 \arguments{
-\item{area}{área (en hectáreas) implementada por año en cada una de las categorías de uso del suelo}
+\item{area}{Area (hectares) of coverage implementation by year for each land coverage type}
 
-\item{años}{años donde se agregan hectáreas al suelo}
+\item{anos}{Years}
 
-\item{t_e}{tiempo de estimación}
+\item{t_e}{time of estimation}
 
-\item{region}{Lugar de ubicación del suelo}
+\item{region}{region}
 
-\item{tipo_cobertura}{Categoría de uso del suelo en la cuál tiene ganado.}
+\item{tipo_cobertura}{Land coverage type}
 }
 \value{
 None
 }
 \description{
-Estimación de carbono capturado
+Carbon capture estimation
 }
 \examples{
-carbono_capturado_estimacion(area = c(6418.8, 43, 0, 69.5), t_e = 20, region = 'Eje Cafetero', tipo_cobertura = 'cercas_vivas')
-
+pastoriles_area <- c(10.6,	142.5, 0.0,	131.0, 170.0, 222.7, 95.4 )
+carbono_capturado_estimacion(pastoriles_area, anos = c(2013:2019), t_e = 7,
+  region = 'Bajo Magdalena', tipo_cobertura = 'silvopastoriles')
 }

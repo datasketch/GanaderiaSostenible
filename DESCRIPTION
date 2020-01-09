@@ -6,20 +6,32 @@ Authors@R:
            family = "Marin Diaz",
            role = c("aut", "cre"),
            email = "jpmarindiaz@gmail.com")
-Description: Provides an interface to calculate carbon capture in Colombia
-License: What license it uses
+Description: Provides an interface to calculate carbon capture in Colombia and 
+    estimations of bird biodiversity for given regions and land coverage types.
+License: MIT + file LICENSE
+ByteCompile: true
 Encoding: UTF-8
 LazyData: true
 Depends:
-    testthat,
+    R (>= 3.5)
+Imports: 
     dsAppLayout,
     highcharter,
-    dsCustom,
-    tidyverse
-Imports: 
     shiny,
+    rlang,
+    dplyr,
+    htmltools
 Suggests: 
+    tidyverse,
+    tidyr,
+    purrr,
+    jsonlite,
+    readr,
+    testthat,
     knitr,
     rmarkdown
 VignetteBuilder: knitr
 RoxygenNote: 6.1.1
+URL: https://github.com/datasketch/GanaderiaSostenible
+BugReports: https://github.com/datasketch/GanaderiaSostenible/issues
+Language: es

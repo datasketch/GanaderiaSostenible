@@ -2,24 +2,23 @@
 % Please edit documentation in R/compute.R
 \name{cambio_carbono}
 \alias{cambio_carbono}
-\title{Estimación del cambio en las reservas de carbono según categorías de uso del suelo}
+\title{Carbon capture estimation according to land cover type}
 \usage{
 cambio_carbono(region, tipo_cobertura, t_f = 0)
 }
 \arguments{
-\item{region}{Nombre de la zona en la cual estan ubicados los terrenos.}
+\item{region}{geographic region name}
 
-\item{tipo_cobertura}{Categoría de uso del suelo en la cuál tiene ganado.}
+\item{tipo_cobertura}{Coverage type for the land}
 
-\item{t_f}{Tiempo del último año en el que aumento el número de hectareas del terreno}
+\item{t_f}{Time of intervention}
 }
 \value{
 None
 }
 \description{
-Estimación del cambio en las reservas de carbono según categorías de uso del suelo
+Carbon capture estimation according to land cover type
 }
 \examples{
 cambio_carbono('Eje Cafetero', 'bosque_secundario', 5)
-
 }

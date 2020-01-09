@@ -2,20 +2,19 @@
 % Please edit documentation in R/compute.R
 \name{co2_carros}
 \alias{co2_carros}
-\title{Estimación de carros por carbono capturado}
+\title{Captured carbon}
 \usage{
 co2_carros(carbono_capturado)
 }
 \arguments{
-\item{cambio_carbono}{Valor del total de carbono según tipo de terreno}
+\item{carbono_capturado}{Captured carbon in CO2 tons}
 }
 \value{
 None
 }
 \description{
-Estimación de carros por carbono capturado
+Captured carbon
 }
 \examples{
-co2_carros(3425)
-
+co2_carros(10000)
 }

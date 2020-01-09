@@ -2,26 +2,28 @@
 % Please edit documentation in R/compute.R
 \name{captura_carbono_bosques}
 \alias{captura_carbono_bosques}
-\title{Estimación de carbono capturado en bosques primarios}
+\title{Captured carbon for forests}
 \usage{
-captura_carbono_bosques(departamento, municipio, area_bosque, años, t_e,
-  ...)
+captura_carbono_bosques(departamento, municipio, area_bosque, anos, t_e)
 }
 \arguments{
-\item{departamento}{Departamento de ubicación del suelo}
+\item{departamento}{Department}
 
-\item{municipio}{municipio de ubicación del suelo}
+\item{municipio}{Municipality}
 
-\item{años}{años donde se agregan hectáreas al suelo}
+\item{area_bosque}{Hectares of forest}
 
-\item{t_e}{tiempo de estimación}
+\item{anos}{Years}
 
-\item{area}{área (en hectáreas) implementada por año en cada una de las categorías de uso del suelo}
+\item{t_e}{Estimated times}
+}
+\value{
+None
 }
 \description{
-Estimación de carbono capturado en bosques primarios
+Captured carbon for forests
 }
 \examples{
-captura_carbono_bosques('Nariño', 'cordoba', c(12, 324, 211, 89), 2000:2004, 20)
-
+captura_carbono_bosques(departamento = 'Nariño', municipio = 'Córdoba',
+  area_bosque = 500, t_e = 1, anos = 2001)
 }
