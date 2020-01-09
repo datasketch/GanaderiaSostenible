@@ -1,6 +1,6 @@
 Package: GanaderiaSostenible
-Title: Carbon capture in Colombian farms
-Version: 0.0.0.9000
+Title: Carbon Capture and Biodiversity Estimations for Colombian Farms
+Version: 0.1.0
 Authors@R: 
     person(given = "Juan Pablo",
            family = "Marin Diaz",
@@ -34,4 +34,4 @@ VignetteBuilder: knitr
 RoxygenNote: 6.1.1
 URL: https://github.com/datasketch/GanaderiaSostenible
 BugReports: https://github.com/datasketch/GanaderiaSostenible/issues
-Language: es
+Language: en
