@@ -447,11 +447,15 @@ max-width: 500px;
 }
 
 .ubicacion {
-display: flex;
+    display: flex;
     justify-content: space-between;
     align-items: baseline;
 }
 
+#warning_years {
+  color: orange;
+  font-size: small;
+}
 
 
 '
@@ -461,7 +465,7 @@ ui <- dsAppPanels( styles = styles,
                    header =  div(style="", class="topbar",
                                  img(class="topbar__img", src = "img/logo_GCS.png"),
                                  HTML("<div class = 'top_title'> HERRAMIENTA <div class = 'top_line'> <div style = 'margin-left: 10px;'> ESTIMACIÓN DE BIODIVERSIDAD Y <span class = 'tex_sub'>CAPTURA DE CO<sub>2</sub></span></div></div></div>"),
-                                 modalBtn(id = 'id-but-mod', modal_id = 'info_modal', label = HTML('<i class="fa fa-info-circle" style="font-size:31px;color:#fff"></i>'))
+                                 modalButton(id = 'id-but-mod', modal_id = 'info_modal', label = HTML('<i class="fa fa-info-circle" style="font-size:31px;color:#fff"></i>'))
                    ),
                    modal(id  = "info_modal",
                          title = div(class = 'topbar-modal',
@@ -486,12 +490,13 @@ ui <- dsAppPanels( styles = styles,
                          div(style = 'background: #ffffff;',
                              div(class = 'margin-panel-info',
                                  div(class = "ubicacion",
-                                     div(class = 'title-filters', 'UBICACIÓN'),
-                                     geoloc::button_geoloc("gpsubicacion", HTML('<i class="fas fa-map-marker-alt"></i> Activar GPS')),
+                                     div(class = 'title-filters', 'UBICACIÓN')
+                                     # geoloc::button_geoloc("gpsubicacion", HTML('<i class="fas fa-map-marker-alt"></i> Activar GPS')),
                                  ),
                                  uiOutput('buscador'),
                                  br()
                              )),
+                         uiOutput("warning_years"),
                          box(title = div(class = 'title-filters', 'BOSQUE PRIMARIO'), collapsed = FALSE,
                              div(class = 'panel-primario',
                                  div(class="mas-anios-primario",
@@ -662,7 +667,7 @@ server <- function(input, output, session) {
     bosque_primario <- l$primario %>% bind_rows() %>% drop_na()
     annio_0_pr <- bosque_primario$año[1]
     if (is.na(annio_0_pr)) annio_0_pr <- 0
-    captura_primario <- captura_carbono_bosques(departamento = lugar[1], municipio = lugar[2], area_bosque = bosque_primario$valor, años = bosque_primario$año, t_e = (fecha_hoy -  annio_0_pr) + 10)
+    captura_primario <- captura_carbono_bosques(departamento = lugar[1], municipio = lugar[2], area_bosque = bosque_primario$valor, anos = bosque_primario$año, t_e = (fecha_hoy -  annio_0_pr) + 10)
     captura_primario$Suelo <- 'Bosque primario'
     captura_primario$Estimacion  <- cumsum(captura_primario$co2)
     if (sum(captura_primario$co2) == 0)  return()
@@ -680,7 +685,7 @@ server <- function(input, output, session) {
     bosque_secundario <- l$secundario %>% bind_rows() %>% drop_na()
     annio_0_s <- bosque_secundario$año[1]
     if (is.na(annio_0_s)) annio_0_s <- 0
-    captura_secundario <- carbono_capturado_estimacion(area = bosque_secundario$valor,años = bosque_secundario$año, region = region, tipo_cobertura = 'bosque_secundario', t_e = (fecha_hoy -annio_0_s) + 10)
+    captura_secundario <- carbono_capturado_estimacion(area = bosque_secundario$valor,anos = bosque_secundario$año, region = region, tipo_cobertura = 'bosque_secundario', t_e = (fecha_hoy -annio_0_s) + 10)
     captura_secundario$Suelo <- 'Bosque secundario'
     captura_secundario$Estimacion  <- cumsum(captura_secundario$co2)
     if (region != 'Otras Áreas') {
@@ -697,7 +702,7 @@ server <- function(input, output, session) {
     potreros <- l$potreros %>% bind_rows() %>% drop_na()
     annio_0_p <- potreros$año[1]
     if (is.na(annio_0_p)) annio_0_p <- 0
-    captura_potreros<- carbono_capturado_estimacion(area = potreros$valor, años = potreros$año, region = region, tipo_cobertura = 'arboles_dispersos', t_e = (fecha_hoy - annio_0_p) + 10)
+    captura_potreros<- carbono_capturado_estimacion(area = potreros$valor, anos = potreros$año, region = region, tipo_cobertura = 'arboles_dispersos', t_e = (fecha_hoy - annio_0_p) + 10)
     captura_potreros$Suelo <- "Árboles dispersos"
     captura_potreros$Estimacion  <- cumsum(captura_potreros$co2)
     if (region != 'Otras Áreas') {
@@ -715,7 +720,7 @@ server <- function(input, output, session) {
     cercas <- l$cercas %>% bind_rows() %>% drop_na()
     annio_0_c <- cercas$año[1]
     if (is.na(annio_0_c)) annio_0_c <- 0
-    captura_cercas <- carbono_capturado_estimacion(area = cercas$valor, años = cercas$año, region = region, tipo_cobertura = 'cercas_vivas', t_e = (fecha_hoy - annio_0_c) + 10)
+    captura_cercas <- carbono_capturado_estimacion(area = cercas$valor, anos = cercas$año, region = region, tipo_cobertura = 'cercas_vivas', t_e = (fecha_hoy - annio_0_c) + 10)
     captura_cercas$Suelo <-  'Cercas vivas'
     captura_cercas$Estimacion  <- cumsum(captura_cercas$co2)
     if (region != 'Otras Áreas') {
@@ -732,7 +737,7 @@ server <- function(input, output, session) {
     pastoriles <- l$pastoriles %>% bind_rows() %>% drop_na()
     annio_0_sv <- pastoriles$año[1]
     if (is.na(annio_0_sv)) annio_0_sv <- 0
-    captura_pastoriles <- carbono_capturado_estimacion(area = pastoriles$valor,años = pastoriles$año, region = region, tipo_cobertura = 'silvopastoriles', (fecha_hoy - annio_0_sv) + 10)
+    captura_pastoriles <- carbono_capturado_estimacion(area = pastoriles$valor,anos = pastoriles$año, region = region, tipo_cobertura = 'silvopastoriles', (fecha_hoy - annio_0_sv) + 10)
     captura_pastoriles$Suelo <- 'Silvopastoriles'
     captura_pastoriles$Estimacion  <- cumsum(captura_pastoriles$co2)
     if (region != 'Otras Áreas') {
@@ -789,12 +794,25 @@ server <- function(input, output, session) {
 
   })
 
+  output$warning_years <- renderUI({
+    if(is.null(result())) return()
+    data <- result()$captura_general
+    current_year <- as.numeric(format(Sys.Date(), "%Y"))
+    min_year <-  current_year - 20
+    if(min(data$Tiempo)>= min_year){
+      return()
+    }
+    div(id="warning_years", HTML(paste0("ADVERTENCIA: No incluir años menores al año ", min_year,
+                                   ". <br>Todas las proyecciones solo tienen validez a 20 años")))
+  })
+
   output$vista_resultados <- renderUI({
 
     if (is.null(input$name_mun)) return()
     if (input$name_mun == "") return(HTML('<div class = "content-intro"><img style = "width:78px;" src = "img/placeholder.png"><div class = "text-intro">Llena los campos de información de tú predio</div></div>'))
 
     data <- result()$captura_general
+    #str(min(data$Tiempo))
     if (sum(data$carbono) == 0)  return(HTML('<div class = "content-intro"><img style = "width:78px;" src = "img/placeholder.png"><div class = "text-intro">Llena los campos de información de tú predio</div></div>'))
     options(scipen = 9999)
 
@@ -827,7 +845,7 @@ server <- function(input, output, session) {
     #data$carbono <- round(cumsum(data$carbono), 2)
 
     data <- data %>%
-      select(Año = Tiempo, Suelo, carbono = Estimacion)
+      select(Ano = Tiempo, Suelo, carbono = Estimacion)
 
 
     viz_lines(data, type_plot = type_p)
