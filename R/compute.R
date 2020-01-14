@@ -1,4 +1,4 @@
-availableRegiones <- function() c("Eje Cafetero", "Piedemonte del Meta", "Valle del Rio Cesar", "Bajo Magdalena", "Boyac\\u00e1 y Santander", "Otras \\u00c1reas")
+availableRegiones <- function() c("Eje Cafetero", "Piedemonte del Meta", "Valle del Rio Cesar", "Bajo Magdalena", "Boyac\u00e1 y Santander", "Otras \u00c1reas")
 availableTipoCobertura <- function() c("arboles_dispersos", "cercas_vivas", "silvopastoriles", "bosque_secundario")
 
 utils::globalVariables(c("region_colombia", "tipo", "DEPARTAMEN", "NOMBRE_ENT", ".", "co2",
@@ -163,7 +163,7 @@ regiones_match <- function(departamento = NULL, municipio) {
   }
 
   if (nrow(data_mun) == 0) {
-    region <- 'Otras \\u00c1reas'
+    region <- 'Otras \u00c1reas'
   } else {
     region <- unique(data_mun$Region)
   }

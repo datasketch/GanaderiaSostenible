@@ -484,7 +484,7 @@ ui <- panelsPage( styles = styles,
                    ),
                    panel(
                      title = HTML(paste0('INFORMACIÓN DEL PREDIO<div class = "info-tool"> <div class="tooltip-inf"> <i class="fa fa-info-circle"></i><span class="tooltiptext" style = "width: 340px !important;text-transform: lowercase;"><span style = "color: #2E4856;text-transform: uppercase;">A</span>ctive el gps para determinar su ubicación o ingrese el municipio en el cuál tiene sus predios, luego diríjase a los suelos de interés, ingrese el año inicial en el que empezó la implementación del suelo y el número total de hectáreas de este terreno, sí desde el año inicial hasta la actualidad ha agregado más terreno, de click en agregar año donde se desplegará un nuevo cuadro, allí debe ingresar el año en el que agregó más hectáreas a su suelo y poner el número adicional.</span</div></div></div>')),
-                     show_footer = FALSE, color = "olive", collapsed = FALSE, width = 300, id = 'panel-info', id_body = 'remove-padding',
+                     show_footer = FALSE, color = "olive", collapsed = FALSE, width = 350, id = 'panel-info', id_body = 'remove-padding',
                      body = (
                        div(
                          div(style = 'background: #ffffff;',
@@ -760,6 +760,7 @@ server <- function(input, output, session) {
     captura_general <- bind_rows(captura_primario, captura_secundario, captura_potreros, captura_cercas, captura_pastoriles)
     captura_general <- captura_general %>% select(Tiempo, Suelo, carbono = co2, Estimacion) %>% filter(carbono != 0)
     captura_total <- captura_general %>% group_by(Tiempo) %>% summarise(Estimacion = sum(Estimacion, na.rm = T))
+    if(nrow(captura_total) == 0) return()
     captura_total$Suelo <- 'Todos los suelos'
     captura_total <- captura_total %>% select(Tiempo, Suelo, Estimacion)
     estimacion_pajaros <- list(pajaros_bosque_primario, pajaros_bosque_secundario, pajaros_potreros, pajaros_cercas, pajaros_pastoriles)
@@ -843,7 +844,7 @@ server <- function(input, output, session) {
       div(
         HTML(paste0('<div style = "text-align:center;">
                         <div class = "title-viz">CONTAMINACIÓN EVITADA</div>
-                          <div class = "subtitle-viz">', total_tco2e," tCO2e
+                          <div class = "subtitle-viz">', total_tco2e," tCO<sub>2</sub>e
                             <br>
                           <div class = 'info-tool'>",co2_car,' carros
                         <div class="tooltip-inf">

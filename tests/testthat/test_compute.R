@@ -49,7 +49,7 @@ test_that("Región a la cual pertenece un municipio", {
   departamento <- 'Nariño'
   municipio <- 'Potosí'
   reg_p <- regiones_match(departamento, municipio)
-  expect_equal(reg_p, 'Otras \\u00c1reas')
+  expect_equal(reg_p, 'Otras \u00c1reas')
 
   municipio <- 'Galapa'
   reg_g <- regiones_match(municipio = municipio)
