@@ -483,7 +483,14 @@ ui <- panelsPage( styles = styles,
                      )
                    ),
                    panel(
-                     title = HTML(paste0('INFORMACIÓN DEL PREDIO<div class = "info-tool"> <div class="tooltip-inf"> <i class="fa fa-info-circle"></i><span class="tooltiptext" style = "width: 340px !important;text-transform: lowercase;"><span style = "color: #2E4856;text-transform: uppercase;">A</span>ctive el gps para determinar su ubicación o ingrese el municipio en el cuál tiene sus predios, luego diríjase a los suelos de interés, ingrese el año inicial en el que empezó la implementación del suelo y el número total de hectáreas de este terreno, sí desde el año inicial hasta la actualidad ha agregado más terreno, de click en agregar año donde se desplegará un nuevo cuadro, allí debe ingresar el año en el que agregó más hectáreas a su suelo y poner el número adicional.</span</div></div></div>')),
+                     title = HTML(paste0('INFORMACIÓN DEL PREDIO<div class = "info-tool"> <div class="tooltip-inf">
+                     <i class="fa fa-info-circle"></i><span class="tooltiptext" style = "width: 340px !important;text-transform: lowercase;">
+                                         <span style = "color: #2E4856;text-transform: uppercase;">A</span>
+                                         active el gps para determinar su ubicación o ingrese el municipio en el cuál tiene sus predios, luego diríjase
+                                         a la cobertura de interés, ingrese el año inicial en el que empezó la implementación del suelo y el número total
+                                         de hectáreas de este terreno, sí desde el año inicial hasta la actualidad ha agregado más terreno, de click en
+                                         agregar año donde se desplegará un nuevo cuadro, allí debe ingresar el año en el que agregó más hectáreas a su suelo y
+                                         poner el número adicional.</span</div></div></div>')),
                      show_footer = FALSE, color = "olive", collapsed = FALSE, width = 350, id = 'panel-info', id_body = 'remove-padding',
                      body = (
                        div(
@@ -555,8 +562,13 @@ ui <- panelsPage( styles = styles,
                          ))
                      )),
                    panel(
-                     title = HTML(paste0('RESULTADOS<div class = "info-tool"> <div class="tooltip-inf"> <i class="fa fa-info-circle"></i><span class="tooltiptext" style = "width: 340px !important;text-transform: lowercase;"><span style = "color: #2E4856;text-transform: uppercase;">S</span>i selecciona captura de carbono, podrá ver el resumen del total de carbono capturado por tipo de terreno hasta el día de hoy, el gráfico le muestra el porcentaje de captura según el tipo de suelo, es decir, si tiene dos tipos de terrenos el gráfico le mostrará cuánto captura en porcentaje cada uno. <br/>
-                                <span style = "color: #2E4856;text-transform: uppercase;">S</span>i selecciona biodiversidad podrá ver la estimación del número de aves protegidas por terreno. </span</div></div></div>')),
+                     title = HTML(paste0('RESULTADOS<div class = "info-tool"> <div class="tooltip-inf"> <i class="fa fa-info-circle"></i>
+                     <span class="tooltiptext" style = "width: 340px !important;text-transform: lowercase;">
+                     <span style = "color: #2E4856;text-transform: uppercase;">S</span>i selecciona captura de carbono, podrá ver el resumen
+                     del total de carbono capturado por tipo de terreno hasta el día de hoy, el gráfico le muestra el porcentaje de captura según
+                     el tipo de suelo, es decir, si tiene dos tipos de terrenos el gráfico le mostrará cuánto captura en porcentaje cada uno. <br/>
+                                <span style = "color: #2E4856;text-transform: uppercase;">S</span>i selecciona biodiversidad podrá ver la estimación
+                                         del número de aves protegidas por terreno. </span</div></div></div>')),
                      color = "olive", collapsed = FALSE, width = 350,show_footer = FALSE, id = 'resultados-padding',
                      body = div(
                        #verbatimTextOutput('aver'),
@@ -565,7 +577,12 @@ ui <- panelsPage( styles = styles,
                      )
                    ),
                    panel(
-                     title =  HTML(paste0('RESULTADOS AVANZADOS<div class = "info-tool"> <div class="tooltip-inf"> <i class="fa fa-info-circle"></i><span class="tooltiptext" style = "width: 310px !important;text-transform: lowercase;"><span style = "color: #2E4856;text-transform: uppercase;">A</span>cá podrá ver una proyección de la captura de carbono por terreno, además si da click en el cuadro inferior del gráfico podrá ver la proyección del total capturado. <span style = "color: #2E4856;text-transform: uppercase;">S</span>i selecciona Biodiversidad en resultados, podrá deslizar el círculo para conocer el número de especies protegidas por hectáreas.</span</div></div></div>')),
+                     title =  HTML(paste0('RESULTADOS AVANZADOS<div class = "info-tool"> <div class="tooltip-inf"> <i class="fa fa-info-circle"></i>
+                                          <span class="tooltiptext" style = "width: 310px !important;text-transform: lowercase;">
+                                          <span style = "color: #2E4856;text-transform: uppercase;">A</span>cá podrá ver una proyección de la captura de carbono
+                                          por terreno, además si da click en el cuadro inferior del gráfico podrá ver la proyección del total capturado.
+                                          <span style = "color: #2E4856;text-transform: uppercase;">S</span>i selecciona Biodiversidad en resultados, podrá deslizar
+                                          el círculo para conocer el número de especies protegidas por hectáreas.</span</div></div></div>')),
                      color = "olive", collapsed = FALSE, show_footer = FALSE, id = 'resultados-padding',
                      body =  div(uiOutput('vista_avanzados'))
                    )
@@ -761,7 +778,7 @@ server <- function(input, output, session) {
     captura_general <- captura_general %>% select(Tiempo, Suelo, carbono = co2, Estimacion) %>% filter(carbono != 0)
     captura_total <- captura_general %>% group_by(Tiempo) %>% summarise(Estimacion = sum(Estimacion, na.rm = T))
     if(nrow(captura_total) == 0) return()
-    captura_total$Suelo <- 'Todos los suelos'
+    captura_total$Suelo <- 'Todas las coberturas'
     captura_total <- captura_total %>% select(Tiempo, Suelo, Estimacion)
     estimacion_pajaros <- list(pajaros_bosque_primario, pajaros_bosque_secundario, pajaros_potreros, pajaros_cercas, pajaros_pastoriles)
     list("region" = region,"captura_general" = captura_general, "captura_total" = captura_total,  "pajaros" = estimacion_pajaros)
@@ -791,7 +808,7 @@ server <- function(input, output, session) {
                 HTML('<div class = "subtitle-viz">No hay información disponible para esta ubicación</div>'))
     } else {
       tx <- div(
-        HTML('<div style = "text-align:center;"><div class = "title-viz">ESPECIES CONSERVADAS POR TIPO DE SUELO</div></div>'),
+        HTML('<div style = "text-align:center;"><div class = "title-viz">ESPECIES CONSERVADAS POR TIPO DE COBERTURA</div></div>'),
         HTML(gsub("NULL", "", paste0('<div style = "text-align:center;"><div class = "subtitle-viz">', result()$pajaros, collapse = "</div></div>"))),
         tags$img(style = "text-align: center; padding: 0px 20px;margin-top:20px;", src = "img/aves.png")
       )
@@ -839,7 +856,7 @@ server <- function(input, output, session) {
     if (id_res == 'Biodiversidad') {
       uiOutput('total_aves')
     } else {
-      total_tco2e <- format(round(sum(data$carbono)), big.mark = ' ', small.mark = '.')
+      total_tco2e <- format(round(sum(data$carbono[data$Tiempo == 2020])), big.mark = ' ', small.mark = '.') ### OJO REVISAR TOTAL
       co2_car <- format(round(co2_carros(sum(data$carbono))), big.mark = ' ', small.mark = '.')
       div(
         HTML(paste0('<div style = "text-align:center;">
@@ -892,7 +909,7 @@ server <- function(input, output, session) {
   output$slider_area <- renderUI({
     if (all(is.null(unlist(result()$pajaros)))) return()
     div(HTML('<div class = "title-sliders">Área bosque primario o secundario</div>'),
-        sliderInput('id_area_primario', ' ', min = 1000, max = 100000, value = 3000, step = 100)
+        sliderInput('id_area_primario', ' ', min = 1000, max = 10000, value = 300, step = 100)
     )
 
   })
@@ -903,7 +920,7 @@ server <- function(input, output, session) {
           HTML('<div class = "subtitle-viz">No hay información disponible para esta ubicación</div>'))
     } else {
       div(HTML('<div class = "title-sliders" style="margin-top:15px;">Área Silvopastorales, cercas vivas <br/>o árboles dispersos</div>'),
-          sliderInput('id_pastoriles', ' ', min = 1000, max = 100000, value = 5000, step = 100)
+          sliderInput('id_pastoriles', ' ', min = 1000, max = 10000, value =500, step = 100)
       )
     }
   })
@@ -957,7 +974,7 @@ server <- function(input, output, session) {
       car_tot <- format(round(sum(data$carbono)), big.mark = ' ', small.mark = '.')
 
       div(
-        HTML(paste0('<div style = "text-align:center;"><div class = "title-viz">PROYECCIÓN CAPTURA DE CARBONO </div><div class = "subtitle-viz">', car_tot, ' tCO<sub>2</sub>e</div></div>')),
+        HTML(paste0('<div style = "text-align:center;"><div class = "title-viz">PROYECCIÓN CAPTURA DE CARBONO (A 20 AÑOS)</div><div class = "subtitle-viz">', car_tot, ' tCO<sub>2</sub>e</div></div>')),
         highchartOutput('viz_lineas', height = 450),
         checkboxInput('id_lines', 'Ver resultados por total', value = FALSE)
       )

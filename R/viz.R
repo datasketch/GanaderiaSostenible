@@ -75,7 +75,7 @@ viz_bar <- function(data) {
                                    enabled = T,
                                    inside = T,
                                    align = "left",
-                                   format = " {point.percentage:.2f}%<br/>{series.name}<br/>Captura: {point.y} (tCO2e)",
+                                   format = " {point.percentage:.2f}% {series.name} Captura: {point.y} (tCO2e)",
                                    style = list(
                                      color = 'contrast',
                                      fontSize = '11px',
