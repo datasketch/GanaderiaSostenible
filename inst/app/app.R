@@ -474,7 +474,9 @@ data_mun <- read_csv('data/MunicipiosColombia_geo.csv')
 ui <- panelsPage( styles = styles,
                    header =  div(style="", class="topbar",
                                  img(class="topbar__img", src = "img/logo_GCS.png"),
-                                 HTML("<div class = 'top_title'> HERRAMIENTA <div class = 'top_line'> <div style = 'margin-left: 10px;'> ESTIMACIÓN DE BIODIVERSIDAD Y <span class = 'tex_sub'>CAPTURA DE CO<sub>2</sub></span></div></div></div>"),
+                                 HTML("<div class = 'top_title'> HERRAMIENTA <div class = 'top_line'>
+                                      <div style = 'margin-left: 10px;'> ESTIMACIÓN DE BIODIVERSIDAD, CAPTURA<span class = 'tex_sub'>
+                                      Y EMISIONES EVITADAS DE CO<sub>2</sub></span></div></div></div>"),
                                  modalButton(id = 'id-but-mod', modal_id = 'info_modal', label = HTML('<i class="fa fa-info-circle" style="font-size:31px;color:#fff"></i>'))
                    ),
                    modal(id  = "info_modal",
@@ -620,7 +622,7 @@ server <- function(input, output, session) {
   })
 
   output$resultados <- renderUI({
-    radioButtons('id_resultados', ' ', c('Captura de carbono', 'Biodiversidad'), inline = T)
+    radioButtons('id_resultados', ' ', c('Captura y emisiones evitadas', 'Biodiversidad'), inline = T)
   })
 
   map(c('primario', 'secundario', 'potreros', 'cercas', 'pastoriles'), function(i) {
@@ -984,7 +986,7 @@ server <- function(input, output, session) {
       car_tot <- format(round(sum(data$carbono)), big.mark = ' ', small.mark = '.')
 
       div(
-        HTML(paste0('<div style = "text-align:center;"><div class = "title-viz">PROYECCIÓN CAPTURA DE CARBONO (A 20 AÑOS)</div><div class = "subtitle-viz">', car_tot, ' tCO<sub>2</sub>e</div></div>')),
+        HTML(paste0('<div style = "text-align:center;"><div class = "title-viz">PROYECCIÓN DE CAPTURA Y EMISIONES EVITADAS DE CO<sub>2</sub> (A 20 AÑOS)</div><div class = "subtitle-viz">', car_tot, ' tCO<sub>2</sub>e</div></div>')),
         highchartOutput('viz_lineas', height = 450),
         checkboxInput('id_lines', 'Ver resultados por total', value = FALSE)
       )
