@@ -484,7 +484,7 @@ ui <- panelsPage( styles = styles,
                    ),
                    panel(
                      title = HTML(paste0('INFORMACIÓN DEL PREDIO<div class = "info-tool"> <div class="tooltip-inf"> <i class="fa fa-info-circle"></i><span class="tooltiptext" style = "width: 340px !important;text-transform: lowercase;"><span style = "color: #2E4856;text-transform: uppercase;">A</span>ctive el gps para determinar su ubicación o ingrese el municipio en el cuál tiene sus predios, luego diríjase a los suelos de interés, ingrese el año inicial en el que empezó la implementación del suelo y el número total de hectáreas de este terreno, sí desde el año inicial hasta la actualidad ha agregado más terreno, de click en agregar año donde se desplegará un nuevo cuadro, allí debe ingresar el año en el que agregó más hectáreas a su suelo y poner el número adicional.</span</div></div></div>')),
-                     show_footer = FALSE, color = "olive", collapsed = FALSE, width = 400, id = 'panel-info', id_body = 'remove-padding',
+                     show_footer = FALSE, color = "olive", collapsed = FALSE, width = 300, id = 'panel-info', id_body = 'remove-padding',
                      body = (
                        div(
                          div(style = 'background: #ffffff;',
@@ -557,7 +557,7 @@ ui <- panelsPage( styles = styles,
                    panel(
                      title = HTML(paste0('RESULTADOS<div class = "info-tool"> <div class="tooltip-inf"> <i class="fa fa-info-circle"></i><span class="tooltiptext" style = "width: 340px !important;text-transform: lowercase;"><span style = "color: #2E4856;text-transform: uppercase;">S</span>i selecciona captura de carbono, podrá ver el resumen del total de carbono capturado por tipo de terreno hasta el día de hoy, el gráfico le muestra el porcentaje de captura según el tipo de suelo, es decir, si tiene dos tipos de terrenos el gráfico le mostrará cuánto captura en porcentaje cada uno. <br/>
                                 <span style = "color: #2E4856;text-transform: uppercase;">S</span>i selecciona biodiversidad podrá ver la estimación del número de aves protegidas por terreno. </span</div></div></div>')),
-                     color = "olive", collapsed = FALSE, width = 450,show_footer = FALSE, id = 'resultados-padding',
+                     color = "olive", collapsed = FALSE, width = 350,show_footer = FALSE, id = 'resultados-padding',
                      body = div(
                        #verbatimTextOutput('aver'),
                        uiOutput('resultados'),
@@ -595,10 +595,6 @@ server <- function(input, output, session) {
   output$resultados <- renderUI({
     radioButtons('id_resultados', ' ', c('Captura de carbono', 'Biodiversidad'), inline = T)
   })
-
-
-
-
 
   map(c('primario', 'secundario', 'potreros', 'cercas', 'pastoriles'), function(i) {
     output[[paste0('add_anio_', i)]] <- renderUI({
@@ -672,13 +668,15 @@ server <- function(input, output, session) {
 
     fecha_hoy <- as.numeric(format(Sys.Date(), "%Y"))
 
-    bosque_primario <- l$primario %>% bind_rows() %>% drop_na()
+    bosque_primario <- l$primario %>% bind_rows() %>% drop_na() %>% filter(valor > 0)
     annio_0_pr <- bosque_primario$año[1]
     if (is.na(annio_0_pr)) annio_0_pr <- 0
-    captura_primario <- captura_carbono_bosques(departamento = lugar[1], municipio = lugar[2], area_bosque = bosque_primario$valor, anos = bosque_primario$año, t_e = (fecha_hoy -  annio_0_pr) + 10)
+    captura_primario <- captura_carbono_bosques(departamento = lugar[1], municipio = lugar[2], area_bosque = bosque_primario$valor,
+                                                anos = bosque_primario$año, t_e = (fecha_hoy -  annio_0_pr) + 10)
     captura_primario$Suelo <- 'Bosque primario'
-    captura_primario$Estimacion  <- cumsum(captura_primario$co2)
-    if (sum(captura_primario$co2) == 0)  return()
+    # captura_primario$Estimacion  <- cumsum(captura_primario$co2) ## REMOVER CUMSUM
+    captura_primario$Estimacion  <- captura_primario$co2
+    #if (sum(captura_primario$co2) == 0)  return() ## REMOVER
     if (region != 'Otras Áreas') {
       pajaros_bosque_primario <- biodiv_area(area = sum(bosque_primario$valor, na.rm = T), region = region, tipo_cobertura = 'bosque_secundario')
       if (pajaros_bosque_primario != 0) {

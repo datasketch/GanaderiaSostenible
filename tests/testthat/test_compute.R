@@ -18,6 +18,19 @@ test_that("Factor de emisión", {
   expect_equal(cercas_factor, cercas_fac)
 })
 
+test_that("Captura carbono bosque primario works",{
+
+  lugar <- c("QUINDIO", "MONTENEGRO")
+  area_primario <- 1
+  captura_primario <- captura_carbono_bosques(departamento = lugar[1], municipio = lugar[2], area_bosque = area_primario,
+                                              anos = 2010, t_e = 10)
+  # captura_primario
+  # captura_primario$Suelo <- 'Bosque primario'
+  # captura_primario$Estimacion  <- cumsum(captura_primario$co2)
+
+})
+
+
 test_that("Captura de carbono", {
   pastoriles_area <- c(10.6,	142.5, 0.0,	131.0, 170.0, 222.7, 95.4 )
   cb_capturado <- carbono_capturado_estimacion(pastoriles_area, anos = c(2013:2019), t_e = 7, region = 'Bajo Magdalena', tipo_cobertura = 'silvopastoriles')
