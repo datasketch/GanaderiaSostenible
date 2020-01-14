@@ -1,4 +1,4 @@
-library(dsAppLayout)
+library(shinypanels)
 library(tidyverse)
 library(highcharter)
 library(GanaderiaSostenible)
@@ -461,7 +461,7 @@ max-width: 500px;
 '
 source('info.R')
 data_mun <- read_csv('data/MunicipiosColombia_geo.csv')
-ui <- dsAppPanels( styles = styles,
+ui <- panelsPage( styles = styles,
                    header =  div(style="", class="topbar",
                                  img(class="topbar__img", src = "img/logo_GCS.png"),
                                  HTML("<div class = 'top_title'> HERRAMIENTA <div class = 'top_line'> <div style = 'margin-left: 10px;'> ESTIMACIÓN DE BIODIVERSIDAD Y <span class = 'tex_sub'>CAPTURA DE CO<sub>2</sub></span></div></div></div>"),
@@ -535,7 +535,7 @@ ui <- dsAppPanels( styles = styles,
                                  div(class="mas-anios-cercas",
                                      div(class = "anios-valor",
                                          textInput(paste0('anioscercas0'), ' ', value = NULL, placeholder = 'Año'),
-                                         textInput(paste0('id_anios_cercas0'), ' ', value = NULL, placeholder = 'Hectáreas')
+                                         textInput(paste0('id_anios_cercas0'), ' ', value = NULL, placeholder = 'Kilómetros')
                                      )
                                  ),
                                  uiOutput('add_anio_cercas'),
@@ -615,6 +615,14 @@ server <- function(input, output, session) {
       if (is.null(click_i[[z]])) click_i[[z]] <- 1
       map(click_i[[z]], function(i) {
         output[[paste0('annios_', z, i)]]  <- renderUI({
+          if(z == "cercas"){
+            return(
+              div(class = "anios-valor",
+                  textInput(paste0('anios', z, i), ' ', value = NULL, placeholder = 'Año'),
+                  textInput(paste0('id_anios_',  z, i), ' ', value = NULL, placeholder = 'Kilómetros')
+              )
+            )
+          }
           div(class = "anios-valor",
               textInput(paste0('anios', z, i), ' ', value = NULL, placeholder = 'Año'),
               textInput(paste0('id_anios_',  z, i), ' ', value = NULL, placeholder = 'Hectáreas')
@@ -794,26 +802,36 @@ server <- function(input, output, session) {
 
   })
 
-  output$warning_years <- renderUI({
+  min_year <- reactive({
     if(is.null(result())) return()
     data <- result()$captura_general
+    min(data$Tiempo)
+  })
+
+  output$warning_years <- renderUI({
+    if(is.null(min_year())) return()
     current_year <- as.numeric(format(Sys.Date(), "%Y"))
-    min_year <-  current_year - 20
-    if(min(data$Tiempo)>= min_year){
+    message("min year")
+    str(min_year())
+    min_year <- min_year()
+    smaller_year <- current_year - 20
+    if(min_year() >= smaller_year){
       return()
     }
     div(id="warning_years", HTML(paste0("ADVERTENCIA: No incluir años menores al año ", min_year,
-                                   ". <br>Todas las proyecciones solo tienen validez a 20 años")))
+                                        ". <br>Todas las proyecciones solo tienen validez a 20 años")))
   })
 
   output$vista_resultados <- renderUI({
 
     if (is.null(input$name_mun)) return()
-    if (input$name_mun == "") return(HTML('<div class = "content-intro"><img style = "width:78px;" src = "img/placeholder.png"><div class = "text-intro">Llena los campos de información de tú predio</div></div>'))
+    if (input$name_mun == "") return(HTML('<div class = "content-intro"><img style = "width:78px;" src = "img/placeholder.png">
+                                          <div class = "text-intro">Llena los campos de información de tú predio</div></div>'))
 
     data <- result()$captura_general
     #str(min(data$Tiempo))
-    if (sum(data$carbono) == 0)  return(HTML('<div class = "content-intro"><img style = "width:78px;" src = "img/placeholder.png"><div class = "text-intro">Llena los campos de información de tú predio</div></div>'))
+    if (sum(data$carbono) == 0)  return(HTML('<div class = "content-intro"><img style = "width:78px;" src = "img/placeholder.png">
+                                             <div class = "text-intro">Llena los campos de información de tú predio</div></div>'))
     options(scipen = 9999)
 
     id_res <- input$id_resultados
@@ -822,9 +840,23 @@ server <- function(input, output, session) {
     if (id_res == 'Biodiversidad') {
       uiOutput('total_aves')
     } else {
+      total_tco2e <- format(round(sum(data$carbono)), big.mark = ' ', small.mark = '.')
       co2_car <- format(round(co2_carros(sum(data$carbono))), big.mark = ' ', small.mark = '.')
       div(
-        HTML(paste0('<div style = "text-align:center;"><div class = "title-viz">CONTAMINACIÓN EVITADA</div><div class = "info-tool subtitle-viz">', co2_car, ' carros <div class="tooltip-inf"> <i class="fa fa-info-circle"></i><span class="tooltiptext">El cálculo se realiza según la distancia promedio recorrida en grandes ciudades durante un año (12500 km), por un carro promedio de motor 1.5 litros.</span</div></div></div></div>')),
+        HTML(paste0('<div style = "text-align:center;">
+                        <div class = "title-viz">CONTAMINACIÓN EVITADA</div>
+                          <div class = "subtitle-viz">', total_tco2e," tCO2e
+                            <br>
+                          <div class = 'info-tool'>",co2_car,' carros
+                        <div class="tooltip-inf">
+                          <i class="fa fa-info-circle"></i>
+                          <span class="tooltiptext">El cálculo se realiza según la distancia promedio recorrida en grandes ciudades
+                            durante un año (12500 km), por un carro promedio de motor 1.5 litros.
+                          </span>
+                        </div>
+                        </div>
+                    </div>
+                   ')),
         highchartOutput('viz_porcentaje', height = 450)
       )
     }
@@ -832,6 +864,8 @@ server <- function(input, output, session) {
   })
   #
   plot_lineas <- reactive({
+    if(is.null(result())) return()
+    if(is.null(min_year())) return()
     if (is.null(input$name_mun)) return()
     data <- result()$captura_general
     type_p <- 'spline'
@@ -843,9 +877,10 @@ server <- function(input, output, session) {
     if (sum(data$Estimacion) == 0) return()
 
     #data$carbono <- round(cumsum(data$carbono), 2)
-
+    max_year <- min_year() + 20
     data <- data %>%
-      select(Ano = Tiempo, Suelo, carbono = Estimacion)
+      select(Ano = Tiempo, Suelo, carbono = Estimacion) %>%
+      filter(Ano <= max_year)
 
 
     viz_lines(data, type_plot = type_p)
