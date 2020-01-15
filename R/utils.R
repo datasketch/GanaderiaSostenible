@@ -22,6 +22,9 @@ regiones_match <- function(departamento = NULL, municipio) {
 
   path <- system.file("aux/regiones.csv", package = "GanaderiaSostenible")
   info_regiones <- suppressMessages(readr::read_csv(path))
+
+  stopifnot(all(unique(info_regiones$Region) %in% availableRegiones()))
+
   info_regiones$Municipio <- iconv(tolower(info_regiones$Municipio), to="ASCII//TRANSLIT")
   info_regiones$Departamento <- iconv(tolower(info_regiones$Departamento), to="ASCII//TRANSLIT")
   municipio <- iconv(tolower(municipio), to="ASCII//TRANSLIT")

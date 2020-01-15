@@ -104,31 +104,6 @@ test_that("Captura de carbono", {
 })
 
 
-test_that("Región a la cual pertenece un municipio", {
-  municipio <- 'Montenegro'
-  reg_m <- regiones_match(municipio = municipio)
-  expect_equal(reg_m, 'Eje Cafetero')
-
-  departamento <- 'Quindío'
-  municipio <- 'Montenegro'
-  regiones_match(departamento = departamento, municipio = municipio)
-
-  departamento <- 'Nariño'
-  municipio <- 'Potosí'
-  reg_p <- regiones_match(departamento, municipio)
-  expect_equal(reg_p, 'Otras \u00c1reas')
-
-  municipio <- 'Galapa'
-  reg_g <- regiones_match(municipio = municipio)
-  expect_equal(reg_g, 'Bajo Magdalena')
-
-  municipio <- 'RIOHACHA'
-  departamento <- 'LA GUAJIRA'
-  reg_p <- regiones_match(departamento, municipio)
-  expect_equal(reg_p, 'Valle del Rio Cesar')
-})
-
-
 test_that("Carbono capturado equivalencia en número de carros", {
    num_x <- round(co2_carros(carbono_capturado = 5000))
    expect_equal(num_x, 2212)
