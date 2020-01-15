@@ -6,12 +6,14 @@
 #' runGanaderiaSostenible()
 #' }
 #' @export
-runGanaderiaSostenible <- function() {
+runGanaderiaSostenible <- function(debug = FALSE, preset = NULL) {
   appDir <- system.file("app", package = "GanaderiaSostenible")
   if (appDir == "") {
     stop("Could not find example directory. Try re-installing `GanaderiaSostenible`.", call. = FALSE)
   }
-
+  .GlobalEnv$.debug <- debug
+  .GlobalEnv$.preset <- preset
+  on.exit(rm(list=c(.debug, .preset), envir=.GlobalEnv))
   shiny::runApp(appDir, display.mode = "normal")
 }
 
@@ -24,8 +26,8 @@ app_results <- function(inputs, departamento, municipio){
   region <- regiones_match(departamento = departamento, municipio = municipio)
   captura_df <- estimacion_co2_tidy(inputs, departamento = departamento, municipio = municipio)
   if(nrow(captura_df) == 0) return()
-  est_co2_tot <- estimacion_co2(inputs, departamento = departamento, municipio = municipio)
-  captura_df_tot <- est_co2_tot$carbono_capturado_cumsum
+  est_co2 <- estimacion_co2(inputs, departamento = departamento, municipio = municipio)
+  captura_df_tot <- est_co2$carbono_capturado_cumsum
 
   ## Adjust results to app
   captura_general <- captura_df %>%
@@ -39,7 +41,9 @@ app_results <- function(inputs, departamento, municipio){
   res <- list(
     region = region,
     captura_general = captura_general,
-    captura_total = captura_total
+    captura_total = captura_total,
+    carbono_capturado_presente = est_co2$carbono_capturado_presente,
+    carbono_capturado_futuro = est_co2$carbono_capturado_futuro
   )
 
   # BIODIVERSIDAD
