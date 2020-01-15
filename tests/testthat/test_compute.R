@@ -1,17 +1,29 @@
 context("Compute")
 
-test_that("Cambio carbono",{
-  bosque_carbono <- cambio_carbono('Eje Cafetero', 'bosque_secundario', 20)
+test_that("Captura carbono",{
+
+  bosque_carbono <- captura_carbono('Eje Cafetero', 'bosque_secundario', 0:20)
   path <- system.file("data_test/test_captura_eje_cafetero.csv", package = "GanaderiaSostenible")
   test_eje_cafetero <- readr::read_csv(path)
   bosque_carbono_eje <- test_eje_cafetero[["bosque_secundario"]]
   expect_equal(bosque_carbono, bosque_carbono_eje)
 })
 
-test_that("Factor de emisión", {
+
+
+test_that("Captura carbono",{
+  bosque_carbono <- captura_carbono('Eje Cafetero', 'bosque_secundario', 0:20)
+  path <- system.file("data_test/test_captura_eje_cafetero.csv", package = "GanaderiaSostenible")
+  test_eje_cafetero <- readr::read_csv(path)
+  bosque_carbono_eje <- test_eje_cafetero[["bosque_secundario"]]
+  expect_equal(bosque_carbono, bosque_carbono_eje)
+})
+
+test_that("Cambio carbono", {
   cercas_area <- c(608.1, 1068.8, 0.0, 0.0, 442.9, 1042.9, 447.0 )
-  cercas_carbono <- cambio_carbono('Piedemonte del Meta', 'arboles_dispersos', 20)
-  cercas_factor <- factor_emision(cercas_carbono, 'Piedemonte del Meta')
+  cercas_carbono <- captura_carbono('Piedemonte del Meta', 'arboles_dispersos', 0:20)
+  cercas_factor <- cambio_carbono(cercas_carbono, 'Piedemonte del Meta')
+  #cercas_factor <- factor_emision(cercas_carbono, 'Piedemonte del Meta')
   path <- system.file("data_test/test_factor_pm.csv", package = "GanaderiaSostenible")
   test_fac_pm <- readr::read_csv(path)
   cercas_fac <- test_fac_pm[["arboles_dispersos"]]
@@ -21,23 +33,25 @@ test_that("Factor de emisión", {
 test_that("Captura carbono bosque primario works",{
 
   lugar <- c("QUINDIO", "MONTENEGRO")
-  area_primario <- 1
-  captura_primario <- captura_carbono_bosques(departamento = lugar[1], municipio = lugar[2], area_bosque = area_primario,
-                                              anos = 2010, t_e = 10)
-  # captura_primario
-  # captura_primario$Suelo <- 'Bosque primario'
-  # captura_primario$Estimacion  <- cumsum(captura_primario$co2)
+  area <- 1
+  captura_primario <- captura_carbono_bosque_primario(departamento = lugar[1], municipio = lugar[2],
+                                              area = area, t = 0:1)
+  path <- system.file("aux/co2_municipios.csv", package = "GanaderiaSostenible")
+  co2_munis <-  suppressMessages(readr::read_csv(path))
+
+  co2 <- co2_munis %>% filter(NOMBRE_ENT == "MONTENEGRO") %>% pull(MeanCO2e)
+  expect_equal(c(co2, co2), captura_primario)
 
 })
 
 
 test_that("Captura de carbono", {
-  pastoriles_area <- c(10.6,	142.5, 0.0,	131.0, 170.0, 222.7, 95.4 )
-  cb_capturado <- carbono_capturado_estimacion(pastoriles_area, anos = c(2013:2019), t_e = 7, region = 'Bajo Magdalena', tipo_cobertura = 'silvopastoriles')
-  path <- system.file("data_test/test_total_mag.csv", package = "GanaderiaSostenible")
-  test_tts_pm <- readr::read_csv(path)
-  xx <- test_tts_pm$silvopastoriles
-  expect_equal(round(cb_capturado$co2), c(54, 753, 320, 992, 1466, 2092, 1905))
+  # pastoriles_area <- c(10.6,	142.5, 0.0,	131.0, 170.0, 222.7, 95.4 )
+  # cb_capturado <- carbono_capturado_estimacion(pastoriles_area, anos = c(2013:2019), t_e = 7, region = 'Bajo Magdalena', tipo_cobertura = 'silvopastoriles')
+  # path <- system.file("data_test/test_total_mag.csv", package = "GanaderiaSostenible")
+  # test_tts_pm <- readr::read_csv(path)
+  # xx <- test_tts_pm$silvopastoriles
+  # expect_equal(round(cb_capturado$co2), c(54, 753, 320, 992, 1466, 2092, 1905))
 })
 
 
@@ -45,6 +59,10 @@ test_that("Región a la cual pertenece un municipio", {
   municipio <- 'Montenegro'
   reg_m <- regiones_match(municipio = municipio)
   expect_equal(reg_m, 'Eje Cafetero')
+
+  departamento <- 'Quindío'
+  municipio <- 'Montenegro'
+  regiones_match(departamento = departamento, municipio = municipio)
 
   departamento <- 'Nariño'
   municipio <- 'Potosí'
@@ -90,20 +108,20 @@ test_that("Biodiversidad works",{
 
 test_that("Viz",{
 
-  areas <- c(100, 30, 23, 459)
-  region <- "Eje Cafetero"
-  total <- carbono_capturado_estimacion(area = areas, region = region, t_e = 4, anos = 2001:2004, tipo_cobertura = 'bosque_secundario')
-  total$Suelo <- 'Bosque primario'
-  total <- total %>% select(Suelo, carbono = co2)
-  viz_bar(total)
-
-
-  # need to calculate proyeccion
-  d <- carbono_capturado_estimacion(area = areas, region = region, t_e = 20, anos = 2001:2004, tipo_cobertura = 'bosque_secundario')
-  d$Suelo <- 'Bosque primario'
-  d <- d %>% select(Ano = Tiempo, Suelo, carbono = co2)
-  d$carbono <- cumsum(d$carbono)
-  viz_lines(d)
+  # areas <- c(100, 30, 23, 459)
+  # region <- "Eje Cafetero"
+  # total <- carbono_capturado_estimacion(area = areas, region = region, t_e = 4, anos = 2001:2004, tipo_cobertura = 'bosque_secundario')
+  # total$Suelo <- 'Bosque primario'
+  # total <- total %>% select(Suelo, carbono = co2)
+  # viz_bar(total)
+  #
+  #
+  # # need to calculate proyeccion
+  # d <- carbono_capturado_estimacion(area = areas, region = region, t_e = 20, anos = 2001:2004, tipo_cobertura = 'bosque_secundario')
+  # d$Suelo <- 'Bosque primario'
+  # d <- d %>% select(Ano = Tiempo, Suelo, carbono = co2)
+  # d$carbono <- cumsum(d$carbono)
+  # viz_lines(d)
 
 })
 
@@ -120,7 +138,7 @@ test_that("Match_municipalities",{
 
 
 test_that("Carbono_bosque_primario",{
-  captura_carbono_bosques(municipio = 'Córdoba', area_bosque = NULL, t_e = 2)
-  cb <- captura_carbono_bosques(departamento = 'Nariño', municipio = 'Córdoba', area_bosque = 500, t_e = 1, anos = 2001)
-  expect_equal(round(cb$co2), 124618)
+  # captura_carbono_bosques(municipio = 'Córdoba', area_bosque = NULL, t_e = 2)
+  # cb <- captura_carbono_bosques(departamento = 'Nariño', municipio = 'Córdoba', area_bosque = 500, t_e = 1, anos = 2001)
+  # expect_equal(round(cb$co2), 124618)
 })

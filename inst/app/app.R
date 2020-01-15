@@ -680,7 +680,9 @@ server <- function(input, output, session) {
     lugar <- str_split(lugar, ' - ') %>% unlist()
     region <- regiones_match(departamento = lugar[1], municipio = lugar[2])
 
-    l <-  map(c('primario', 'secundario', 'potreros', 'cercas', 'pastoriles'), function(z) {
+
+
+    l <-  map(availableTipoCobertura(), function(z) {
       n_years <- 0:click_i[[z]]
       annios <- c()
       hectareas <- c()
@@ -693,7 +695,7 @@ server <- function(input, output, session) {
         data.frame(año = annios, valor = hectareas)
       })
     })
-    names(l) <- c('primario', 'secundario', 'potreros', 'cercas', 'pastoriles')
+    names(l) <- availableTipoCobertura() #c('primario', 'secundario', 'potreros', 'cercas', 'pastoriles')
 
     fecha_hoy <- as.numeric(format(Sys.Date(), "%Y"))
 
