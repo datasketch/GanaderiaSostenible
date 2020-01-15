@@ -1,8 +1,56 @@
 context("Compute")
 
+test_that("Captura carbono extreme input cases",{
+
+  lugar <- "Quindio - Montenegro"
+  lugar <- strsplit(lugar, ' - ') %>% unlist()
+  departamento <- lugar[1]
+  municipio <- lugar[2]
+
+  # SOLO BOSQUE SECUNDARIO WITH INPUT
+  inputs <- list(
+    bosque_secundario = data.frame(year = 2010, value = 1)
+  )
+  region <- regiones_match(departamento = departamento, municipio = municipio)
+
+  bs_captura_df <- estimacion_co2_tidy(inputs, departamento = departamento, municipio = municipio)
+  bs_est_co2 <- estimacion_co2(inputs, departamento = departamento, municipio = municipio)
+
+  # SOLO BOSQUE PRIMARIO WITH INPUT
+  inputs <- list(
+    bosque_primario = data.frame(year = 2010, value = 1)
+  )
+  region <- regiones_match(departamento = departamento, municipio = municipio)
+
+  bp_captura_df <- estimacion_co2_tidy(inputs, departamento = departamento, municipio = municipio)
+  bp_est_co2 <- estimacion_co2(inputs, departamento = departamento, municipio = municipio)
+
+  expect_equal(bs_est_co2$carbono_capturado_cumsum$year, bp_est_co2$carbono_capturado_cumsum$year)
+
+  # SOLO BOSQUE PRIMARION WITH OTHER NAs
+  inputs <- list(
+    bosque_primario = data.frame(year = 2010, value = 1),
+    bosque_secundario = data.frame(year = NA, value = NA),
+    arboles_dispersos = data.frame(year = NA, value = NA),
+    cercas_vivas = data.frame(year = NA, value = NA),
+    silvopastoriles = data.frame(year = NA, value = NA)
+  )
+  region <- regiones_match(departamento = departamento, municipio = municipio)
+
+  captura_df <- estimacion_co2_tidy(inputs, departamento = departamento, municipio = municipio)
+  bs2_est_co2 <- estimacion_co2(inputs, departamento = departamento, municipio = municipio)
+
+  expect_equal(bs_est_co2$carbono_capturado_cumsum$year, bs2_est_co2$carbono_capturado_cumsum$year)
+
+
+})
+
+
+
+
 test_that("Captura carbono",{
 
-  bosque_carbono <- captura_carbono('Eje Cafetero', 'bosque_secundario', 0:20)
+  bosque_carbono <- captura_carbono2('Eje Cafetero', 'bosque_secundario', 0:20)
   path <- system.file("data_test/test_captura_eje_cafetero.csv", package = "GanaderiaSostenible")
   test_eje_cafetero <- readr::read_csv(path)
   bosque_carbono_eje <- test_eje_cafetero[["bosque_secundario"]]
@@ -22,7 +70,7 @@ test_that("Captura carbono",{
 test_that("Cambio carbono", {
   cercas_area <- c(608.1, 1068.8, 0.0, 0.0, 442.9, 1042.9, 447.0 )
   cercas_carbono <- captura_carbono('Piedemonte del Meta', 'arboles_dispersos', 0:20)
-  cercas_factor <- cambio_carbono(cercas_carbono, 'Piedemonte del Meta')
+  cercas_factor <- cambio_carbono2(cercas_carbono, 'Piedemonte del Meta')
   #cercas_factor <- factor_emision(cercas_carbono, 'Piedemonte del Meta')
   path <- system.file("data_test/test_factor_pm.csv", package = "GanaderiaSostenible")
   test_fac_pm <- readr::read_csv(path)
@@ -34,6 +82,12 @@ test_that("Captura carbono bosque primario works",{
 
   lugar <- c("QUINDIO", "MONTENEGRO")
   area <- 1
+
+  cambio_carbono()
+
+
+
+  ## OLD CODE, REMOVE LATER
   captura_primario <- captura_carbono_bosque_primario(departamento = lugar[1], municipio = lugar[2],
                                               area = area, t = 0:1)
   path <- system.file("aux/co2_municipios.csv", package = "GanaderiaSostenible")

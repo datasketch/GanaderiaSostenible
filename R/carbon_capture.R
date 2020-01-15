@@ -14,7 +14,7 @@
 #' @export
 captura_carbono <- function(region, tipo_cobertura, t = 0){
   if(!region %in% availableRegiones()){
-    stop("regions must be one of: ", availableRegiones())
+    stop("Current region: ", region,". Regions must be one of: ", availableRegiones())
   }
   if(!tipo_cobertura %in% availableTipoCobertura()){
     stop("tipo_cobertura must be one of", availableTipoCobertura())
@@ -74,7 +74,6 @@ cambio_carbono <- function(captura,  region, area = 1){
 estimacion_co2_tidy <- function(inputs, departamento, municipio, t_max = 20) {
 
   region <- regiones_match(departamento = departamento, municipio = municipio)
-
   inputs_tipos_cobertura <- names(inputs)
 
   inputs <- bind_rows(inputs, .id = "tipo_cobertura") %>% purrr::transpose()
@@ -94,7 +93,7 @@ estimacion_co2_tidy <- function(inputs, departamento, municipio, t_max = 20) {
     tibble(tipo_cobertura = input$tipo_cobertura, captura = captura[1:t_max], cambio = cambio[1:t_max], cambio_acumulado = cumsum(cambio[1:t_max]),
            year = seq_along(captura) + input$year - 1)
   }) %>% dplyr::bind_rows()
-  captura_df
+  captura_df <- captura_df %>% drop_na()
 }
 
 
@@ -118,6 +117,9 @@ estimacion_co2 <- function(inputs, departamento, municipio, this_year = NULL, t_
   if(is.null(this_year))
     this_year <- as.numeric(format(Sys.Date(), "%Y"))
   captura_df <- estimacion_co2_tidy(inputs, departamento = departamento, municipio = municipio, t_max = t_max)
+
+  if(nrow(captura_df) == 0) return()
+
   min_year <- min(captura_df$year)
   captura_df <- captura_df %>% filter(year <= (min_year + t_max - 1))
 
