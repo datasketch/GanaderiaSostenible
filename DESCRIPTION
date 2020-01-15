@@ -18,6 +18,7 @@ Imports:
     shinypanels,
     highcharter,
     shiny,
+    shinyalert,
     rlang,
     dplyr,
     htmltools
