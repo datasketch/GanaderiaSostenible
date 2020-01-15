@@ -128,8 +128,8 @@ estimacion_co2 <- function(inputs, departamento, municipio, this_year = NULL, t_
 
   list(
     carbono_capturado_total = captura_df %>% pull(cambio) %>% sum(),
-    carbono_capturado_presente = captura_df %>% filter(year < this_year) %>% pull(cambio) %>% sum(),
-    carbono_capturado_futuro = captura_df %>% filter(year >= this_year) %>% pull(cambio) %>% sum(),
+    carbono_capturado_presente = captura_df %>% filter(year <= this_year) %>% pull(cambio) %>% sum(),
+    carbono_capturado_futuro = captura_df %>% filter(year > this_year) %>% pull(cambio) %>% sum(),
     carbono_capturado_cumsum = captura_cumsum
   )
 }

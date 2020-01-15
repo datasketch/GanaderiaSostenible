@@ -12,12 +12,13 @@ test_that("Input municipio",{
 
   current_year <- as.numeric(format(Sys.Date(), "%Y"))
 
+  # Same input as montenegro script
   inputs <- list(
-    bosque_primario = data.frame(year = 2010, value = 5),
-    bosque_secundario = data.frame(year = 2010, value = 10),
-    arboles_dispersos = data.frame(year = 2010, value = 2),
-    cercas_vivas = data.frame(year = 2010, value = 2),
-    silvopastoriles = data.frame(year = 2010, value = 5)
+    cercas_vivas = data.frame(year = 2012, value = 2),
+    bosque_primario = data.frame(year = 2012, value = 5),
+    bosque_secundario = data.frame(year = 2012, value = 10),
+    arboles_dispersos = data.frame(year = 2012, value = 0),
+    silvopastoriles = data.frame(year = 2012, value = 5)
   )
 
   old_app_results <- results_old(inputs, departamento, municipio)
@@ -28,6 +29,8 @@ test_that("Input municipio",{
 
   expect_equal(names(old_app_results$captura_general), names(app_results$captura_general))
   expect_equal(names(old_app_results$captura_total), names(app_results$captura_total))
+
+  expect_equal(round(app_results$carbono_capturado_presente), round(748.9119))
 
   # All NA inputs
   inputs <- list(

@@ -18,8 +18,14 @@ test_that("Examples",{
   )
   captura_df <- estimacion_co2_tidy(inputs, departamento = departamento, municipio = municipio, t_max = 8)
   captura_df
+
   expect_equal(cumsum(captura_df$cambio), res_cambio_acumulado)
   expect_equal(sum(captura_df$cambio), tot_c02)
+  expect_equal(sum(captura_df$cambio), tot_c02)
+
+  est_co2 <- estimacion_co2(inputs, departamento = departamento, municipio = municipio)
+  expect_equal(round(est_co2$carbono_capturado_presente), round(tot_c02))
+
 
   ## 02 HERRAMIENTA PARA LA ESTIMACIÓN DE CAPTURA DE CO2 EJE ÁRBOLES DISPERSOS UN AÑO
   tot_c02 <- 299927
@@ -32,6 +38,9 @@ test_that("Examples",{
   expect_equal(cumsum(captura_df$cambio), res_cambio_acumulado)
   expect_equal(sum(captura_df$cambio), tot_c02)
 
+  est_co2 <- estimacion_co2(inputs, departamento = departamento, municipio = municipio)
+  expect_equal(round(est_co2$carbono_capturado_presente), round(tot_c02))
+
   ## 03 HERRAMIENTA PARA LA ESTIMACIÓN DE CAPTURA DE CO2 EJE SILVOPASTORILES UN AÑO
   tot_c02 <- 283476
   res_cambio_acumulado <- c(91417, 118854, 146291, 173728, 201165, 228602, 256039, 283476)
@@ -43,6 +52,9 @@ test_that("Examples",{
   expect_equal(cumsum(captura_df$cambio), res_cambio_acumulado)
   expect_equal(sum(captura_df$cambio), tot_c02)
 
+  est_co2 <- estimacion_co2(inputs, departamento = departamento, municipio = municipio)
+  expect_equal(round(est_co2$carbono_capturado_presente), round(tot_c02))
+
   ## 04 HERRAMIENTA PARA LA ESTIMACIÓN DE CAPTURA DE CO2 EJE CERCAS VIVAS DOS AÑOS
   tot_c02 <- 361850.5
   res_cambio_acumulado <- c(57624, 86615, 144418, 187904.5, 231391, 274877.5, 318364, 361850.5)
@@ -51,16 +63,19 @@ test_that("Examples",{
     cercas_vivas =
       tribble(
         ~year, ~value,
-        2013,   10000,
-        2015,   5000
+        2013,   10000 / 3.5,
+        2015,   5000 / 3.5
       )
   )
 
   captura_df <- estimacion_co2_tidy(inputs, departamento = departamento, municipio = municipio, t_max = 8)
   est_co2_tot <- estimacion_co2(inputs, departamento = departamento, municipio = municipio, t_max = 8)
   captura_df_tot <- est_co2_tot$carbono_capturado_cumsum
-  expect_equal(cumsum(captura_df_tot$cambio/3.5), res_cambio_acumulado) ## OJO FACTOR DE 3.5
-  expect_equal(sum(captura_df_tot$cambio/3.5), tot_c02)
+  expect_equal(cumsum(captura_df_tot$cambio), res_cambio_acumulado) ## OJO FACTOR DE 3.5
+  expect_equal(sum(captura_df_tot$cambio), tot_c02)
+
+  est_co2 <- estimacion_co2(inputs, departamento = departamento, municipio = municipio)
+  expect_equal(round(est_co2$carbono_capturado_presente), round(tot_c02))
 
   ## 05 HERRAMIENTA PARA LA ESTIMACIÓN DE CAPTURA DE CO2 EJE ÁRBOLES DISPERSOS DOS AÑOS
   tot_c02 <- 416955.5
@@ -81,6 +96,9 @@ test_that("Examples",{
   expect_equal(cumsum(captura_df_tot$cambio), res_cambio_acumulado)
   expect_equal(est_co2_tot$carbono_capturado_total, tot_c02)
 
+  est_co2 <- estimacion_co2(inputs, departamento = departamento, municipio = municipio)
+  expect_equal(round(est_co2$carbono_capturado_presente), round(tot_c02))
+
   ## 06 HERRAMIENTA PARA LA ESTIMACIÓN DE CAPTURA DE CO2 EJE SILVOPASTORILES DOS AÑOS
   tot_c02 <-  397777.0
   res_cambio_acumulado <- c(91417, 118854, 191999.5, 233155, 274310.5, 315466, 356621.5, 397777)
@@ -100,6 +118,9 @@ test_that("Examples",{
   expect_equal(cumsum(captura_df_tot$cambio), res_cambio_acumulado)
   expect_equal(est_co2_tot$carbono_capturado_total, tot_c02)
 
+  est_co2 <- estimacion_co2(inputs, departamento = departamento, municipio = municipio)
+  expect_equal(round(est_co2$carbono_capturado_presente), round(tot_c02))
+
   ## 07 HERRAMIENTA PARA LA ESTIMACIÓN DE CAPTURA DE CO2 EJE TODOS UN AÑO
 
   tot_c02 <- 1170199.6
@@ -117,6 +138,9 @@ test_that("Examples",{
   #expect_equal(captura_df_tot$cambio_acumulado, res_cambio_acumulado)
   expect_true( sum( (captura_df_tot$cambio_acumulado - res_cambio_acumulado)^2 ) < 0.01) # Differencia <1%
   expect_equal(est_co2_tot$carbono_capturado_total, tot_c02)
+
+  est_co2 <- estimacion_co2(inputs, departamento = departamento, municipio = municipio)
+  expect_equal(round(est_co2$carbono_capturado_presente), round(tot_c02))
 
   ## 08 HERRAMIENTA PARA LA ESTIMACIÓN DE CAPTURA DE CO2 EJE TODOS DOS AÑOS.xlsx
 
@@ -139,6 +163,9 @@ test_that("Examples",{
   #expect_equal(captura_df_tot$cambio_acumulado, res_cambio_acumulado)
   expect_true( sum( (captura_df_tot$cambio_acumulado - res_cambio_acumulado)^2 ) < 0.01) # Differencia <1%
   expect_equal(round(est_co2_tot$carbono_capturado_total), round(tot_c02))
+
+  est_co2 <- estimacion_co2(inputs, departamento = departamento, municipio = municipio)
+  expect_equal(round(est_co2$carbono_capturado_presente), round(tot_c02))
 
 
 })

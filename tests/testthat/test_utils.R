@@ -28,11 +28,14 @@ test_that("Región a la cual pertenece un municipio", {
   reg_p <- regiones_match(departamento, municipio)
   expect_equal(reg_p, 'Otras \u00c1reas')
 
-
-
   municipio <- 'Galapa'
   reg_g <- regiones_match(municipio = municipio)
   expect_equal(reg_g, 'Bajo Magdalena')
+
+  municipio <- 'Manizales'
+  reg_g <- regiones_match(municipio = municipio)
+  expect_equal(reg_g, 'Eje Cafetero')
+
 
   # municipio <- 'Tunja'
   # reg_g <- regiones_match(municipio = municipio)

@@ -24,25 +24,25 @@ test_that("TNC Example",{
   captura.bsec0 <- captura.bsec
   captura.bsec[1]<-area.bsec*pastos_eje #se considera el contenido de carbono de la pastura en t=0.
   cambio.bsec<-captura.bsec[2:length(t)]-captura.bsec[1:(length(t)-1)] #Este vector debe coincidir con lo reportado en la pestaña Cambio_C_BS_EJE columna AB
-  captura.presente.bsec <- sum(cambio.bsec[1:8]) #Total captura de carbono en bosque secundario
+  captura.presente.bsec <- sum(cambio.bsec[1:9]) #Total captura de carbono en bosque secundario
   captura.proyectada.bsec <- sum(cambio.bsec)
 
   captura.silvo <- (7.698+2.7437*t)*area.silvo #esta es la ecuacion que corresponde a los silvopastoriles en eje cafetero
   captura.silvo0 <- captura.silvo
   captura.silvo[1]<-area.silvo*pastos_eje #se considera el contenido de carbono de la pastura en t=0.
   cambio.silvo<-captura.silvo[2:length(t)]-captura.silvo[1:(length(t)-1)] #Este vector debe coincidir con lo reportado en la pestaña Cambio_C_SSPi_EJE columna AB
-  captura.presente.silvo <- sum(cambio.silvo[1:8]) #Total captura de carbono en silvopastoriles
+  captura.presente.silvo <- sum(cambio.silvo[1:9]) #Total captura de carbono en silvopastoriles
   captura.proyectada.silvo <- sum(cambio.silvo)
 
   captura.cv <- (4.1633+2.8991*t)*area.cv #esta es la ecuacion que corresponde a las cercas vivas en eje cafetero
   captura.cv0 <- captura.cv
   captura.cv[1]<-area.cv*pastos_eje #se considera el contenido de carbono de la pastura en t=0.
   cambio.cv<-captura.cv[2:length(t)]-captura.cv[1:(length(t)-1)] #Este vector debe coincidir con lo reportado en la pestaña Cambio_C_CV_EJE columna AB
-  captura.presente.cv <- sum(cambio.cv[1:8]) #Total captura de carbono en cercas vivas
+  captura.presente.cv <- sum(cambio.cv[1:9]) #Total captura de carbono en cercas vivas
   captura.proyectada.cv <- sum(cambio.cv)
 
   #Este valor debe coincidir con lo reportado por la calculadora en la pestaña "captura_co2"
-  tot_co2_presente <- captura.presente.bsec+captura.presente.silvo+captura.presente.cv
+  tot_co2_presente <- captura.presente.bsec+captura.presente.silvo+captura.presente.cv ##### 748.9119
 
   #calculos para bosque primario
   library(rgdal)

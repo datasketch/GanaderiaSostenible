@@ -472,36 +472,32 @@ max-width: 500px;
 source('info.R')
 data_mun <- read_csv('data/MunicipiosColombia_geo.csv')
 ui <- panelsPage( styles = styles,
-                   header =  div(style="", class="topbar",
-                                 img(class="topbar__img", src = "img/logo_GCS.png"),
-                                 HTML("<div class = 'top_title'> HERRAMIENTA <div class = 'top_line'>
+                  header =  div(style="", class="topbar",
+                                img(class="topbar__img", src = "img/logo_GCS.png"),
+                                HTML("<div class = 'top_title'> HERRAMIENTA <div class = 'top_line'>
                                       <div style = 'margin-left: 10px;'> ESTIMACIÓN DE BIODIVERSIDAD, CAPTURA<span class = 'tex_sub'>
                                       Y EMISIONES EVITADAS DE CO<sub>2</sub></span></div></div></div>"),
-                                 modalButton(id = 'id-but-mod', modal_id = 'info_modal', label = HTML('<i class="fa fa-info-circle" style="font-size:31px;color:#fff"></i>'))
-                   ),
-                   modal(id  = "info_modal",
-                         title = div(class = 'topbar-modal',
-                                     HTML("<div class = 'top_title' style = 'align-items: center;'> HERRAMIENTA <div class = 'top_line'> <div style = 'margin-left: 10px;'> ESTIMACIÓN DE BIODIVERSIDAD Y <span class = 'tex_sub'>CAPTURA DE CO<sub>2</sub></span></div></div></div>")
-                         ),
-                         body = div(
-                           text_modal()
-                         )
-                   ),
-                   panel(
-                     id = "info_panel",
-                     title = "Información de ayuda", color = "olive", collapsed = TRUE, show_footer = FALSE,
-                     body = div(
-                       text_info()
-                     )
-                   ),
+                                modalButton(id = 'id-but-mod', modal_id = 'info_modal', label = HTML('<i class="fa fa-info-circle" style="font-size:31px;color:#fff"></i>'))
+                  ),
+                  useShinyalert(),
+                  modal(id  = "info_modal",
+                        title = div(class = 'topbar-modal',
+                                    HTML("<div class = 'top_title' style = 'align-items: center;'> HERRAMIENTA <div class = 'top_line'> <div style = 'margin-left: 10px;'> ESTIMACIÓN DE BIODIVERSIDAD Y <span class = 'tex_sub'>CAPTURA DE CO<sub>2</sub></span></div></div></div>")
+                        ),
+                        body = div(
+                          text_modal()
+                        )
+                  ),
                   panel(
-                    title = "Debug", color = "olive", collapsed = FALSE, show_footer = FALSE, width = 600,
+                    id = "info_panel",
+                    title = "Información de ayuda", color = "olive", collapsed = TRUE, show_footer = FALSE,
                     body = div(
-                      verbatimTextOutput("debug")
+                      uiOutput("debug_container"),
+                      text_info()
                     )
                   ),
-                   panel(
-                     title = HTML(paste0('INFORMACIÓN DEL PREDIO<div class = "info-tool"> <div class="tooltip-inf">
+                  panel(
+                    title = HTML(paste0('INFORMACIÓN DEL PREDIO<div class = "info-tool"> <div class="tooltip-inf">
                      <i class="fa fa-info-circle"></i><span class="tooltiptext" style = "width: 340px !important;text-transform: lowercase;">
                                          <span style = "color: #2E4856;text-transform: uppercase;">A</span>
                                          active el gps para determinar su ubicación o ingrese el municipio en el cuál tiene sus predios, luego diríjase
@@ -509,101 +505,101 @@ ui <- panelsPage( styles = styles,
                                          de hectáreas de este terreno, sí desde el año inicial hasta la actualidad ha agregado más terreno, de click en
                                          agregar año donde se desplegará un nuevo cuadro, allí debe ingresar el año en el que agregó más hectáreas a su suelo y
                                          poner el número adicional.</span</div></div></div>')),
-                     show_footer = FALSE, color = "olive", collapsed = FALSE, width = 350, id = 'panel-info', id_body = 'remove-padding',
-                     body = (
-                       div(
-                         div(style = 'background: #ffffff;',
-                             div(class = 'margin-panel-info',
-                                 div(class = "ubicacion",
-                                     div(class = 'title-filters', 'UBICACIÓN')
-                                     # geoloc::button_geoloc("gpsubicacion", HTML('<i class="fas fa-map-marker-alt"></i> Activar GPS')),
-                                 ),
-                                 uiOutput('buscador'),
-                                 br()
-                             )),
-                         uiOutput("warning_years"),
-                         box(title = div(class = 'title-filters', 'BOSQUE PRIMARIO'), collapsed = FALSE,
-                             div(class = 'panel-primario',
-                                 div(class="mas-anios-primario",
-                                     div(class = "anios-valor",
-                                         textInput(paste0('aniosprimario0'), ' ', value = NULL, placeholder = 'Año'),
-                                         textInput(paste0('id_anios_primario0'), ' ', value = NULL, placeholder = 'Hectáreas')
-                                     )
-                                 ),
-                                 uiOutput('add_anio_primario'),
-                                 br()
-                             )),
-                         box(title = div(class = 'title-filters', 'BOSQUE SECUNDARIO'), collapsed = TRUE,
-                             div(class = 'panel-secundario',
-                                 div(class="mas-anios-secundario",
-                                     div(class = "anios-valor",
-                                         textInput(paste0('aniossecundario0'), ' ', value = NULL, placeholder = 'Año'),
-                                         textInput(paste0('id_anios_secundario0'), ' ', value = NULL, placeholder = 'Hectáreas')
-                                     )
-                                 ),
-                                 uiOutput('add_anio_secundario'),
-                                 br()
-                             )),
-                         box(title = div(class = 'title-filters', 'ÁRBOLES DISPERSOS EN POTREROS'), collapsed = TRUE,
-                             div(class = 'panel-potreros',
-                                 div(class="mas-anios-potreros",
-                                     div(class = "anios-valor",
-                                         textInput(paste0('aniospotreros0'), ' ', value = NULL, placeholder = 'Año'),
-                                         textInput(paste0('id_anios_potreros0'), ' ', value = NULL, placeholder = 'Hectáreas')
-                                     )
-                                 ),
-                                 uiOutput('add_anio_potreros'),
-                                 br()
-                             )),
-                         box(title = div(class = 'title-filters', 'CERCAS VIVAS'), collapsed = TRUE,
-                             div(class = 'panel-cercas',
-                                 div(class="mas-anios-cercas",
-                                     div(class = "anios-valor",
-                                         textInput(paste0('anioscercas0'), ' ', value = NULL, placeholder = 'Año'),
-                                         textInput(paste0('id_anios_cercas0'), ' ', value = NULL, placeholder = 'Kilómetros')
-                                     )
-                                 ),
-                                 uiOutput('add_anio_cercas'),
-                                 br()
-                             )),
-                         box(title = div(class = 'title-filters', 'SISTEMAS SILVOPASTORILES INTENSIVOS'), collapsed = TRUE,
-                             div(class = 'panel-pastoriles',
-                                 div(class="mas-anios-pastoriles",
-                                     div(class = "anios-valor",
-                                         textInput(paste0('aniospastoriles0'), ' ', value = NULL, placeholder = 'Año'),
-                                         textInput(paste0('id_anios_pastoriles0'), ' ', value = NULL, placeholder = 'Hectáreas')
-                                     )
-                                 ),
-                                 uiOutput('add_anio_pastoriles'),
-                                 br()
-                             )
-                         ))
-                     )),
-                   panel(
-                     title = HTML(paste0('RESULTADOS<div class = "info-tool"> <div class="tooltip-inf"> <i class="fa fa-info-circle"></i>
+                    show_footer = FALSE, color = "olive", collapsed = FALSE, width = 350, id = 'panel-info', id_body = 'remove-padding',
+                    body = (
+                      div(
+                        div(style = 'background: #ffffff;',
+                            div(class = 'margin-panel-info',
+                                div(class = "ubicacion",
+                                    div(class = 'title-filters', 'UBICACIÓN')
+                                    # geoloc::button_geoloc("gpsubicacion", HTML('<i class="fas fa-map-marker-alt"></i> Activar GPS')),
+                                ),
+                                uiOutput('buscador'),
+                                br()
+                            )),
+                        uiOutput("warning_years"),
+                        box(title = div(class = 'title-filters', 'BOSQUE PRIMARIO'), collapsed = FALSE,
+                            div(class = 'panel-primario',
+                                div(class="mas-anios-primario",
+                                    div(class = "anios-valor",
+                                        textInput(paste0('aniosprimario0'), ' ', value = NULL, placeholder = 'Año'),
+                                        textInput(paste0('id_anios_primario0'), ' ', value = NULL, placeholder = 'Hectáreas')
+                                    )
+                                ),
+                                uiOutput('add_anio_primario'),
+                                br()
+                            )),
+                        box(title = div(class = 'title-filters', 'BOSQUE SECUNDARIO'), collapsed = TRUE,
+                            div(class = 'panel-secundario',
+                                div(class="mas-anios-secundario",
+                                    div(class = "anios-valor",
+                                        textInput(paste0('aniossecundario0'), ' ', value = NULL, placeholder = 'Año'),
+                                        textInput(paste0('id_anios_secundario0'), ' ', value = NULL, placeholder = 'Hectáreas')
+                                    )
+                                ),
+                                uiOutput('add_anio_secundario'),
+                                br()
+                            )),
+                        box(title = div(class = 'title-filters', 'ÁRBOLES DISPERSOS EN POTREROS'), collapsed = TRUE,
+                            div(class = 'panel-potreros',
+                                div(class="mas-anios-potreros",
+                                    div(class = "anios-valor",
+                                        textInput(paste0('aniospotreros0'), ' ', value = NULL, placeholder = 'Año'),
+                                        textInput(paste0('id_anios_potreros0'), ' ', value = NULL, placeholder = 'Hectáreas')
+                                    )
+                                ),
+                                uiOutput('add_anio_potreros'),
+                                br()
+                            )),
+                        box(title = div(class = 'title-filters', 'CERCAS VIVAS'), collapsed = TRUE,
+                            div(class = 'panel-cercas',
+                                div(class="mas-anios-cercas",
+                                    div(class = "anios-valor",
+                                        textInput(paste0('anioscercas0'), ' ', value = NULL, placeholder = 'Año'),
+                                        textInput(paste0('id_anios_cercas0'), ' ', value = NULL, placeholder = 'Kilómetros')
+                                    )
+                                ),
+                                uiOutput('add_anio_cercas'),
+                                br()
+                            )),
+                        box(title = div(class = 'title-filters', 'SISTEMAS SILVOPASTORILES INTENSIVOS'), collapsed = TRUE,
+                            div(class = 'panel-pastoriles',
+                                div(class="mas-anios-pastoriles",
+                                    div(class = "anios-valor",
+                                        textInput(paste0('aniospastoriles0'), ' ', value = NULL, placeholder = 'Año'),
+                                        textInput(paste0('id_anios_pastoriles0'), ' ', value = NULL, placeholder = 'Hectáreas')
+                                    )
+                                ),
+                                uiOutput('add_anio_pastoriles'),
+                                br()
+                            )
+                        ))
+                    )),
+                  panel(
+                    title = HTML(paste0('RESULTADOS<div class = "info-tool"> <div class="tooltip-inf"> <i class="fa fa-info-circle"></i>
                      <span class="tooltiptext" style = "width: 340px !important;text-transform: lowercase;">
                      <span style = "color: #2E4856;text-transform: uppercase;">S</span>i selecciona captura de carbono, podrá ver el resumen
                      del total de carbono capturado por tipo de terreno hasta el día de hoy, el gráfico le muestra el porcentaje de captura según
                      el tipo de suelo, es decir, si tiene dos tipos de terrenos el gráfico le mostrará cuánto captura en porcentaje cada uno. <br/>
                                 <span style = "color: #2E4856;text-transform: uppercase;">S</span>i selecciona biodiversidad podrá ver la estimación
                                          del número de aves protegidas por terreno. </span</div></div></div>')),
-                     color = "olive", collapsed = FALSE, width = 350,show_footer = FALSE, id = 'resultados-padding',
-                     body = div(
-                       #verbatimTextOutput('aver'),
-                       uiOutput('resultados'),
-                       uiOutput('vista_resultados')
-                     )
-                   ),
-                   panel(
-                     title =  HTML(paste0('RESULTADOS AVANZADOS<div class = "info-tool"> <div class="tooltip-inf"> <i class="fa fa-info-circle"></i>
+                    color = "olive", collapsed = FALSE, width = 350,show_footer = FALSE, id = 'resultados-padding',
+                    body = div(
+                      #verbatimTextOutput('aver'),
+                      uiOutput('resultados'),
+                      uiOutput('vista_resultados')
+                    )
+                  ),
+                  panel(
+                    title =  HTML(paste0('RESULTADOS AVANZADOS<div class = "info-tool"> <div class="tooltip-inf"> <i class="fa fa-info-circle"></i>
                                           <span class="tooltiptext" style = "width: 310px !important;text-transform: lowercase;">
                                           <span style = "color: #2E4856;text-transform: uppercase;">A</span>cá podrá ver una proyección de la captura de carbono
                                           por terreno, además si da click en el cuadro inferior del gráfico podrá ver la proyección del total capturado.
                                           <span style = "color: #2E4856;text-transform: uppercase;">S</span>i selecciona Biodiversidad en resultados, podrá deslizar
                                           el círculo para conocer el número de especies protegidas por hectáreas.</span</div></div></div>')),
-                     color = "olive", collapsed = FALSE, show_footer = FALSE, id = 'resultados-padding',
-                     body =  div(uiOutput('vista_avanzados'))
-                   )
+                    color = "olive", collapsed = FALSE, show_footer = FALSE, id = 'resultados-padding',
+                    body =  div(uiOutput('vista_avanzados'))
+                  )
 
 )
 
@@ -620,6 +616,10 @@ server <- function(input, output, session) {
   #   )
   # })
 
+  output$debug_container <- renderUI({
+    if(!.GlobalEnv$.debug) return()
+    div(class="debug", verbatimTextOutput("debug"))
+  })
 
   output$debug <- renderText({
 
@@ -649,29 +649,43 @@ server <- function(input, output, session) {
     #current_year <- as.numeric(format(Sys.Date(), "%Y"))
     inputs <- l
 
-    # inputs <- list(
-    #   bosque_primario = data.frame(year = 2010, value = 1),
-    #   bosque_secundario = data.frame(year = 2010, value = 10),
-    #   arboles_dispersos = data.frame(year = NA, value = NA),
-    #   cercas_vivas = data.frame(year = NA, value = NA),
-    #   silvopastoriles = data.frame(year = NA, value = NA)
-    # )
+    if(!is.null(.GlobalEnv$.preset)){
+      presets <- list(
+        "00" = list(
+          cercas_vivas = data.frame(year = 2012, value = 2),
+          bosque_primario = data.frame(year = 2012, value = 5),
+          bosque_secundario = data.frame(year = 2012, value = 10),
+          arboles_dispersos = data.frame(year = 2012, value = 0),
+          silvopastoriles = data.frame(year = 2012, value = 5)
+        ),
+        "01" = list(
+          cercas_vivas = list(year = 2013, value = 10000 / 3.5) ## OJO NO HAY FACTOR DE 3.5
+        ),
+        "02" = list(
+          arboles_dispersos = list(year = 2013, value = 10000 / 3.5) ## OJO NO HAY FACTOR DE 3.5
+        )
+      )
+      inputs <- presets[[.GlobalEnv$.preset]]
+    }
+
     string <- capture.output(str(c(l, inputs)))
     # string <- capture.output(str(inputs))
 
     #res <- results_old(inputs, departamento = departamento, municipio = municipio)
     res <- app_results(inputs,  departamento = departamento, municipio = municipio)
     string <- capture.output(str(res))
-    string <- capture.output(str(c(inputs, res)))
+
+    out <- list(inputs = inputs, result = res)
+    string <- capture.output(str(out))
 
     string %>% paste0(collapse = "\n")
+
   })
 
 
 
 
   output$buscador <- renderUI({
-
     dta_mun <- paste0(Hmisc::capitalize(tolower(data_mun$DEPARTAMEN)), ' - ', Hmisc::capitalize(tolower(data_mun$NOMBRE_ENT)))
     l_m <-  setNames(dta_mun, toupper(dta_mun))
     searchInput('name_mun', l_m, 'Búsqueda por municipio')
@@ -731,11 +745,14 @@ server <- function(input, output, session) {
 
   result <- reactive({
 
-    lugar <- input$name_mun
-    lugar <- "Quindío - Montenegro"
+    if(!is.null(.GlobalEnv$.preset)){
+      lugar <- "Quindío - Montenegro"
 
-    if (is.null(lugar)) return()
-    if (lugar == "") return()
+    }else{
+      lugar <- input$name_mun
+      if (is.null(lugar)) return()
+      if (lugar == "") return()
+    }
 
     lugar <- str_split(lugar, ' - ') %>% unlist()
     departamento <- lugar[1]
@@ -758,19 +775,29 @@ server <- function(input, output, session) {
     current_year <- as.numeric(format(Sys.Date(), "%Y"))
     inputs <- l
 
-    # inputs <- list(
-    #   bosque_primario = data.frame(year = 2010, value = 1),
-    #   bosque_secundario = data.frame(year = 2010, value = 10),
-    #   arboles_dispersos = data.frame(year = NA, value = NA),
-    #   cercas_vivas = data.frame(year = NA, value = NA),
-    #   silvopastoriles = data.frame(year = NA, value = NA)
-    # )
+    if(!is.null(.GlobalEnv$.preset)){
+      presets <- list(
+        "00" = list(
+          cercas_vivas = data.frame(year = 2012, value = 2),
+          bosque_primario = data.frame(year = 2012, value = 5),
+          bosque_secundario = data.frame(year = 2012, value = 10),
+          arboles_dispersos = data.frame(year = 2012, value = 0),
+          silvopastoriles = data.frame(year = 2012, value = 5)
+        ),
+        "01" = list(
+          cercas_vivas = list(year = 2013, value = 10000 / 3.5) ## OJO NO HAY FACTOR DE 3.5
+        ),
+        "02" = list(
+          arboles_dispersos = list(year = 2013, value = 10000 / 3.5) ## OJO NO HAY FACTOR DE 3.5
+        )
+      )
+      inputs <- presets[[.GlobalEnv$.preset]]
+    }
 
     str(inputs)
     #res <- results_old(inputs, departamento = departamento, municipio = municipio)
     res <- app_results(inputs,  departamento = departamento, municipio = municipio)
     str(res)
-    #message("RES: ", as.character(res))
     res
   })
 
@@ -823,8 +850,10 @@ server <- function(input, output, session) {
     if(min_year() >= smaller_year){
       return()
     }
-    div(id="warning_years", HTML(paste0("ADVERTENCIA: No incluir años menores al año ", min_year,
-                                        ". <br>Todas las proyecciones solo tienen validez a 20 años")))
+    warning_text <- paste0("ADVERTENCIA: No incluir años menores al año ", min_year,
+                           ". Todas las proyecciones solo tienen validez a 20 años")
+    shinyalert("Ups!", warning_text, type = "error")
+    div(id="warning_years", HTML(warning_text))
   })
 
 
@@ -849,7 +878,7 @@ server <- function(input, output, session) {
     if (id_res == 'Biodiversidad') {
       uiOutput('total_aves')
     } else {
-      total_tco2e <- format(round(sum(data$carbono[data$Tiempo == 2020])), big.mark = ' ', small.mark = '.') ### OJO REVISAR TOTAL
+      total_tco2e <- format(round(result()$carbono_capturado_presente), big.mark = ' ', small.mark = '.')
       co2_car <- format(round(co2_carros(sum(data$carbono))), big.mark = ' ', small.mark = '.')
       div(
         HTML(paste0('<div style = "text-align:center;">
@@ -926,7 +955,9 @@ server <- function(input, output, session) {
     if (is.null(area_bosque)) return()
     region <- result()$region
     aves_bosques <- round(biodiv_area(area = area_bosque, region = region, tipo_cobertura = 'bosque_secundario'))
-    txt <- HTML(paste0('<p class = "result-slider">Por cada  <span style="color: #2e4856;font-size: 18px;">', area_bosque, ' hectáreas </span> de más en bosques primarios o secundarios se podrían conservar <span style="color: #2e4856;font-size: 18px;">', aves_bosques, ' aves</span>.</p>' ))
+    txt <- HTML(paste0('<p class = "result-slider">Por cada  <span style="color: #2e4856;font-size: 18px;">', area_bosque,
+                       ' hectáreas </span> de más en bosques primarios o secundarios se podrían conservar
+                       <span style="color: #2e4856;font-size: 18px;">', aves_bosques, ' aves</span>.</p>' ))
 
     txt
   })
@@ -938,7 +969,9 @@ server <- function(input, output, session) {
     region <- result()$region
     aves_otras <- round(biodiv_area(area = area_otras, region = region, tipo_cobertura = 'silvopastoriles'))
     txt <- HTML(paste0('<p class = "result-slider">
-                Por cada  <span style="color: #2e4856;font-size: 18px;">', area_otras, ' hectáreas</span> de más en suelos silvopastorales, cercas vivas ó árboles dispersos se podrían conservar <span style="color: #2e4856;font-size: 18px;">', aves_otras, ' aves</span>.</p>' ))
+                Por cada  <span style="color: #2e4856;font-size: 18px;">', area_otras, ' hectáreas</span>
+                       de más en suelos silvopastorales, cercas vivas ó árboles dispersos se podrían conservar
+                       <span style="color: #2e4856;font-size: 18px;">', aves_otras, ' aves</span>.</p>' ))
 
     txt
   })
@@ -965,10 +998,12 @@ server <- function(input, output, session) {
         uiOutput('text_aves_pastoriles')
       )
     } else {
-      car_tot <- format(round(sum(data$carbono)), big.mark = ' ', small.mark = '.')
+      car_tot <- format(round(result()$carbono_capturado_futuro), big.mark = ' ', small.mark = '.')
 
       div(
-        HTML(paste0('<div style = "text-align:center;"><div class = "title-viz">PROYECCIÓN DE CAPTURA Y EMISIONES EVITADAS DE CO<sub>2</sub> (A 20 AÑOS)</div><div class = "subtitle-viz">', car_tot, ' tCO<sub>2</sub>e</div></div>')),
+        HTML(paste0('<div style = "text-align:center
+                    div class = "title-viz">PROYECCIÓN DE CAPTURA Y EMISIONES EVITADAS DE CO<sub>2</sub> (A 20 AÑOS)</div>
+                    <div class = "subtitle-viz">', car_tot, ' tCO<sub>2</sub>e</div></div>')),
         highchartOutput('viz_lineas', height = 450),
         checkboxInput('id_lines', 'Ver resultados por total', value = FALSE)
       )
