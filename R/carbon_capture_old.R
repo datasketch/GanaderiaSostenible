@@ -108,7 +108,7 @@ results_old <- function(inputs, departamento, municipio){
 }
 
 
-
+#' @export
 cambio_carbono_old <- function(region, tipo_cobertura, t_f = 0) {
   if(!region %in% availableRegiones()){
     stop("regions must be one of: ", availableRegiones())

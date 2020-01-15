@@ -50,7 +50,7 @@ test_that("Captura carbono extreme input cases",{
 
 test_that("Captura carbono",{
 
-  bosque_carbono <- captura_carbono2('Eje Cafetero', 'bosque_secundario', 0:20)
+  bosque_carbono <- captura_carbono('Eje Cafetero', 'bosque_secundario', 0:20)
   path <- system.file("data_test/test_captura_eje_cafetero.csv", package = "GanaderiaSostenible")
   test_eje_cafetero <- readr::read_csv(path)
   bosque_carbono_eje <- test_eje_cafetero[["bosque_secundario"]]
@@ -67,11 +67,10 @@ test_that("Captura carbono",{
   expect_equal(bosque_carbono, bosque_carbono_eje)
 })
 
-test_that("Cambio carbono", {
+test_that("Cambio carbono old", {
   cercas_area <- c(608.1, 1068.8, 0.0, 0.0, 442.9, 1042.9, 447.0 )
   cercas_carbono <- captura_carbono('Piedemonte del Meta', 'arboles_dispersos', 0:20)
-  cercas_factor <- cambio_carbono2(cercas_carbono, 'Piedemonte del Meta')
-  #cercas_factor <- factor_emision(cercas_carbono, 'Piedemonte del Meta')
+  cercas_factor <- factor_emision(cercas_carbono, 'Piedemonte del Meta')
   path <- system.file("data_test/test_factor_pm.csv", package = "GanaderiaSostenible")
   test_fac_pm <- readr::read_csv(path)
   cercas_fac <- test_fac_pm[["arboles_dispersos"]]
@@ -82,10 +81,6 @@ test_that("Captura carbono bosque primario works",{
 
   lugar <- c("QUINDIO", "MONTENEGRO")
   area <- 1
-
-  cambio_carbono()
-
-
 
   ## OLD CODE, REMOVE LATER
   captura_primario <- captura_carbono_bosque_primario(departamento = lugar[1], municipio = lugar[2],
