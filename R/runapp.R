@@ -18,7 +18,7 @@ runGanaderiaSostenible <- function(debug = FALSE, preset = NULL) {
 }
 
 
-
+#' @export
 app_results <- function(inputs, departamento, municipio){
 
   # CO2 CAPTURE
