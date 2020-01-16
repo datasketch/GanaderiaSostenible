@@ -886,7 +886,7 @@ server <- function(input, output, session) {
       co2_car <- format(round(co2_carros(sum(data$carbono))), big.mark = ' ', small.mark = '.')
       div(
         HTML(paste0('<div style = "text-align:center;">
-                        <div class = "title-viz">CONTAMINACIÓN EVITADA</div>
+                        <div class = "title-viz"></div>
                           <div class = "subtitle-viz">', total_tco2e," tCO<sub>2</sub>e
                             <br>
                           <div class = 'info-tool'>",co2_car,' carros
@@ -1007,7 +1007,7 @@ server <- function(input, output, session) {
         uiOutput('text_aves_pastoriles')
       )
     } else {
-      car_tot <- format(round(result()$carbono_capturado_futuro), big.mark = ' ', small.mark = '.')
+      car_tot <- format(round(result()$carbono_capturado_total), big.mark = ' ', small.mark = '.')
 
       div(
         HTML(paste0('<div style = "text-align:center">
