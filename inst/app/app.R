@@ -478,12 +478,15 @@ ui <- panelsPage( styles = styles,
                                 HTML("<div class = 'top_title'> HERRAMIENTA <div class = 'top_line'>
                                       <div style = 'margin-left: 10px;'> ESTIMACIÓN DE BIODIVERSIDAD, CAPTURA<span class = 'tex_sub'>
                                       Y EMISIONES EVITADAS DE CO<sub>2</sub></span></div></div></div>"),
-                                modalButton(id = 'id-but-mod', modal_id = 'info_modal', label = HTML('<i class="fa fa-info-circle" style="font-size:31px;color:#fff"></i>'))
+                                modalButton(id = 'id-but-mod', modal_id = 'info_modal',
+                                            label = HTML('<i class="fa fa-info-circle" style="font-size:31px;color:#fff"></i>'))
                   ),
                   useShinyalert(),
                   modal(id  = "info_modal",
                         title = div(class = 'topbar-modal',
-                                    HTML("<div class = 'top_title' style = 'align-items: center;'> HERRAMIENTA <div class = 'top_line'> <div style = 'margin-left: 10px;'> ESTIMACIÓN DE BIODIVERSIDAD Y <span class = 'tex_sub'>CAPTURA DE CO<sub>2</sub></span></div></div></div>")
+                                    HTML("<div class = 'top_title' style = 'align-items: center;'> HERRAMIENTA
+                                         <div class = 'top_line'> <div style = 'margin-left: 10px;'> ESTIMACIÓN DE BIODIVERSIDAD Y
+                                         <span class = 'tex_sub'>CAPTURA DE CO<sub>2</sub></span></div></div></div>")
                         ),
                         body = div(
                           text_modal()
@@ -802,7 +805,10 @@ server <- function(input, output, session) {
     res
   })
 
-  plot_bar <- reactive({
+  # plot_bar <- reactive({
+  # })
+
+  output$viz_porcentaje <- renderHighchart({
     if (is.null(input$name_mun)) return()
     data <- result()$captura_general
     if (sum(data$carbono) == 0) return()
@@ -812,10 +818,7 @@ server <- function(input, output, session) {
       select(Suelo, carbono)
 
     viz_bar(data)
-  })
-
-  output$viz_porcentaje <- renderHighchart({
-    plot_bar()
+    #plot_bar()
   })
 
   output$total_aves <- renderUI({
@@ -902,7 +905,11 @@ server <- function(input, output, session) {
 
   })
   #
-  plot_lineas <- reactive({
+  # plot_lineas <- reactive({
+  # })
+
+  output$viz_lineas <- renderHighchart({
+    # plot_lineas()
     if(is.null(result())) return()
     if(is.null(min_year())) return()
     if (is.null(input$name_mun)) return()
@@ -921,12 +928,7 @@ server <- function(input, output, session) {
       select(Ano = Tiempo, Suelo, carbono = Estimacion) %>%
       filter(Ano <= max_year)
 
-
     viz_lines(data, type_plot = type_p)
-  })
-
-  output$viz_lineas <- renderHighchart({
-    plot_lineas()
   })
   # #
   output$slider_area <- renderUI({
