@@ -29,3 +29,32 @@ biodiv_area <- function(area, region, tipo_cobertura, t = 0) {
   especies <- eval(parse(text=f))
   especies
 }
+
+#' @export
+biodiv_area2 <- function(areas, region, tipo_cobertura, t = 0){
+  if(!region %in% availableRegiones()){
+    stop("regions must be one of: ", availableRegiones())
+  }
+  if(!tipo_cobertura %in% availableTipoCobertura()){
+    stop("tipo_cobertura must be one of", availableTipoCobertura())
+  }
+  if(tipo_cobertura == "cercas_vivas") return(0)
+
+  load(system.file("Funciones_area_especies.RData", package = "GanaderiaSostenible"))
+  funs <- list(
+     "Bajo Magdalena_bosque_secundario" = Bajo_Magdalena_bosque_secundario,
+     "Bajo Magdalena_silvopastoriles" = Bajo_Magdalena_silvopastoriles,
+     "Boyacá y Santander_bosque_secundario" = Boyaca_y_Santander_bosque_secundario,
+     "Boyacá y Santander_silvopastoriles" = Boyaca_y_Santander_silvopastoriles,
+     "Eje Cafetero_bosque_secundario" = Eje_Cafetero_bosque_secundario,
+     "Eje Cafetero_silvopastoriles" = Eje_Cafetero_silvopastoriles,
+     "Piedemonte del Meta_bosque_secundario" = Piedemonte_del_Meta_bosque_secundario,
+     "Piedemonte del Meta_silvopastoriles" = Piedemonte_del_Meta_silvopastoriles,
+     "Valle del Rio Cesar_bosque_secundario" = Valle_del_Rio_Cesar_bosque_secundario,
+     "Valle del Rio Cesar_silvopastoriles" = Valle_del_Rio_Cesar_silvopastoriles
+     )
+  x <- sars::sar_pred(funs[[paste(region, tipo_cobertura, sep = "_")]], areas)
+  x$Prediction
+}
+
+
