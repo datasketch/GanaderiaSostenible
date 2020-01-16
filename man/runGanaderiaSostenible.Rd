@@ -4,7 +4,7 @@
 \alias{runGanaderiaSostenible}
 \title{Ganaderia Sostenible Web App}
 \usage{
-runGanaderiaSostenible()
+runGanaderiaSostenible(debug = FALSE, preset = NULL)
 }
 \value{
 None
