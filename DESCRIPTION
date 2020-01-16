@@ -21,7 +21,8 @@ Imports:
     shinyalert,
     rlang,
     dplyr,
-    htmltools
+    htmltools,
+    sars
 Suggests: 
     tidyverse,
     tidyr,
