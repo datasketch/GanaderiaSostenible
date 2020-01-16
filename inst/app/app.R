@@ -1,4 +1,5 @@
 library(shinypanels)
+library(shinyalert)
 library(tidyverse)
 library(highcharter)
 library(GanaderiaSostenible)
@@ -814,7 +815,7 @@ server <- function(input, output, session) {
   })
 
   output$viz_porcentaje <- renderHighchart({
-    print(plot_bar())
+    plot_bar()
   })
 
   output$total_aves <- renderUI({
@@ -861,14 +862,14 @@ server <- function(input, output, session) {
 
     if (is.null(input$name_mun)) return()
 
-    # if (input$name_mun == "") return(HTML('<div class = "content-intro"><img style = "width:78px;" src = "img/placeholder.png">
-    #                                       <div class = "text-intro">Llena los campos de información de tú predio</div></div>'))
+    if (input$name_mun == "") return(HTML('<div class = "content-intro"><img style = "width:78px;" src = "img/placeholder.png">
+                                          <div class = "text-intro">Llena los campos de información de tú predio</div></div>'))
 
     data <- result()$captura_general
     #str(min(data$Tiempo))
 
-    # if (sum(data$carbono) == 0)  return(HTML('<div class = "content-intro"><img style = "width:78px;" src = "img/placeholder.png">
-    #                                          <div class = "text-intro">Llena los campos de información de tú predio</div></div>'))
+    if (sum(data$carbono) == 0)  return(HTML('<div class = "content-intro"><img style = "width:78px;" src = "img/placeholder.png">
+                                             <div class = "text-intro">Llena los campos de información de tú predio</div></div>'))
 
     options(scipen = 9999)
 
@@ -978,12 +979,18 @@ server <- function(input, output, session) {
 
   output$vista_avanzados <- renderUI({
 
-    # if (is.null(input$name_mun)) return()
-    # if (input$name_mun == "") return(HTML('<div class = "content-intro" style = "margin-top:45px;"><img style = "width:78px;" src = "img/placeholder.png"><div class = "text-intro">Llena los campos de <br/> información de tú predio</div></div>'))
+    if (is.null(input$name_mun)) return()
+    if (input$name_mun == "") return(HTML('<div class = "content-intro" style = "margin-top:45px;">
+                                          <img style = "width:78px;" src = "img/placeholder.png">
+                                          <div class = "text-intro">Llena los campos de <br/> información de tú predio</div>
+                                          </div>'))
 
     data <- result()$captura_general
 
-    # if (sum(data$carbono) == 0)  return(HTML('<div class = "content-intro" style = "margin-top:45px;"><img style = "width:78px;" src = "img/placeholder.png"><div class = "text-intro">Llena los campos de <br/> información de tú predio</div></div>'))
+    if (sum(data$carbono) == 0)  return(HTML('<div class = "content-intro" style = "margin-top:45px;">
+                                             <img style = "width:78px;" src = "img/placeholder.png">
+                                             <div class = "text-intro">Llena los campos de <br/> información de tú predio</div>
+                                             </div>'))
 
     options(scipen = 9999)
 
@@ -1001,9 +1008,10 @@ server <- function(input, output, session) {
       car_tot <- format(round(result()$carbono_capturado_futuro), big.mark = ' ', small.mark = '.')
 
       div(
-        HTML(paste0('<div style = "text-align:center
-                    div class = "title-viz">PROYECCIÓN DE CAPTURA Y EMISIONES EVITADAS DE CO<sub>2</sub> (A 20 AÑOS)</div>
-                    <div class = "subtitle-viz">', car_tot, ' tCO<sub>2</sub>e</div></div>')),
+        HTML(paste0('<div style = "text-align:center">
+                    <div class = "title-viz">PROYECCIÓN DE CAPTURA Y EMISIONES EVITADAS DE CO<sub>2</sub> (A 20 AÑOS)</div>
+                    <div class = "subtitle-viz">', car_tot, ' tCO<sub>2</sub>e</div>
+                    </div>')),
         highchartOutput('viz_lineas', height = 450),
         checkboxInput('id_lines', 'Ver resultados por total', value = FALSE)
       )
@@ -1013,6 +1021,13 @@ server <- function(input, output, session) {
 
 
 }
+
+onStop(function() {
+  cat("Doing application cleanup\n")
+  .GlobalEnv$.preset <- NULL
+  .GlobalEnv$.debug <- FALSE
+  rm(list=c(.debug, .preset), envir=.GlobalEnv)
+})
 
 shinyApp(ui, server)
 

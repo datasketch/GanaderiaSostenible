@@ -75,6 +75,48 @@ test_that("Input municipio",{
 
   expect_equal(nrow(app_results$captura_general), nrow(old_app_results$captura_general))
 
+  ### App viz
+
+
+  inputs <- list(
+    cercas_vivas = data.frame(year = 2012, value = 2),
+    bosque_primario = data.frame(year = 2012, value = 5),
+    bosque_secundario = data.frame(year = 2012, value = 10),
+    arboles_dispersos = data.frame(year = 2012, value = 0),
+    silvopastoriles = data.frame(year = 2012, value = 5)
+  )
+  result <- app_results(inputs, departamento, municipio)
+
+  ## Viz bar
+
+  data <- result$captura_general
+  data$carbono <- round(data$carbono, 2)
+  data <- data %>%
+    filter(Tiempo <= as.numeric(format(Sys.Date(), "%Y"))) %>%
+    select(Suelo, carbono)
+
+  viz_bar(data)
+
+  ## Viz lines
+
+  data <- result$captura_general
+  type_p <- 'spline'
+
+  min_year <- min(data$Tiempo)
+  max_year <- min_year + 20
+  data <- data %>%
+    select(Ano = Tiempo, Suelo, carbono = Estimacion) %>%
+    filter(Ano <= max_year)
+  viz_lines(data, type_plot = type_p)
+
+  data <- result$captura_total
+  data <- data %>%
+    select(Ano = Tiempo, Suelo, carbono = Estimacion) %>%
+    filter(Ano <= max_year)
+  type_p <- 'area'
+  viz_lines(data, type_plot = type_p)
+
+
 })
 
 

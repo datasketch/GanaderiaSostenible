@@ -27,6 +27,12 @@ viz_bar <- function(data) {
 
   data <- data %>% dplyr::filter(carbono != 0)
 
+  level_key <- c(cercas_vivas = "Cercas Vivas", bosque_primario = "Bosque Primario",
+                 bosque_secundario = "Bosque Secundario", arboles_dispersos = "Árboles Dispersos",
+                 silvopastoriles = "Silvopastoriles")
+  data$Suelo <- recode(data$Suelo, !!!level_key)
+
+
   d <- data %>%
     dplyr::group_by(Suelo) %>%
     dplyr::summarise(carbono = sum(carbono, na.rm = T))
@@ -35,12 +41,15 @@ viz_bar <- function(data) {
   d <- d %>% dplyr::ungroup() %>%
     dplyr::mutate(porcentaje = (carbono / sum(carbono, na.rm = TRUE)) * 100)
 
-
+  colors <- c(`Bosque Secundario` = '#dbefa5', `Cercas Vivas` = '#ea640d',
+              `Silvopastoriles` = '#fdbc00', `Bosque Primario` = '#3d894d',
+              `Árboles Dispersos` = '#2e4856')
 
   series <- purrr::map(as.character(unique(d$Suelo)), function(i) {
     d0 <- d %>%
       dplyr::filter(Suelo %in% i)
     l0 <- list("name" = as.character(i),
+               "color" = unname(colors[i]),
                "data" = list(d0$carbono)
     )
   })
@@ -122,25 +131,36 @@ viz_lines <- function(data, type_plot = "spline") {
     stop("Load an available dataset")
   }
 
+  level_key <- c(cercas_vivas = "Cercas Vivas", bosque_primario = "Bosque Primario",
+                 bosque_secundario = "Bosque Secundario", arboles_dispersos = "Árboles Dispersos",
+                 silvopastoriles = "Silvopastoriles")
+  data$Suelo <- recode(data$Suelo, !!!level_key)
+
   d <- data %>%
     dplyr::group_by(Ano, Suelo) %>%
     dplyr::summarise(total = sum(carbono, na.rm = T)) %>%
     tidyr::spread(Suelo, total) %>%
     tidyr::gather(Suelo, total, -Ano)
 
-
+  colors <- c(`Bosque Secundario` = '#dbefa5', `Cercas Vivas` = '#ea640d',
+              `Silvopastoriles` = '#fdbc00', `Bosque Primario` = '#3d894d',
+              `Árboles Dispersos` = '#2e4856')
 
   series <- purrr::map(unique(d[[2]]), function(i) {
     d0 <- d %>%
       dplyr::filter(Suelo %in% i)
     l0 <- list("name" = as.character(i),
+               "color" = unname(colors[i]),
                "data" = d0$total,
                "marker" = list(symbol = 'circle'))
   })
 
 
- p_i <- grep( format(Sys.Date(), '%Y'), data$Ano) - 1
- if (identical(p_i, integer(0))) p_i <- 2019
+ # p_i <- grep(format(Sys.Date(), '%Y'), data$Ano) - 1
+ # if (identical(p_i, integer(0))) p_i <- 2020
+
+ p_i <- as.numeric(format(Sys.Date(), '%Y')) -  min(data$Ano)
+
  options(highcharter.lang = hcoptslang)
 
  highchart() %>%
