@@ -45,7 +45,11 @@ captura_carbono <- function(region, tipo_cobertura, t = 0){
 #'
 #' @export
 cambio_carbono <- function(captura,  region, area = 1){
-  if(is.na(region)) return(rep(0, length(captura)-1))
+  if(is.na(region)){
+    #message("here")
+    #return(rep(0, length(captura)-1))
+    return(captura)
+  }
   captura_pastura <- captura_pasturas(region)
   captura[1]<- area * captura_pastura
   diff(captura)
@@ -83,6 +87,7 @@ estimacion_co2_tidy <- function(inputs, departamento, municipio, t_max = 20) {
       captura <- captura_carbono_bosque_primario(departamento = departamento,
                                                  municipio = municipio, area = input$value, t = 0:(t_max-0))
       cambio <- cambio_carbono(captura, NA)
+      #cambio <- cambio_carbono(captura, NA)
     }else{
       if(input$tipo_cobertura == "cercas_vivas"){
         input$value <- input$value * 3.5
@@ -166,7 +171,7 @@ captura_carbono_bosque_primario <- function(departamento, municipio, area = 1, t
 
   data_mun <- data_mun %>% dplyr::filter(NOMBRE_ENT %in% municipio) %>% pull(MeanCO2e)
   captura <- data_mun * area
-  if(!is.null(t)) captura <- rep(captura, length(t))
+  if(!is.null(t)) captura <- c(captura, rep(0, length(t)-1))
   captura
 }
 

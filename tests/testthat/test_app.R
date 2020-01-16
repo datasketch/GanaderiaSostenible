@@ -75,6 +75,15 @@ test_that("Input municipio",{
 
   expect_equal(nrow(app_results$captura_general), nrow(old_app_results$captura_general))
 
+
+  ##
+
+  inputs <- list(
+    bosque_primario = data.frame(year = 2012, value = 5)
+    )
+  result <- app_results(inputs, departamento, municipio)
+
+
   ### App viz
 
 

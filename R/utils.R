@@ -1,4 +1,8 @@
+
+#' @export
 availableRegiones <- function() c("Eje Cafetero", "Piedemonte del Meta", "Valle del Rio Cesar", "Bajo Magdalena", "Boyac\u00e1 y Santander", "Otras \u00c1reas")
+
+#' @export
 availableTipoCobertura <- function() c( "bosque_primario",  "bosque_secundario", "arboles_dispersos", "cercas_vivas", "silvopastoriles")
 
 utils::globalVariables(c("region_colombia", "tipo", "DEPARTAMEN", "NOMBRE_ENT", ".", "co2",
