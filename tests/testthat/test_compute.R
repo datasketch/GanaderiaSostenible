@@ -42,6 +42,21 @@ test_that("Captura carbono extreme input cases",{
 
   expect_equal(bs_est_co2$carbono_capturado_cumsum$year, bs2_est_co2$carbono_capturado_cumsum$year)
 
+  # SOLO CERCAS VIVAS
+
+  municipio <- "Piojó"
+  departamento <- "Atlántico"
+  inputs <- list(
+    cercas_vivas = list(year = 2013, value = 10000 / 3.5)
+    #bosque_secundario = list(year = 2013, value = 10000) ## OJO NO HAY FACTOR DE 3.5
+  )
+  regiones_match(departamento = departamento, municipio = municipio)
+
+  captura_df <- estimacion_co2_tidy(inputs, departamento = departamento, municipio = municipio, t_max = 8)
+  captura_df
+
+
+
 
 })
 
@@ -89,7 +104,7 @@ test_that("Captura carbono bosque primario works",{
   co2_munis <-  suppressMessages(readr::read_csv(path))
 
   co2 <- co2_munis %>% filter(NOMBRE_ENT == "MONTENEGRO") %>% pull(MeanCO2e)
-  expect_equal(c(co2, co2), captura_primario)
+  expect_equal(c(co2, 0), captura_primario)
 
 })
 
@@ -111,58 +126,3 @@ test_that("Carbono capturado equivalencia en número de carros", {
 
 
 
-
-
-test_that("Biodiversidad works",{
-
-  area <- 10
-  region <- "Eje Cafetero"
-  pop2 <- biodiv_area(10, "Eje Cafetero", "bosque_secundario")
-  pop2
-  pop2 <- biodiv_area(1000, region, "bosque_secundario")
-  pop2
-
-
-  areas <- c(100)
-  region <- "Eje Cafetero"
-  total <- biodiv_area(areas, region, t = 10, tipo_cobertura = "arboles_dispersos")
-  total
-
-})
-
-test_that("Viz",{
-
-  # areas <- c(100, 30, 23, 459)
-  # region <- "Eje Cafetero"
-  # total <- carbono_capturado_estimacion(area = areas, region = region, t_e = 4, anos = 2001:2004, tipo_cobertura = 'bosque_secundario')
-  # total$Suelo <- 'Bosque primario'
-  # total <- total %>% select(Suelo, carbono = co2)
-  # viz_bar(total)
-  #
-  #
-  # # need to calculate proyeccion
-  # d <- carbono_capturado_estimacion(area = areas, region = region, t_e = 20, anos = 2001:2004, tipo_cobertura = 'bosque_secundario')
-  # d$Suelo <- 'Bosque primario'
-  # d <- d %>% select(Ano = Tiempo, Suelo, carbono = co2)
-  # d$carbono <- cumsum(d$carbono)
-  # viz_lines(d)
-
-})
-
-
-
-
-test_that("Match_municipalities",{
-
- regiones_match('atlantico', 'Juan de Acosta')
- regiones_match(departamento = NULL, municipio = 'usiacuri')
-
-})
-
-
-
-test_that("Carbono_bosque_primario",{
-  # captura_carbono_bosques(municipio = 'Córdoba', area_bosque = NULL, t_e = 2)
-  # cb <- captura_carbono_bosques(departamento = 'Nariño', municipio = 'Córdoba', area_bosque = 500, t_e = 1, anos = 2001)
-  # expect_equal(round(cb$co2), 124618)
-})

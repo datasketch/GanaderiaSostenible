@@ -1,7 +1,6 @@
-context("Compute")
+context("Captura computations work for all regions")
 
-test_that("Examples",{
-
+test_that("Captura Eje Cafetero",{
 
   region <- "Eje Cafetero"
   regiones <- readr::read_csv(system.file("aux/regiones.csv", package = "GanaderiaSostenible"))
@@ -13,6 +12,15 @@ test_that("Examples",{
   ## 01 HERRAMIENTA PARA LA ESTIMACIÓN DE CAPTURA DE CO2 EJE CERCAS VIVAS UN AÑO
   tot_c02 <- 260561
   res_cambio_acumulado <- c(57624, 86615, 115606, 144597, 173588, 202579, 231570, 260561)
+
+
+  inputs <- list(
+    cercas_vivas = list(year = 2013, value = 10/3.5) ## OJO NO HAY FACTOR DE 3.5
+  )
+  captura_df <- estimacion_co2_tidy(inputs, departamento = departamento, municipio = municipio, t_max = 8)
+  captura_df
+
+
   inputs <- list(
     cercas_vivas = list(year = 2013, value = 10000 / 3.5) ## OJO NO HAY FACTOR DE 3.5
   )
@@ -167,5 +175,45 @@ test_that("Examples",{
   est_co2 <- estimacion_co2(inputs, departamento = departamento, municipio = municipio)
   expect_equal(round(est_co2$carbono_capturado_presente), round(tot_c02))
 
+})
+
+test_that("Captura Bajo Magdalena",{
+
+  ## 10 HERRAMIENTA PARA LA ESTIMACIÓN DE CAPTURA DE CO2 MAG TODOS DOS AÑOS
+
+  region <- "Bajo Magdalena"
+  regiones <- readr::read_csv(system.file("aux/regiones.csv", package = "GanaderiaSostenible"))
+
+  lugar <- regiones %>% filter(Region == region) %>% sample_n(1) %>% select(-1) %>% as.list()
+  municipio <- lugar[1]
+  departamento <- lugar[2]
+
+
+  tot_c02 <- 2893687.6
+  res_cambio_acumulado <- c(271878.5, 510977, 897432.4, 1276505.7, 1668305, 2069962.7, 2479090, 2893687.6)
+
+  inputs <- list(
+    bosque_secundario = list(year = 2013, value = 10000),
+    cercas_vivas = list(year = 2013, value = 10000 / 3.5),
+    arboles_dispersos = list(year = 2013, value = 10000),
+    silvopastoriles = list(year = 2013, value = 10000),
+    bosque_secundario = list(year = 2015, value = 5000),
+    cercas_vivas = list(year = 2015, value = 5000 / 3.5),
+    arboles_dispersos = list(year = 2015, value = 5000),
+    silvopastoriles = list(year = 2015, value = 5000)
+  )
+  captura_df <- estimacion_co2_tidy(inputs, departamento = departamento, municipio = municipio, t_max = 8)
+  est_co2_tot <- estimacion_co2(inputs, departamento = departamento, municipio = municipio, t_max = 8)
+  captura_df_tot <- est_co2_tot$carbono_capturado_cumsum
+  #expect_equal(captura_df_tot$cambio_acumulado, res_cambio_acumulado)
+  expect_true( sum( (captura_df_tot$cambio_acumulado - res_cambio_acumulado)^2 ) < 0.01) # Differencia <1%
+  expect_equal(round(est_co2_tot$carbono_capturado_total), round(tot_c02))
+
+  est_co2 <- estimacion_co2(inputs, departamento = departamento, municipio = municipio)
+  expect_equal(round(est_co2$carbono_capturado_presente), round(tot_c02))
 
 })
+
+
+
+

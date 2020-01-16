@@ -109,7 +109,7 @@ test_that("TNC Example",{
   co2_est <- estimacion_co2(inputs, departamento = "Quindio", municipio = "Montenegro", this_year = 2020)
 
 
-  expect_equal(co2_est$carbono_capturado_presente, tot_co2_presente)
+  expect_equal(co2_est$carbono_capturado_presente, tot_co2_presente + emision.evitada)
 
 })
 

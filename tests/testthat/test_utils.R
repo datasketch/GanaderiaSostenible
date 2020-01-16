@@ -46,3 +46,14 @@ test_that("Región a la cual pertenece un municipio", {
   # reg_p <- regiones_match(departamento, municipio)
   # expect_equal(reg_p, 'Valle del Rio Cesar')
 })
+
+
+test_that("Match_municipalities",{
+
+  regiones_match('atlantico', 'Juan de Acosta')
+  regiones_match(departamento = NULL, municipio = 'usiacuri')
+
+})
+
+
+

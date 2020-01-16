@@ -25,12 +25,10 @@ test_that("Input municipio",{
 
   app_results <- app_results(inputs, departamento = departamento, municipio = municipio)
 
-  expect_equal(app_results$pajaros, old_app_results$pajaros)
-
   expect_equal(names(old_app_results$captura_general), names(app_results$captura_general))
   expect_equal(names(old_app_results$captura_total), names(app_results$captura_total))
 
-  expect_equal(round(app_results$carbono_capturado_presente), round(748.9119))
+  expect_equal(round(app_results$carbono_capturado_presente), round(1627.705)) # tot_co2_presente + emision.evitada # test_montenegro
 
   # All NA inputs
   inputs <- list(
