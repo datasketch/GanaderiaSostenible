@@ -25,7 +25,7 @@ html {
 h3,h4,label,span{
   color: #8096a3;
 }
-p {
+p li{
   font-size: 11pt;
   color: #8096a3;
 }
@@ -828,8 +828,10 @@ server <- function(input, output, session) {
                 HTML('<div class = "subtitle-viz">No hay información disponible para esta ubicación</div>'))
     } else {
       tx <- div(
-        HTML('<div style = "text-align:center;"><div class = "title-viz">ESPECIES CONSERVADAS POR TIPO DE COBERTURA</div></div>'),
-        HTML(gsub("NULL", "", paste0('<div style = "text-align:center;"><div class = "subtitle-viz">', result()$pajaros, collapse = "</div></div>"))),
+        HTML('<div style = "text-align:center;">
+             <div class = "title-viz">RIQUEZA ESPERADA DE ESPECIES POR TIPO DE COBERTURA</div></div>'),
+        HTML(gsub("NULL", "", paste0('<div style = "text-align:center;"><div class = "subtitle-viz">',
+                                     result()$pajaros, collapse = "</div></div>"))),
         tags$img(style = "text-align: center; padding: 0px 20px;margin-top:20px;", src = "img/aves.png")
       )
     }
@@ -934,7 +936,7 @@ server <- function(input, output, session) {
   output$slider_area <- renderUI({
     if (all(is.null(unlist(result()$pajaros)))) return()
     div(HTML('<div class = "title-sliders">Área bosque primario o secundario</div>'),
-        sliderInput('id_area_primario', ' ', min = 1000, max = 10000, value = 300, step = 100)
+        sliderInput('id_area_primario', ' ', min = 0, max = 10000, value = 300, step = 100)
     )
 
   })
