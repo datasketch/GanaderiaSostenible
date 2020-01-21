@@ -832,7 +832,7 @@ server <- function(input, output, session) {
         HTML('<div style = "text-align:center;">
              <div class = "title-viz">RIQUEZA ESPERADA DE ESPECIES POR TIPO DE COBERTURA</div></div>'),
         HTML(gsub("NULL", "", paste0('<div style = "text-align:center;"><div class = "subtitle-viz">',
-                                     result()$pajaros, collapse = "</div></div>"))),
+                                     result()$pajaros_text, collapse = "</div></div>"))),
         tags$img(style = "text-align: center; padding: 0px 20px;margin-top:20px;", src = "img/aves.png")
       )
     }
@@ -937,7 +937,7 @@ server <- function(input, output, session) {
   output$slider_area <- renderUI({
     if (all(is.null(unlist(result()$pajaros)))) return()
     div(HTML('<div class = "title-sliders">Área bosque primario o secundario</div>'),
-        sliderInput('id_area_primario', ' ', min = 0, max = 10000, value = 300, step = 100)
+        sliderInput('id_area_primario', ' ', min = 0, max = 1000, value = 0, step = 10)
     )
 
   })
@@ -948,7 +948,7 @@ server <- function(input, output, session) {
           HTML('<div class = "subtitle-viz">No hay información disponible para esta ubicación</div>'))
     } else {
       div(HTML('<div class = "title-sliders" style="margin-top:15px;">Área Silvopastorales, cercas vivas <br/>o árboles dispersos</div>'),
-          sliderInput('id_pastoriles', ' ', min = 1000, max = 10000, value =500, step = 100)
+          sliderInput('id_pastoriles', ' ', min = 0, max = 1000, value = 0, step = 10)
       )
     }
   })
@@ -963,7 +963,7 @@ server <- function(input, output, session) {
     if (is.null(area_bosque)) return()
     region <- result()$region
     aves_bosques <- round(biodiv_area2(area = area_bosque, region = region, tipo_cobertura = 'bosque_secundario'))
-    txt <- HTML(paste0('<p class = "result-slider">Por cada  <span style="color: #2e4856;font-size: 18px;">', area_bosque,
+    txt <- HTML(paste0('<p class = "result-slider">Por cada  <span style="color: #2e4856;font-size: 18px;">', input$id_area_primario,
                        ' hectáreas </span> de más en bosques primarios o secundarios se podrían conservar
                        <span style="color: #2e4856;font-size: 18px;">', aves_bosques, ' aves</span>.</p>' ))
 
@@ -980,7 +980,7 @@ server <- function(input, output, session) {
     region <- result()$region
     aves_otras <- round(biodiv_area2(area = area_otras, region = region, tipo_cobertura = 'silvopastoriles'))
     txt <- HTML(paste0('<p class = "result-slider">
-                Por cada  <span style="color: #2e4856;font-size: 18px;">', area_otras, ' hectáreas</span>
+                Por cada  <span style="color: #2e4856;font-size: 18px;">', input$id_pastoriles, ' hectáreas</span>
                        de más en suelos silvopastorales, cercas vivas ó árboles dispersos se podrían conservar
                        <span style="color: #2e4856;font-size: 18px;">', aves_otras, ' aves</span>.</p>' ))
 

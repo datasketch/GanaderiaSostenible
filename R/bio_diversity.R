@@ -38,22 +38,40 @@ biodiv_area2 <- function(areas, region, tipo_cobertura, t = 0){
   if(!tipo_cobertura %in% availableTipoCobertura()){
     stop("tipo_cobertura must be one of", availableTipoCobertura())
   }
-  if(tipo_cobertura == "cercas_vivas") return(0)
+  # if(tipo_cobertura %in% c("cercas_vivas")) return(0)
   areas <- areas * 10000
   load(system.file("biodiversity/Funciones_area_especies.RData", package = "GanaderiaSostenible"))
   funs <- list(
      "Bajo Magdalena_bosque_secundario" = Bajo_Magdalena_bosque_secundario,
+     "Bajo Magdalena_bosque_primario" = Bajo_Magdalena_bosque_secundario,
      "Bajo Magdalena_silvopastoriles" = Bajo_Magdalena_silvopastoriles,
+     "Bajo Magdalena_arboles_dispersos" = Bajo_Magdalena_silvopastoriles,
+     "Bajo Magdalena_cercas_vivas" = Bajo_Magdalena_silvopastoriles,
      "Boyacá y Santander_bosque_secundario" = Boyaca_y_Santander_bosque_secundario,
+     "Boyacá y Santander_bosque_primario" = Boyaca_y_Santander_bosque_secundario,
      "Boyacá y Santander_silvopastoriles" = Boyaca_y_Santander_silvopastoriles,
+     "Boyacá y Santander_arboles_dispersos" = Boyaca_y_Santander_silvopastoriles,
+     "Boyacá y Santander_cercas_vivas" = Boyaca_y_Santander_silvopastoriles,
      "Eje Cafetero_bosque_secundario" = Eje_Cafetero_bosque_secundario,
+     "Eje Cafetero_bosque_primario" = Eje_Cafetero_bosque_secundario,
      "Eje Cafetero_silvopastoriles" = Eje_Cafetero_silvopastoriles,
+     "Eje Cafetero_arboles_dispersos" = Eje_Cafetero_silvopastoriles,
+     "Eje Cafetero_cercas_vivas" = Eje_Cafetero_silvopastoriles,
      "Piedemonte del Meta_bosque_secundario" = Piedemonte_del_Meta_bosque_secundario,
+     "Piedemonte del Meta_bosque_primario" = Piedemonte_del_Meta_bosque_secundario,
      "Piedemonte del Meta_silvopastoriles" = Piedemonte_del_Meta_silvopastoriles,
+     "Piedemonte del Meta_arboles_dispersos" = Piedemonte_del_Meta_silvopastoriles,
+     "Piedemonte del Meta_cercas_vivas" = Piedemonte_del_Meta_silvopastoriles,
      "Valle del Rio Cesar_bosque_secundario" = Valle_del_Rio_Cesar_bosque_secundario,
-     "Valle del Rio Cesar_silvopastoriles" = Valle_del_Rio_Cesar_silvopastoriles
+     "Valle del Rio Cesar_bosque_primario" = Valle_del_Rio_Cesar_bosque_secundario,
+     "Valle del Rio Cesar_silvopastoriles" = Valle_del_Rio_Cesar_silvopastoriles,
+     "Valle del Rio Cesar_arboles_dispersos" = Valle_del_Rio_Cesar_silvopastoriles,
+     "Valle del Rio Cesar_cercas_vivas" = Valle_del_Rio_Cesar_silvopastoriles
      )
   x <- sars::sar_pred(funs[[paste(region, tipo_cobertura, sep = "_")]], areas)
+  if(is.infinite(x$Prediction)){
+    x$Prediction <- 0
+  }
   x$Prediction
 }
 
