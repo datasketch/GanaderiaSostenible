@@ -51,9 +51,10 @@ app_results <- function(inputs, departamento, municipio){
   l <- inputs
   bosque_primario <- l$bosque_primario %>% bind_rows() %>% drop_na() %>% filter(value > 0)
   if (region != 'Otras Áreas') {
-    pajaros_bosque_primario <- biodiv_area2(area = sum(bosque_primario$value, na.rm = T), region = region, tipo_cobertura = 'bosque_secundario')
+    pajaros_bosque_primario <- biodiv_area2(area = sum(bosque_primario$value, na.rm = TRUE),
+                                            region = region, tipo_cobertura = 'bosque_secundario')
     if (pajaros_bosque_primario != 0) {
-      pajaros_bosque_primario <- HTML(paste0('Bosque primario: ', round(pajaros_bosque_primario), ' aves'))
+      #pajaros_bosque_primario <- HTML(paste0('Bosque primario: ', round(pajaros_bosque_primario), ' aves'))
     } else {
       pajaros_bosque_primario <- NULL
     }
@@ -62,9 +63,10 @@ app_results <- function(inputs, departamento, municipio){
   }
   bosque_secundario <- l$bosque_secundario %>% bind_rows() %>% drop_na()
   if (region != 'Otras Áreas') {
-    pajaros_bosque_secundario <- biodiv_area2(area = sum(bosque_secundario$value, na.rm = T), region = region, tipo_cobertura = 'bosque_secundario')
+    pajaros_bosque_secundario <- biodiv_area2(area = sum(bosque_secundario$value, na.rm = TRUE),
+                                              region = region, tipo_cobertura = 'bosque_secundario')
     if (pajaros_bosque_secundario != 0) {
-      pajaros_bosque_secundario <- HTML(paste0('Bosque secundario: ', round(pajaros_bosque_secundario), ' aves'))
+      #pajaros_bosque_secundario <- HTML(paste0('Bosque secundario: ', round(pajaros_bosque_secundario), ' aves'))
     } else {
       pajaros_bosque_secundario <- NULL
     }
@@ -73,40 +75,53 @@ app_results <- function(inputs, departamento, municipio){
   }
   potreros <- l$arboles_dispersos %>% bind_rows() %>% drop_na()
   if (region != 'Otras Áreas') {
-    pajaros_potreros <- biodiv_area2(area = sum(potreros$value, na.rm = T), region = region, tipo_cobertura = 'silvopastoriles')
+    pajaros_potreros <- biodiv_area2(area = sum(potreros$value, na.rm = TRUE),
+                                     region = region, tipo_cobertura = 'silvopastoriles')
     if (pajaros_potreros != 0) {
-      pajaros_potreros <- HTML(paste0('Árboles dispersos en potreros: ', round(pajaros_potreros), ' aves'))
+      pajaros_potreros_text <- HTML(paste0('Árboles dispersos en potreros: ', round(pajaros_potreros), ' aves'))
     } else {
-      pajaros_potreros <- NULL
+      pajaros_potreros_text <- NULL
     }
   } else {
-    pajaros_potreros <- NULL
+    pajaros_potreros_text <- NULL
   }
   cercas <- l$cercas_vivas %>% bind_rows() %>% drop_na()
   if (region != 'Otras Áreas') {
-    pajaros_cercas <- biodiv_area2(area = sum(cercas$value, na.rm = T), region = region, tipo_cobertura = 'silvopastoriles')
+    pajaros_cercas <- biodiv_area2(area = sum(cercas$value, na.rm = TRUE),
+                                   region = region, tipo_cobertura = 'silvopastoriles')
     if (pajaros_cercas != 0) {
-      pajaros_cercas <- HTML(paste0('Cercas vivas: ', round(pajaros_cercas), ' aves'))
+      pajaros_cercas_text <- HTML(paste0('Cercas vivas: ', round(pajaros_cercas), ' aves'))
     } else {
-      pajaros_cercas <- NULL
+      pajaros_cercas_text <- NULL
     }
   } else {
-    pajaros_cercas <- NULL
+    pajaros_cercas_text <- NULL
   }
   pastoriles <- l$silvopastoriles %>% bind_rows() %>% drop_na()
   if (region != 'Otras Áreas') {
-    pajaros_pastoriles <- biodiv_area2(area = sum(pastoriles$value, na.rm = T), region = region, tipo_cobertura = 'silvopastoriles')
+    pajaros_pastoriles <- biodiv_area2(area = sum(pastoriles$value, na.rm = TRUE),
+                                       region = region, tipo_cobertura = 'silvopastoriles')
     if (pajaros_pastoriles != 0) {
-      pajaros_pastoriles <- HTML(paste0('Sistemas silvopastoriles: ', round(pajaros_pastoriles), ' aves'))
+      pajaros_pastoriles_text <- HTML(paste0('Sistemas silvopastoriles: ', round(pajaros_pastoriles), ' aves'))
     } else {
-      pajaros_pastoriles <- NULL
+      pajaros_pastoriles_text <- NULL
     }
   } else {
-    pajaros_pastoriles <- NULL
+    pajaros_pastoriles_text <- NULL
   }
 
-  estimacion_pajaros <- list(pajaros_bosque_primario, pajaros_bosque_secundario, pajaros_potreros, pajaros_cercas, pajaros_pastoriles)
+
+  #estimacion_pajaros <- list(pajaros_bosque_primario, pajaros_bosque_secundario, pajaros_potreros, pajaros_cercas, pajaros_pastoriles)
+  estimacion_pajaros <- list()
+  estimacion_pajaros$bosque <- pajaros_bosque_primario + pajaros_bosque_secundario
+  estimacion_pajaros$bosque_text <- HTML(paste0('Sistemas silvopastoriles: ',
+                                                round(estimacion_pajaros$bosque), ' aves'))
+  estimacion_pajaros$silvopastoriles <- pajaros_potreros + pajaros_cercas + pajaros_pastoriles
+  estimacion_pajaros$silvopastoriles_text <- HTML(paste0('Silvopastoriles: ',
+                                                         round(estimacion_pajaros$silvopastoriles), ' aves'))
+  estimacion_pajaros <- list(estimacion_pajaros$bosques_text, estimacion_pajaros$silvopastoriles_text)
   res$pajaros <- estimacion_pajaros
+  res$inputs <- inputs
   #res$pajaros <- NA
 
   res

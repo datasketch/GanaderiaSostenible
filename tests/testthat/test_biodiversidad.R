@@ -27,8 +27,6 @@ test_that("Biodiversidad works",{
 
 test_that("Biodiversidad aves 2", {
 
-  # cargar paquete
-  #library (sars) # Species area relationship
 
 
 
@@ -43,9 +41,11 @@ test_that("Biodiversidad aves 2", {
   especies2 <- biodiv_area2(area, region, tipo_cobertura)
   especies2
 
+  # cargar paquete
+  library (sars) # Species area relationship
   ### Ejemplo para predecir número de especies
   # # cargar las funciones Area - especies
-  # load("inst/Funciones_area_especies.RData")
+  load(system.file("biodiversity/Funciones_area_especies.RData", package = "GanaderiaSostenible"))
   # Predecir numero de especies proporcionando el area para cada region.
   # Note que el area esta en metros (1ha=10.000 m2)
   # sar_pred(Bajo_Magdalena_bosque_secundario, area = c(10000, 100000, 1000000, 10000000)) # predict 1ha, 10ha, 100ha, 1000ha
@@ -59,5 +59,10 @@ test_that("Biodiversidad aves 2", {
   # sar_pred(Valle_del_Rio_Cesar_bosque_secundario, area = c(10000, 100000, 1000000, 10000000)) # predict 1ha, 10ha, 100ha, 1000ha
   # sar_pred(Valle_del_Rio_Cesar_silvopastoriles, area = c(10000, 100000, 1000000, 10000000)) # predict 1ha, 10ha, 100ha, 1000ha
 
+
+  #sar_pred(Eje_Cafetero_bosque_secundario, area = c(10000, 100000, 1000000, 10000000)) # predict 1ha, 10ha, 100ha, 1000ha
+
+  x <- sars::sar_pred(Eje_Cafetero_bosque_secundario, area = c(10000, 100000, 1000000, 10000000)) # predict 1ha, 10ha, 100ha, 1000ha
+  expect_equal(x$Prediction[1], biodiv_area2(1, "Eje Cafetero", "bosque_secundario"))
 
 })

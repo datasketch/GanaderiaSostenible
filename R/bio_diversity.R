@@ -39,8 +39,8 @@ biodiv_area2 <- function(areas, region, tipo_cobertura, t = 0){
     stop("tipo_cobertura must be one of", availableTipoCobertura())
   }
   if(tipo_cobertura == "cercas_vivas") return(0)
-
-  load(system.file("Funciones_area_especies.RData", package = "GanaderiaSostenible"))
+  areas <- areas * 10000
+  load(system.file("biodiversity/Funciones_area_especies.RData", package = "GanaderiaSostenible"))
   funs <- list(
      "Bajo Magdalena_bosque_secundario" = Bajo_Magdalena_bosque_secundario,
      "Bajo Magdalena_silvopastoriles" = Bajo_Magdalena_silvopastoriles,

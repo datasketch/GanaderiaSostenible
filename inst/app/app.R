@@ -526,8 +526,8 @@ ui <- panelsPage( styles = styles,
                             div(class = 'panel-primario',
                                 div(class="mas-anios-primario",
                                     div(class = "anios-valor",
-                                        textInput(paste0('aniosprimario0'), ' ', value = NULL, placeholder = 'Año'),
-                                        textInput(paste0('id_anios_primario0'), ' ', value = NULL, placeholder = 'Hectáreas')
+                                        numericInput(paste0('aniosprimario0'), 'Año', value = NULL, min = 2000, max = 2020),
+                                        textInput(paste0('id_anios_primario0'), 'Área', value = NULL, placeholder = 'Hectáreas')
                                     )
                                 ),
                                 uiOutput('add_anio_primario'),
@@ -537,8 +537,8 @@ ui <- panelsPage( styles = styles,
                             div(class = 'panel-secundario',
                                 div(class="mas-anios-secundario",
                                     div(class = "anios-valor",
-                                        textInput(paste0('aniossecundario0'), ' ', value = NULL, placeholder = 'Año'),
-                                        textInput(paste0('id_anios_secundario0'), ' ', value = NULL, placeholder = 'Hectáreas')
+                                        numericInput(paste0('aniossecundario0'), 'Año', value = NULL, min = 2000, max = 2020),
+                                        textInput(paste0('id_anios_secundario0'), 'Área', value = NULL, placeholder = 'Hectáreas')
                                     )
                                 ),
                                 uiOutput('add_anio_secundario'),
@@ -548,8 +548,8 @@ ui <- panelsPage( styles = styles,
                             div(class = 'panel-potreros',
                                 div(class="mas-anios-potreros",
                                     div(class = "anios-valor",
-                                        textInput(paste0('aniospotreros0'), ' ', value = NULL, placeholder = 'Año'),
-                                        textInput(paste0('id_anios_potreros0'), ' ', value = NULL, placeholder = 'Hectáreas')
+                                        numericInput(paste0('aniospotreros0'), 'Año', value = NULL, min = 2000, max = 2020),
+                                        textInput(paste0('id_anios_potreros0'), 'Área', value = NULL, placeholder = 'Hectáreas')
                                     )
                                 ),
                                 uiOutput('add_anio_potreros'),
@@ -559,8 +559,8 @@ ui <- panelsPage( styles = styles,
                             div(class = 'panel-cercas',
                                 div(class="mas-anios-cercas",
                                     div(class = "anios-valor",
-                                        textInput(paste0('anioscercas0'), ' ', value = NULL, placeholder = 'Año'),
-                                        textInput(paste0('id_anios_cercas0'), ' ', value = NULL, placeholder = 'Kilómetros')
+                                        numericInput(paste0('anioscercas0'), 'Año', value = NULL, min = 2000, max = 2020),
+                                        textInput(paste0('id_anios_cercas0'), 'Longitud', value = NULL, placeholder = 'Kilómetros')
                                     )
                                 ),
                                 uiOutput('add_anio_cercas'),
@@ -570,8 +570,8 @@ ui <- panelsPage( styles = styles,
                             div(class = 'panel-pastoriles',
                                 div(class="mas-anios-pastoriles",
                                     div(class = "anios-valor",
-                                        textInput(paste0('aniospastoriles0'), ' ', value = NULL, placeholder = 'Año'),
-                                        textInput(paste0('id_anios_pastoriles0'), ' ', value = NULL, placeholder = 'Hectáreas')
+                                        textInput(paste0('aniospastoriles0'), 'Año', value = NULL, placeholder = 'Año'),
+                                        textInput(paste0('id_anios_pastoriles0'), 'Área', value = NULL, placeholder = 'Hectáreas')
                                     )
                                 ),
                                 uiOutput('add_anio_pastoriles'),
@@ -717,14 +717,15 @@ server <- function(input, output, session) {
           if(z == "cercas"){
             return(
               div(class = "anios-valor",
-                  textInput(paste0('anios', z, i), ' ', value = NULL, placeholder = 'Año'),
-                  textInput(paste0('id_anios_',  z, i), ' ', value = NULL, placeholder = 'Kilómetros')
+                  numericInput(paste0('anios', z, i), 'Año', value = NULL, min = 2000, max = 2020),
+                  textInput(paste0('id_anios_',  z, i), 'Longitud', value = NULL, placeholder = 'Kilómetros')
               )
             )
           }
           div(class = "anios-valor",
-              textInput(paste0('anios', z, i), ' ', value = NULL, placeholder = 'Año'),
-              textInput(paste0('id_anios_',  z, i), ' ', value = NULL, placeholder = 'Hectáreas')
+                  numericInput(paste0('anios', z, i), 'Año', value = NULL, min = 2000, max = 2020),
+              # textInput(paste0('anios', z, i), ' ', value = NULL, placeholder = 'Año'),
+              textInput(paste0('id_anios_',  z, i), 'Área', value = NULL, placeholder = 'Hectáreas')
           )
 
         })
@@ -957,9 +958,11 @@ server <- function(input, output, session) {
     #   txt <- HTML("No hay información disponible para este municipio")
     # } else {
     area_bosque <- input$id_area_primario
+    inputs <- result()$inputs
+    area_bosque <- area_bosque + sum(inputs$bosque_primario$value, na.rm = TRUE) + sum(inputs$bosque_secundario$value, na.rm = TRUE)
     if (is.null(area_bosque)) return()
     region <- result()$region
-    aves_bosques <- round(biodiv_area(area = area_bosque, region = region, tipo_cobertura = 'bosque_secundario'))
+    aves_bosques <- round(biodiv_area2(area = area_bosque, region = region, tipo_cobertura = 'bosque_secundario'))
     txt <- HTML(paste0('<p class = "result-slider">Por cada  <span style="color: #2e4856;font-size: 18px;">', area_bosque,
                        ' hectáreas </span> de más en bosques primarios o secundarios se podrían conservar
                        <span style="color: #2e4856;font-size: 18px;">', aves_bosques, ' aves</span>.</p>' ))
@@ -970,9 +973,12 @@ server <- function(input, output, session) {
   output$text_aves_pastoriles <- renderUI({
 
     area_otras <- input$id_pastoriles
+    inputs <- result()$inputs
+    area_otras <- area_otras + sum(inputs$arboles_dispersos$value, na.rm = TRUE) +
+      sum(inputs$cercas_vivas$value, na.rm = TRUE) + sum(inputs$silvopastoriles$value, na.rm = TRUE)
     if (is.null(area_otras)) return()
     region <- result()$region
-    aves_otras <- round(biodiv_area(area = area_otras, region = region, tipo_cobertura = 'silvopastoriles'))
+    aves_otras <- round(biodiv_area2(area = area_otras, region = region, tipo_cobertura = 'silvopastoriles'))
     txt <- HTML(paste0('<p class = "result-slider">
                 Por cada  <span style="color: #2e4856;font-size: 18px;">', area_otras, ' hectáreas</span>
                        de más en suelos silvopastorales, cercas vivas ó árboles dispersos se podrían conservar
