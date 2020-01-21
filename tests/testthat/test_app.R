@@ -29,6 +29,8 @@ test_that("Input municipio",{
   app_results$pajaros
   expect_equal(app_results$pajaros[[1]], biodiv_area2(15, region, "bosque_primario"))
   expect_equal(app_results$pajaros[[2]], biodiv_area2(7, region, "silvopastoriles"))
+  expect_equal(app_results$pajaros_text[[1]], HTML("Bosques: 276 aves"))
+  expect_equal(app_results$pajaros_text[[2]], HTML("Silvopastoriles: 13 aves"))
 
   expect_equal(names(old_app_results$captura_general), names(app_results$captura_general))
   expect_equal(names(old_app_results$captura_total), names(app_results$captura_total))
