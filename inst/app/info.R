@@ -25,14 +25,13 @@ text_info <- function() {
     h2("Glosario"),
 
     div(style = "display:flex;",
-        img(src="img/captura_carbono.png", width = 100, height = 100, style="margin: 10px 20px 10px 10px;"),
+        img(src="img/arboles_dispersos.png", width = 100, height = 100, style="margin: 10px 20px 10px 10px;"),
         div(
-          div(class = "titlte-info", "CAPTURA DE CARBONO O CO2"),
-          p(class = "paraph-info", "Algunos organismos como las plantas, por medio de la
-                              fotosíntesis, capturan el carbono que se encuentra en
-                              la atmósfera y así ayudan a reducir la concentración de
-                              gases de efecto invernadero que forman parte de las
-                              mayores causas del calentamiento global.")
+          div(class = "titlte-info","ÁRBOLES DISPERSOS"),
+          p("Son áreas de pastos naturales o mejorados que tienen árboles dispersos aleatoriamente (cuando son producto de la
+          regeneración natural) o sistemáticamente (cuando han sido plantados). En este tipo de cobertura hay menos de 25
+          árboles por hectárea. Los arboles dispersos funcionan para las aves como el equivalente a una “piedra de salto”
+          que les permite percharse y descansar mientras se mueven de un sitio a otro.")
         )
     ),
     div(style = "display:flex;",
@@ -54,13 +53,14 @@ text_info <- function() {
         )
     ),
     div(style = "display:flex;",
-        img(src="img/arboles_dispersos.png", width = 100, height = 100, style="margin: 10px 20px 10px 10px;"),
+        img(src="img/captura_carbono.png", width = 100, height = 100, style="margin: 10px 20px 10px 10px;"),
         div(
-          div(class = "titlte-info","ÁRBOLES DISPERSOS"),
-          p("Son áreas de pastos naturales o mejorados que tienen árboles dispersos aleatoriamente (cuando son producto de la
-          regeneración natural) o sistemáticamente (cuando han sido plantados). En este tipo de cobertura hay menos de 25
-          árboles por hectárea. Los arboles dispersos funcionan para las aves como el equivalente a una “piedra de salto”
-          que les permite percharse y descansar mientras se mueven de un sitio a otro.")
+          div(class = "titlte-info", "CAPTURA DE CARBONO O CO2"),
+          p(class = "paraph-info", "Algunos organismos como las plantas, por medio de la
+                              fotosíntesis, capturan el carbono que se encuentra en
+                              la atmósfera y así ayudan a reducir la concentración de
+                              gases de efecto invernadero que forman parte de las
+                              mayores causas del calentamiento global.")
         )
     ),
     div(style = "display:flex;",

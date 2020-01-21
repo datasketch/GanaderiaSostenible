@@ -509,7 +509,7 @@ ui <- panelsPage( styles = styles,
                                          de hectáreas de este terreno, sí desde el año inicial hasta la actualidad ha agregado más terreno, de click en
                                          agregar año donde se desplegará un nuevo cuadro, allí debe ingresar el año en el que agregó más hectáreas a su suelo y
                                          poner el número adicional.</span</div></div></div>')),
-                    show_footer = FALSE, color = "olive", collapsed = FALSE, width = 350, id = 'panel-info', id_body = 'remove-padding',
+                    show_footer = FALSE, color = "olive", collapsed = FALSE, width = 450, id = 'panel-info', id_body = 'remove-padding',
                     body = (
                       div(
                         div(style = 'background: #ffffff;',
@@ -526,7 +526,7 @@ ui <- panelsPage( styles = styles,
                             div(class = 'panel-primario',
                                 div(class="mas-anios-primario",
                                     div(class = "anios-valor",
-                                        numericInput(paste0('aniosprimario0'), 'Año', value = NULL, min = 2000, max = 2020),
+                                        numericInput(paste0('aniosprimario0'), 'Año', value = NULL, min = 2000, max = 2020, width = "80px"),
                                         textInput(paste0('id_anios_primario0'), 'Área', value = NULL, placeholder = 'Hectáreas')
                                     )
                                 ),
@@ -537,7 +537,7 @@ ui <- panelsPage( styles = styles,
                             div(class = 'panel-secundario',
                                 div(class="mas-anios-secundario",
                                     div(class = "anios-valor",
-                                        numericInput(paste0('aniossecundario0'), 'Año', value = NULL, min = 2000, max = 2020),
+                                        numericInput(paste0('aniossecundario0'), 'Año', value = NULL, min = 2000, max = 2020, width = "80px"),
                                         textInput(paste0('id_anios_secundario0'), 'Área', value = NULL, placeholder = 'Hectáreas')
                                     )
                                 ),
@@ -548,7 +548,7 @@ ui <- panelsPage( styles = styles,
                             div(class = 'panel-potreros',
                                 div(class="mas-anios-potreros",
                                     div(class = "anios-valor",
-                                        numericInput(paste0('aniospotreros0'), 'Año', value = NULL, min = 2000, max = 2020),
+                                        numericInput(paste0('aniospotreros0'), 'Año', value = NULL, min = 2000, max = 2020, width = "80px"),
                                         textInput(paste0('id_anios_potreros0'), 'Área', value = NULL, placeholder = 'Hectáreas')
                                     )
                                 ),
@@ -559,7 +559,7 @@ ui <- panelsPage( styles = styles,
                             div(class = 'panel-cercas',
                                 div(class="mas-anios-cercas",
                                     div(class = "anios-valor",
-                                        numericInput(paste0('anioscercas0'), 'Año', value = NULL, min = 2000, max = 2020),
+                                        numericInput(paste0('anioscercas0'), 'Año', value = NULL, min = 2000, max = 2020, width = "80px"),
                                         textInput(paste0('id_anios_cercas0'), 'Longitud', value = NULL, placeholder = 'Kilómetros')
                                     )
                                 ),
@@ -570,7 +570,7 @@ ui <- panelsPage( styles = styles,
                             div(class = 'panel-pastoriles',
                                 div(class="mas-anios-pastoriles",
                                     div(class = "anios-valor",
-                                        textInput(paste0('aniospastoriles0'), 'Año', value = NULL, placeholder = 'Año'),
+                                        numericInput(paste0('aniospastoriles0'), 'Año', value = NULL,  min = 2000, max = 2020, width = "80px"),
                                         textInput(paste0('id_anios_pastoriles0'), 'Área', value = NULL, placeholder = 'Hectáreas')
                                     )
                                 ),
