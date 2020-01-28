@@ -13,13 +13,21 @@ estimacion_co2_tidy(inputs, departamento, municipio, t_max = 20)
 
 \item{municipio}{Municipio}
 
-\item{region}{region}
-
-\item{tipo_cobertura}{Land coverage type}
+\item{t_max}{Maximum number of years for estimation}
 }
 \value{
 None
 }
 \description{
 Carbon capture estimation
+}
+\examples{
+inputs <- list(
+  bosque_primario = list(year = 2000, value = 5),
+  bosque_secundario = list(year = 2000, value = 10),
+  arboles_dispersos = list(year = 2000, value = 2),
+  cercas_vivas = list(year = 2000, value = 2),
+  silvopastoriles = list(year = 2000, value = 5)
+)
+estimacion_co2_tidy(inputs, departamento = "Quindio", municipio = "Montenegro")
 }

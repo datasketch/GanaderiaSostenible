@@ -11,7 +11,7 @@ captura_carbono(region, tipo_cobertura, t = 0)
 
 \item{tipo_cobertura}{Coverage type for the land}
 
-\item{t_f}{Time of intervention}
+\item{t}{Time of intervention}
 }
 \value{
 None
@@ -20,5 +20,5 @@ None
 Carbon capture estimation according to land cover type
 }
 \examples{
-cambio_carbono('Eje Cafetero', 'bosque_secundario', 5)
+captura_carbono('Eje Cafetero', 'bosque_secundario')
 }

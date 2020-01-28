@@ -28,7 +28,7 @@ viz_bar <- function(data) {
   data <- data %>% dplyr::filter(carbono != 0)
 
   level_key <- c(cercas_vivas = "Cercas Vivas", bosque_primario = "Bosque Primario",
-                 bosque_secundario = "Bosque Secundario", arboles_dispersos = "Árboles Dispersos",
+                 bosque_secundario = "Bosque Secundario", arboles_dispersos = "\u00c1rboles Dispersos",
                  silvopastoriles = "Silvopastoriles")
   data$Suelo <- recode(data$Suelo, !!!level_key)
 
@@ -41,9 +41,9 @@ viz_bar <- function(data) {
   d <- d %>% dplyr::ungroup() %>%
     dplyr::mutate(porcentaje = (carbono / sum(carbono, na.rm = TRUE)) * 100)
 
-  colors <- c(`Bosque Secundario` = '#dbefa5', `Cercas Vivas` = '#ea640d',
-              `Silvopastoriles` = '#fdbc00', `Bosque Primario` = '#3d894d',
-              `Árboles Dispersos` = '#2e4856')
+  colors <- c('#dbefa5', '#ea640d', '#fdbc00', '#3d894d', '#2e4856')
+  names(colors) <- c("Bosque Secundario", "Cercas Vivas", "Silvopastoriles",
+                     "Bosque Primario", "\u00c1rboles Dispersos")
 
   series <- purrr::map(as.character(unique(d$Suelo)), function(i) {
     d0 <- d %>%
@@ -132,7 +132,7 @@ viz_lines <- function(data, type_plot = "spline") {
   }
 
   level_key <- c(cercas_vivas = "Cercas Vivas", bosque_primario = "Bosque Primario",
-                 bosque_secundario = "Bosque Secundario", arboles_dispersos = "Árboles Dispersos",
+                 bosque_secundario = "Bosque Secundario", arboles_dispersos = "\u00c1rboles Dispersos",
                  silvopastoriles = "Silvopastoriles")
   data$Suelo <- recode(data$Suelo, !!!level_key)
 
@@ -142,9 +142,9 @@ viz_lines <- function(data, type_plot = "spline") {
     tidyr::spread(Suelo, total) %>%
     tidyr::gather(Suelo, total, -Ano)
 
-  colors <- c(`Bosque Secundario` = '#dbefa5', `Cercas Vivas` = '#ea640d',
-              `Silvopastoriles` = '#fdbc00', `Bosque Primario` = '#3d894d',
-              `Árboles Dispersos` = '#2e4856')
+  colors <- c('#dbefa5', '#ea640d', '#fdbc00', '#3d894d', '#2e4856')
+  names(colors) <- c("Bosque Secundario", "Cercas Vivas", "Silvopastoriles",
+                     "Bosque Primario", "\u00c1rboles Dispersos")
 
   series <- purrr::map(unique(d[[2]]), function(i) {
     d0 <- d %>%

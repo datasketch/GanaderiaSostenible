@@ -3,7 +3,7 @@ context("Captura computations work for all regions")
 test_that("Captura Eje Cafetero",{
 
   region <- "Eje Cafetero"
-  regiones <- readr::read_csv(system.file("aux/regiones.csv", package = "GanaderiaSostenible"))
+  regiones <- readr::read_csv(system.file("helpers", "regiones.csv", package = "GanaderiaSostenible"))
 
   lugar <- regiones %>% filter(Region == region) %>% sample_n(1) %>% select(-1) %>% as.list()
   municipio <- lugar[1]
@@ -182,7 +182,7 @@ test_that("Captura Bajo Magdalena",{
   ## 10 HERRAMIENTA PARA LA ESTIMACIÓN DE CAPTURA DE CO2 MAG TODOS DOS AÑOS
 
   region <- "Bajo Magdalena"
-  regiones <- readr::read_csv(system.file("aux/regiones.csv", package = "GanaderiaSostenible"))
+  regiones <- readr::read_csv(system.file("helpers" , "regiones.csv", package = "GanaderiaSostenible"))
 
   lugar <- regiones %>% filter(Region == region) %>% sample_n(1) %>% select(-1) %>% as.list()
   municipio <- lugar[1]

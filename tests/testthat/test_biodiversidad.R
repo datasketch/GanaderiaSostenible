@@ -65,7 +65,7 @@ test_that("Biodiversidad aves 2", {
   library (sars) # Species area relationship
   ### Ejemplo para predecir número de especies
   # # cargar las funciones Area - especies
-  load(system.file("biodiversity/Funciones_area_especies.RData", package = "GanaderiaSostenible"))
+  load(system.file("biodiversity", "funciones_area_especies.RData", package = "GanaderiaSostenible"))
   # Predecir numero de especies proporcionando el area para cada region.
   # Note que el area esta en metros (1ha=10.000 m2)
   # sar_pred(Bajo_Magdalena_bosque_secundario, area = c(10000, 100000, 1000000, 10000000)) # predict 1ha, 10ha, 100ha, 1000ha

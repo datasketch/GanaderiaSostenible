@@ -13,6 +13,10 @@ estimacion_co2(inputs, departamento, municipio, this_year = NULL,
 \item{departamento}{Departamento}
 
 \item{municipio}{Municipio}
+
+\item{this_year}{Current year, defaults to current year}
+
+\item{t_max}{Maximum number of years for estimation}
 }
 \value{
 None
@@ -22,11 +26,11 @@ Carbon capture estimation in tidy format
 }
 \examples{
 inputs <- list(
-  bosque_primario = list(year = current_year - 8, value = 5),
-  bosque_secundario = list(year = current_year - 8, value = 10),
-  arboles_dispersos = list(year = current_year - 8, value = 2),
-  cercas_vivas = list(year = current_year - 8, value = 2),
-  silvopastoriles = list(year = current_year - 8, value = 5)
+  bosque_primario = list(year = 2000, value = 5),
+  bosque_secundario = list(year = 2000, value = 10),
+  arboles_dispersos = list(year = 2000, value = 2),
+  cercas_vivas = list(year = 2000, value = 2),
+  silvopastoriles = list(year = 2000, value = 5)
 )
-estimacion_carbono(inputs, departamento = "Quindio", municipio = "Montenegro")
+estimacion_co2(inputs, departamento = "Quindio", municipio = "Montenegro")
 }

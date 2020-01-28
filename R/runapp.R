@@ -1,5 +1,7 @@
 #' Ganaderia Sostenible Web App
 #'
+#' @param debug show debug mode
+#' @param preset Load input presets
 #' @return None
 #' @examples
 #' \dontrun{
@@ -17,7 +19,16 @@ runGanaderiaSostenible <- function(debug = FALSE, preset = NULL) {
   shiny::runApp(appDir, display.mode = "normal")
 }
 
-
+#' Ganaderia Sostenible Web App
+#'
+#' @param inputs List of inputs: a list with year and value for each tipo_cobertura
+#' @param departamento Department
+#' @param municipio Municipality
+#' @return None
+#' @examples
+#' \dontrun{
+#' runGanaderiaSostenible()
+#' }
 #' @export
 app_results <- function(inputs, departamento, municipio){
 

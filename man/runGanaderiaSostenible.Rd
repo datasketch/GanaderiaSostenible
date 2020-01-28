@@ -6,6 +6,11 @@
 \usage{
 runGanaderiaSostenible(debug = FALSE, preset = NULL)
 }
+\arguments{
+\item{debug}{show debug mode}
+
+\item{preset}{Load input presets}
+}
 \value{
 None
 }

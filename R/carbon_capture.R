@@ -5,12 +5,12 @@
 #'
 #' @param region geographic region name
 #' @param tipo_cobertura Coverage type for the land
-#' @param t_f Time of intervention
+#' @param t Time of intervention
 #'
 #' @return None
 #'
 #' @examples
-#' cambio_carbono('Eje Cafetero', 'bosque_secundario', 5)
+#' captura_carbono('Eje Cafetero', 'bosque_secundario')
 #' @export
 captura_carbono <- function(region, tipo_cobertura, t = 0){
   if(!region %in% availableRegiones()){
@@ -19,7 +19,7 @@ captura_carbono <- function(region, tipo_cobertura, t = 0){
   if(!tipo_cobertura %in% availableTipoCobertura()){
     stop("tipo_cobertura must be one of", availableTipoCobertura())
   }
-  path <- system.file("aux/captura_region_tipo.csv", package = "GanaderiaSostenible")
+  path <- system.file("helpers", "captura_region_tipo.csv", package = "GanaderiaSostenible")
   captura_region_tipo <- suppressMessages(readr::read_csv(path))
   if(tipo_cobertura == "bosque_secundario"){
     captura <- ((((1-exp((t*0.064)*(-1)))^1.964)*111.51)*0.5)*(44/12)
@@ -62,18 +62,17 @@ cambio_carbono <- function(captura,  region, area = 1){
 #' @param inputs  List with implementations by year and value of hectares
 #' @param departamento  Departamento
 #' @param municipio Municipio
-#' @param region region
-#' @param tipo_cobertura Land coverage type
+#' @param t_max Maximum number of years for estimation
 #' @return None
 #' @examples
 #' inputs <- list(
-#'   bosque_primario = list(year = current_year - 8, value = 5),
-#'   bosque_secundario = list(year = current_year - 8, value = 10),
-#'   arboles_dispersos = list(year = current_year - 8, value = 2),
-#'   cercas_vivas = list(year = current_year - 8, value = 2),
-#'   silvopastoriles = list(year = current_year - 8, value = 5)
+#'   bosque_primario = list(year = 2000, value = 5),
+#'   bosque_secundario = list(year = 2000, value = 10),
+#'   arboles_dispersos = list(year = 2000, value = 2),
+#'   cercas_vivas = list(year = 2000, value = 2),
+#'   silvopastoriles = list(year = 2000, value = 5)
 #' )
-#' estimacion_carbono(inputs, departamento = "Quindio", municipio = "Montenegro)
+#' estimacion_co2_tidy(inputs, departamento = "Quindio", municipio = "Montenegro")
 #' @export
 estimacion_co2_tidy <- function(inputs, departamento, municipio, t_max = 20) {
 
@@ -98,7 +97,7 @@ estimacion_co2_tidy <- function(inputs, departamento, municipio, t_max = 20) {
     tibble(tipo_cobertura = input$tipo_cobertura, captura = captura[1:t_max], cambio = cambio[1:t_max], cambio_acumulado = cumsum(cambio[1:t_max]),
            year = seq_along(captura) + input$year - 1)
   }) %>% dplyr::bind_rows()
-  captura_df <- captura_df %>% drop_na()
+  captura_df <- captura_df %>% tidyr::drop_na()
 }
 
 
@@ -107,16 +106,18 @@ estimacion_co2_tidy <- function(inputs, departamento, municipio, t_max = 20) {
 #' @param inputs  List with implementations by year and value of hectares
 #' @param departamento  Departamento
 #' @param municipio Municipio
+#' @param this_year Current year, defaults to current year
+#' @param t_max Maximum number of years for estimation
 #' @return None
 #' @examples
 #' inputs <- list(
-#'   bosque_primario = list(year = current_year - 8, value = 5),
-#'   bosque_secundario = list(year = current_year - 8, value = 10),
-#'   arboles_dispersos = list(year = current_year - 8, value = 2),
-#'   cercas_vivas = list(year = current_year - 8, value = 2),
-#'   silvopastoriles = list(year = current_year - 8, value = 5)
+#'   bosque_primario = list(year = 2000, value = 5),
+#'   bosque_secundario = list(year = 2000, value = 10),
+#'   arboles_dispersos = list(year = 2000, value = 2),
+#'   cercas_vivas = list(year = 2000, value = 2),
+#'   silvopastoriles = list(year = 2000, value = 5)
 #' )
-#' estimacion_carbono(inputs, departamento = "Quindio", municipio = "Montenegro")
+#' estimacion_co2(inputs, departamento = "Quindio", municipio = "Montenegro")
 #' @export
 estimacion_co2 <- function(inputs, departamento, municipio, this_year = NULL, t_max = 20) {
   if(is.null(this_year))
@@ -143,16 +144,15 @@ estimacion_co2 <- function(inputs, departamento, municipio, this_year = NULL, t_
 #'
 #' @param departamento  Department
 #' @param municipio Municipality
-#' @param area_bosque  Hectares of forest
-#' @param anos  Years
-#' @param t_e Estimated times
+#' @param area  Hectares of forest
+#' @param t Time
 #' @return None
 #' @examples
-#' captura_carbono_bosques(departamento = 'Nariño', municipio = 'Córdoba',
-#'   area_bosque = 500, t_e = 1, anos = 2001)
+#' captura_carbono_bosque_primario(departamento = 'Nariño', municipio = 'Córdoba',
+#'   area = 500)
 #' @export
 captura_carbono_bosque_primario <- function(departamento, municipio, area = 1, t = NULL){
-  path <- system.file("aux/co2_municipios.csv", package = "GanaderiaSostenible")
+  path <- system.file("helpers", "co2_municipios.csv", package = "GanaderiaSostenible")
   data_mun <-  suppressMessages(readr::read_csv(path))
 
   mun_data <- unique(data_mun$NOMBRE_ENT)
@@ -175,10 +175,15 @@ captura_carbono_bosque_primario <- function(departamento, municipio, area = 1, t
   captura
 }
 
-#' Captured carbon for forests
+#' Captured carbon for pastures
 #'
+#' @param region  Region
+#' @return None
+#' @examples
+#' captura_pasturas(region = 'Eje Cafetero')
+#' @export
 captura_pasturas <- function(region){
-  path <- system.file("aux/captura_pasturas.csv", package = "GanaderiaSostenible")
+  path <- system.file("helpers","captura_pasturas.csv", package = "GanaderiaSostenible")
   captura_region_pasturas <- suppressMessages(readr::read_csv(path))
   captura_region_pasturas %>% dplyr::filter(region_colombia == region) %>% .$captura
 }

@@ -16,7 +16,7 @@ results_old <- function(inputs, departamento, municipio){
   # captura_primario$Estimacion  <- cumsum(captura_primario$co2) ## REMOVER CUMSUM
   captura_primario$Estimacion  <- captura_primario$co2
   #if (sum(captura_primario$co2) == 0)  return() ## REMOVER
-  if (region != 'Otras Áreas') {
+  if (region != 'Otras \u00c1reas') {
     pajaros_bosque_primario <- biodiv_area(area = sum(bosque_primario$value, na.rm = T), region = region, tipo_cobertura = 'bosque_secundario')
     if (pajaros_bosque_primario != 0) {
       pajaros_bosque_primario <- HTML(paste0('Bosque primario: ', round(pajaros_bosque_primario), ' aves'))
@@ -33,7 +33,7 @@ results_old <- function(inputs, departamento, municipio){
   captura_secundario <- carbono_capturado_estimacion(area = bosque_secundario$value,anos = bosque_secundario$year, region = region, tipo_cobertura = 'bosque_secundario', t_e = (fecha_hoy -annio_0_s) + 10)
   captura_secundario$Suelo <- 'Bosque secundario'
   captura_secundario$Estimacion  <- cumsum(captura_secundario$co2)
-  if (region != 'Otras Áreas') {
+  if (region != 'Otras \u00c1reas') {
     pajaros_bosque_secundario <- biodiv_area(area = sum(bosque_secundario$value, na.rm = T), region = region, tipo_cobertura = 'bosque_secundario')
     if (pajaros_bosque_secundario != 0) {
       pajaros_bosque_secundario <- HTML(paste0('Bosque secundario: ', round(pajaros_bosque_secundario), ' aves'))
@@ -48,12 +48,12 @@ results_old <- function(inputs, departamento, municipio){
   annio_0_p <- potreros$year[1]
   if (is.na(annio_0_p)) annio_0_p <- 0
   captura_potreros<- carbono_capturado_estimacion(area = potreros$value, anos = potreros$year, region = region, tipo_cobertura = 'arboles_dispersos', t_e = (fecha_hoy - annio_0_p) + 10)
-  captura_potreros$Suelo <- "Árboles dispersos"
+  captura_potreros$Suelo <- "\u00c1rrboles dispersos"
   captura_potreros$Estimacion  <- cumsum(captura_potreros$co2)
-  if (region != 'Otras Áreas') {
+  if (region != 'Otras \u00c1rreas') {
     pajaros_potreros <- biodiv_area(area = sum(potreros$value, na.rm = T), region = region, tipo_cobertura = 'silvopastoriles')
     if (pajaros_potreros != 0) {
-      pajaros_potreros <- HTML(paste0('Árboles dispersos en potreros: ', round(pajaros_potreros), ' aves'))
+      pajaros_potreros <- HTML(paste0('\u00c1rboles dispersos en potreros: ', round(pajaros_potreros), ' aves'))
     } else {
       pajaros_potreros <- NULL
     }
@@ -68,7 +68,7 @@ results_old <- function(inputs, departamento, municipio){
   captura_cercas <- carbono_capturado_estimacion(area = cercas$value, anos = cercas$year, region = region, tipo_cobertura = 'cercas_vivas', t_e = (fecha_hoy - annio_0_c) + 10)
   captura_cercas$Suelo <-  'Cercas vivas'
   captura_cercas$Estimacion  <- cumsum(captura_cercas$co2)
-  if (region != 'Otras Áreas') {
+  if (region != 'Otras \u00c1rreas') {
     pajaros_cercas <- biodiv_area(area = sum(cercas$value, na.rm = T), region = region, tipo_cobertura = 'silvopastoriles')
     if (pajaros_cercas != 0) {
       pajaros_cercas <- HTML(paste0('Cercas vivas: ', round(pajaros_cercas), ' aves'))
@@ -85,7 +85,7 @@ results_old <- function(inputs, departamento, municipio){
   captura_pastoriles <- carbono_capturado_estimacion(area = pastoriles$value,anos = pastoriles$year, region = region, tipo_cobertura = 'silvopastoriles', (fecha_hoy - annio_0_sv) + 10)
   captura_pastoriles$Suelo <- 'Silvopastoriles'
   captura_pastoriles$Estimacion  <- cumsum(captura_pastoriles$co2)
-  if (region != 'Otras Áreas') {
+  if (region != 'Otras \u00c1rreas') {
     pajaros_pastoriles <- biodiv_area(area = sum(pastoriles$value, na.rm = T), region = region, tipo_cobertura = 'silvopastoriles')
     if (pajaros_pastoriles != 0) {
       pajaros_pastoriles <- HTML(paste0('Sistemas silvopastoriles: ', round(pajaros_pastoriles), ' aves'))
@@ -108,7 +108,6 @@ results_old <- function(inputs, departamento, municipio){
 }
 
 
-#' @export
 cambio_carbono_old <- function(region, tipo_cobertura, t_f = 0) {
   if(!region %in% availableRegiones()){
     stop("regions must be one of: ", availableRegiones())
@@ -121,7 +120,7 @@ cambio_carbono_old <- function(region, tipo_cobertura, t_f = 0) {
   if(tipo_cobertura == "bosque_secundario"){
     captura <- ((((1-exp((t*0.064)*(-1)))^1.964)*111.51)*0.5)*(44/12)
   }  else {
-    path <- system.file("aux/captura_region_tipo.csv", package = "GanaderiaSostenible")
+    path <- system.file("helpers", "captura_region_tipo.csv", package = "GanaderiaSostenible")
     captura_region_tipo <- suppressMessages(readr::read_csv(path))
     captura <- captura_region_tipo %>% dplyr::filter(region_colombia == region, tipo == tipo_cobertura)
     captura <- captura$b + captura$m * t
@@ -142,11 +141,6 @@ cambio_carbono_old <- function(region, tipo_cobertura, t_f = 0) {
 #' @param region geographic region name
 #'
 #' @return None
-#'
-#' @examples
-#' factor_emision(c(1.3, 3, 4), 'Eje Cafetero')
-#'
-#' @export
 factor_emision <- function(cb_carbono,  region) {
 
   if(!region %in% availableRegiones()){
@@ -182,11 +176,6 @@ factor_emision <- function(cb_carbono,  region) {
 #' @param region region
 #' @param tipo_cobertura Land coverage type
 #' @return None
-#' @examples
-#' pastoriles_area <- c(10.6,	142.5, 0.0,	131.0, 170.0, 222.7, 95.4 )
-#' carbono_capturado_estimacion(pastoriles_area, anos = c(2013:2019), t_e = 7,
-#'   region = 'Bajo Magdalena', tipo_cobertura = 'silvopastoriles')
-#' @export
 carbono_capturado_estimacion <- function(area, anos, t_e, region, tipo_cobertura) {
 
 
@@ -239,10 +228,6 @@ carbono_capturado_estimacion <- function(area, anos, t_e, region, tipo_cobertura
 #' @param anos  Years
 #' @param t_e Estimated times
 #' @return None
-#' @examples
-#' captura_carbono_bosques(departamento = 'Nariño', municipio = 'Córdoba',
-#'   area_bosque = 500, t_e = 1, anos = 2001)
-#' @export
 captura_carbono_bosques <- function(departamento, municipio, area_bosque, anos, t_e) {
 
   if (is.null(municipio)) {
@@ -270,7 +255,7 @@ captura_carbono_bosques <- function(departamento, municipio, area_bosque, anos, 
   area_bosque <- dplyr::left_join(todos_anios, area_bosque)
   area_bosque$area_bosque[is.na(area_bosque$area_bosque)] <- 0
 
-  path <- system.file("aux/co2_municipios.csv", package = "GanaderiaSostenible")
+  path <- system.file("helpers", "co2_municipios.csv", package = "GanaderiaSostenible")
   data_mun <-  suppressMessages(readr::read_csv(path))
   mun_data <- unique(data_mun$NOMBRE_ENT)
   data_mun$NOMBRE_ENT <- iconv(tolower(data_mun$NOMBRE_ENT), to="ASCII//TRANSLIT")

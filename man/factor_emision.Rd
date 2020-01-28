@@ -17,7 +17,3 @@ None
 \description{
 Carbon Emision Factor
 }
-\examples{
-factor_emision(c(1.3, 3, 4), 'Eje Cafetero')
-
-}

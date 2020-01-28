@@ -23,7 +23,3 @@ None
 \description{
 Captured carbon for forests
 }
-\examples{
-captura_carbono_bosques(departamento = 'Nariño', municipio = 'Córdoba',
-  area_bosque = 500, t_e = 1, anos = 2001)
-}

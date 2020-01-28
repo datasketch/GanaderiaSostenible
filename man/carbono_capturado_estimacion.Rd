@@ -23,8 +23,3 @@ None
 \description{
 Carbon capture estimation
 }
-\examples{
-pastoriles_area <- c(10.6,	142.5, 0.0,	131.0, 170.0, 222.7, 95.4 )
-carbono_capturado_estimacion(pastoriles_area, anos = c(2013:2019), t_e = 7,
-  region = 'Bajo Magdalena', tipo_cobertura = 'silvopastoriles')
-}

@@ -2,10 +2,19 @@
 % Please edit documentation in R/carbon_capture.R
 \name{captura_pasturas}
 \alias{captura_pasturas}
-\title{Captured carbon for forests}
+\title{Captured carbon for pastures}
 \usage{
 captura_pasturas(region)
 }
+\arguments{
+\item{region}{Region}
+}
+\value{
+None
+}
 \description{
-Captured carbon for forests
+Captured carbon for pastures
+}
+\examples{
+captura_pasturas(region = 'Eje Cafetero')
 }

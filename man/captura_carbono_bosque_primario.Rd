@@ -12,11 +12,9 @@ captura_carbono_bosque_primario(departamento, municipio, area = 1,
 
 \item{municipio}{Municipality}
 
-\item{area_bosque}{Hectares of forest}
+\item{area}{Hectares of forest}
 
-\item{anos}{Years}
-
-\item{t_e}{Estimated times}
+\item{t}{Time}
 }
 \value{
 None
@@ -25,6 +23,6 @@ None
 Captured carbon for forests
 }
 \examples{
-captura_carbono_bosques(departamento = 'Nariño', municipio = 'Córdoba',
-  area_bosque = 500, t_e = 1, anos = 2001)
+captura_carbono_bosque_primario(departamento = 'Nariño', municipio = 'Córdoba',
+  area = 500)
 }
