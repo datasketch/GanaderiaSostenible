@@ -70,12 +70,12 @@ app_results <- function(inputs, departamento, municipio){
   estimacion_pajaros$bosque <- biodiv_area2(area = total_areas_bosques, region = region, tipo_cobertura = 'bosque_secundario')
   if(!is.null(estimacion_pajaros$bosque)){
     estimacion_pajaros$bosque_text <- HTML(paste0('Bosques: ',
-                                                round(estimacion_pajaros$bosque %||% 0), ' aves'))
+                                                round(estimacion_pajaros$bosque), ' aves'))
   }
   estimacion_pajaros$silvopastoriles <- biodiv_area2(area = total_areas_silvopastoriles, region = region, tipo_cobertura = 'silvopastoriles')
   if(!is.null(estimacion_pajaros$silvopastoriles)){
     estimacion_pajaros$silvopastoriles_text <- HTML(paste0('Silvopastoriles: ',
-                                                         round(estimacion_pajaros$silvopastoriles %||% 0), ' aves'))
+                                                         round(estimacion_pajaros$silvopastoriles), ' aves'))
   }
   res$pajaros <- list(estimacion_pajaros$bosque, estimacion_pajaros$silvopastoriles)
   res$pajaros_text <- list(estimacion_pajaros$bosque_text, estimacion_pajaros$silvopastoriles_text)

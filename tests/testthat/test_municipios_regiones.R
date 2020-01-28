@@ -218,11 +218,14 @@ test_that("Municipios específicos",{
 
   municipio <- "Pasto"
   departamento <- "Nariño"
+  expect_null(biodiv_area2(1, "Otras \u00c1reas", "bosque_primario"))
   inputs <- list(
     bosque_primario = list(year = 2000, value = 10)
   )
   res <- app_results(inputs, departamento, municipio)
-  res
+  expect_null(res$pajaros[[1]])
+  expect_null(res$pajaros[[2]])
+
 })
 
 
