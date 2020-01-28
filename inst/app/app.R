@@ -222,6 +222,9 @@ h2 {
  cursor: pointer;
 }
 
+
+
+
 .topbar__img {
   height: 110px;
   width: 70px;
@@ -469,6 +472,50 @@ max-width: 500px;
     font-size: 32px;
   }
 }
+
+
+.topbar {
+    padding: 20px 55px;
+    background-color: #2e4856;
+    font-size: 14px;
+    color: #fff;
+    overflow: hidden;
+}
+
+.top_title {
+  margin-left: 24px;
+  display: flex;
+}
+
+.topbar__img {
+  height: auto;
+  width: 72px;
+}
+
+.top_line {
+  border-left: 1px solid #ffffff;
+  margin-left: 10px;
+  font-weight: 700;
+}
+
+
+.topbar-modal, .tex_sub {
+  font-size: 14px;
+  color: #fff;
+}
+
+@media only screen and (min-width: 768px) {
+  .topbar, .tex_sub {
+    font-size: 20px;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .topbar, .tex_sub {
+    font-size: 32px;
+  }
+}
+
 '
 source('info.R')
 data_mun <- read_csv('data/MunicipiosColombia_geo.csv')
