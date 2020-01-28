@@ -214,6 +214,17 @@ test_that("Captura Bajo Magdalena",{
 
 })
 
+test_that("Municipios específicos",{
+
+  municipio <- "Pasto"
+  departamento <- "Nariño"
+  inputs <- list(
+    bosque_primario = list(year = 2000, value = 10)
+  )
+  res <- app_results(inputs, departamento, municipio)
+  res
+})
+
 
 
 

@@ -45,6 +45,7 @@ biodiv_area2 <- function(area, region, tipo_cobertura, t = 0){
   if(!region %in% availableRegiones()){
     stop("regions must be one of: ", availableRegiones())
   }
+  if(region == "Otras Áreas") return()
   if(!tipo_cobertura %in% availableTipoCobertura()){
     stop("tipo_cobertura must be one of", availableTipoCobertura())
   }
