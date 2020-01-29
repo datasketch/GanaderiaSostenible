@@ -1,5 +1,4 @@
 library(shinypanels)
-library(shinyalert)
 library(tidyverse)
 library(highcharter)
 library(GanaderiaSostenible)
@@ -528,7 +527,6 @@ ui <- panelsPage( styles = styles,
                                 modalButton(id = 'id-but-mod', modal_id = 'info_modal',
                                             label = HTML('<i class="fa fa-info-circle" style="font-size:31px;color:#fff"></i>'))
                   ),
-                  useShinyalert(),
                   modal(id  = "info_modal",
                         title = div(class = 'topbar-modal',
                                     HTML("<div class = 'top_title' style = 'align-items: center;'> HERRAMIENTA
@@ -904,9 +902,6 @@ server <- function(input, output, session) {
     if(min_year() >= smaller_year){
       return()
     }
-    warning_text <- paste0("ADVERTENCIA: No incluir años menores al año ", min_year,
-                           ". Todas las proyecciones solo tienen validez a 20 años")
-    shinyalert("Ups!", warning_text, type = "error")
     div(id="warning_years", HTML(warning_text))
   })
 
