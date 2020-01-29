@@ -4,11 +4,21 @@
 * rhub
 
 ## R CMD check results
-There were no ERRORs, WARNINGs or NOTES on ubuntu
+There were no ERRORs, WARNINGs or NOTES on ubuntu locally
+
+
+Rhub 
+Build ID: 	GanaderiaSostenible_0.1.0.tar.gz-24eada5c56f84528a8430adaff39f647
+Platform: 	Fedora Linux, R-devel, clang, gfortran
+* checking CRAN incoming feasibility ... 
+
+NOTE
+Maintainer: ‘Juan Pablo Marin Diaz <jpmarindiaz@gmail.com>’
+New submission
+
+
 
 On windows devel. It seems that it cannot find the shinypanels package, which is new but I have been able to install it with install.packages("shinypanels")
-
-
 
 New submission
 * checking package namespace information ... OK
