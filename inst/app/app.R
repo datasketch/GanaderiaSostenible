@@ -515,6 +515,10 @@ max-width: 500px;
   }
 }
 
+.layout-panels {
+    min-height: 400px;
+}
+
 '
 source('info.R')
 data_mun <- read_csv('data/MunicipiosColombia_geo.csv')
