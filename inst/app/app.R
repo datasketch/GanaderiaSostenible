@@ -550,7 +550,7 @@ max-width: 500px;
 }
 
 '
-source('info.R')
+source('info.R', local = TRUE)
 data_mun <- read_csv('data/MunicipiosColombia_geo.csv')
 ui <- panelsPage( styles = styles,
                   header =  div(style="", class="topbar",

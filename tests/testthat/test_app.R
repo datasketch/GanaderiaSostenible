@@ -26,6 +26,19 @@ test_that("Input municipio",{
 
   app_results <- app_results(inputs, departamento = departamento, municipio = municipio)
 
+  # Preset 00
+  d <- app_results$captura_general
+  d_bar <- d %>% filter(Tiempo <= as.numeric(format(Sys.Date(), "%Y"))) %>%
+    select(Suelo, carbono) %>%
+    dplyr::group_by(Suelo) %>%
+    dplyr::summarise(carbono = sum(carbono, na.rm = T))
+  # 1 arboles_dispersos      0
+  # 2 bosque_primario      879.
+  # 3 bosque_secundario    391.
+  # 4 cercas_vivas         203.
+  # 5 silvopastoriles      155.
+  expect_equal(d_bar$carbono, c(0, 878.7931, 390.7690, 202.6864, 155.4565))
+
   app_results$pajaros
   expect_equal(app_results$pajaros[[1]], biodiv_area2(15, region, "bosque_primario"))
   expect_equal(app_results$pajaros[[2]], biodiv_area2(7, region, "silvopastoriles"))
