@@ -4,7 +4,7 @@
 #' @examples
 #' availableRegiones()
 #' @export
-availableRegiones <- function() c("Eje Cafetero", "Piedemonte del Meta", "Valle del Rio Cesar", "Bajo Magdalena", "Boyac\u00e1 y Santander", "Otras \u00c1reas")
+availableRegiones <- function() c("Eje Cafetero", "Piedemonte del Meta", "Valle del Rio Cesar", "Bajo Magdalena", "Boyaca y Santander", "Otras \u00c1reas")
 
 #' Available Tipo de Cobertura
 #'
