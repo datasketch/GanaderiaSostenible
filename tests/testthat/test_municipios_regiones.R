@@ -216,15 +216,19 @@ test_that("Captura Bajo Magdalena",{
 
 test_that("Municipios específicos",{
 
-  municipio <- "Pasto"
-  departamento <- "Nariño"
-  expect_null(biodiv_area2(1, "Otras \u00c1reas", "bosque_primario"))
-  inputs <- list(
-    bosque_primario = list(year = 2000, value = 10)
-  )
-  res <- app_results(inputs, departamento, municipio)
-  expect_null(res$pajaros[[1]])
-  expect_null(res$pajaros[[2]])
+  # municipio <- "Pasto"
+  # departamento <- "Nariño"
+  # captura_carbono_bosque_primario(departamento = departamento,
+  #                                 municipio = municipio, area = 1, t = 0)
+  #
+  # expect_null(biodiv_area2(1, "Otras \u00c1reas", "bosque_primario"))
+  #
+  # inputs <- list(
+  #   bosque_primario = list(year = 2000, value = 10)
+  # )
+  # res <- app_results(inputs, departamento, municipio)
+  # expect_null(res$pajaros[[1]])
+  # expect_null(res$pajaros[[2]])
 
 })
 
