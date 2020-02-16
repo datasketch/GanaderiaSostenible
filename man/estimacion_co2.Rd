@@ -4,8 +4,7 @@
 \alias{estimacion_co2}
 \title{Carbon capture estimation in tidy format}
 \usage{
-estimacion_co2(inputs, departamento, municipio, this_year = NULL,
-  t_max = 20)
+estimacion_co2(inputs, departamento, municipio, this_year = NULL, t_max = 20)
 }
 \arguments{
 \item{inputs}{List with implementations by year and value of hectares}

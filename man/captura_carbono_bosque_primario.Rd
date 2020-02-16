@@ -4,8 +4,7 @@
 \alias{captura_carbono_bosque_primario}
 \title{Captured carbon for forests}
 \usage{
-captura_carbono_bosque_primario(departamento, municipio, area = 1,
-  t = NULL)
+captura_carbono_bosque_primario(departamento, municipio, area = 1, t = NULL)
 }
 \arguments{
 \item{departamento}{Department}
@@ -23,6 +22,6 @@ None
 Captured carbon for forests
 }
 \examples{
-captura_carbono_bosque_primario(departamento = 'Nariño', municipio = 'Córdoba',
+captura_carbono_bosque_primario(departamento = 'Caldas', municipio = 'Manizales',
   area = 500)
 }
