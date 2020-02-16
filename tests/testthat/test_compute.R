@@ -103,7 +103,7 @@ test_that("Captura carbono bosque primario works",{
   path <- system.file("helpers", "co2_municipios.csv", package = "GanaderiaSostenible")
   co2_munis <-  suppressMessages(readr::read_csv(path))
 
-  co2 <- co2_munis %>% filter(NOMBRE_ENT == "MONTENEGRO") %>% pull(MeanCO2e)
+  co2 <- co2_munis %>% filter(NOMBRE_ENT == "montenegro") %>% pull(MeanCO2e)
   expect_equal(c(co2, 0), captura_primario)
 
 })

@@ -156,7 +156,7 @@ captura_carbono_bosque_primario <- function(departamento, municipio, area = 1, t
   data_mun <-  suppressMessages(readr::read_csv(path))
 
   mun_data <- unique(data_mun$NOMBRE_ENT)
-  data_mun$NOMBRE_ENT <- iconv(tolower(data_mun$NOMBRE_ENT), to="ASCII//TRANSLIT")
+  # data_mun$NOMBRE_ENT <- iconv(tolower(data_mun$NOMBRE_ENT), to="ASCII//TRANSLIT")
   municipio <- iconv(tolower(municipio), to="ASCII//TRANSLIT")
 
   if (!is.null(departamento)) {
