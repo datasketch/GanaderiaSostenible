@@ -4,6 +4,35 @@ library(highcharter)
 library(GanaderiaSostenible)
 #library(geoloc)
 
+
+
+# .layout-container {
+#   height: 100%;
+#   display: flex;
+#   flex-direction: column;
+# }
+#
+# .layout-panels {
+#   background-color: #fbfdfe;
+#     padding: 30px;
+#   flex-grow: 1;
+#   flex-shrink: 1;
+#   overflow-x: auto;
+# }
+#
+# .app-container {
+#   display: flex;
+#   height: 100%;
+# }
+#
+# .app-container:after {
+#   content: "";
+#   flex: 0 0 30px;
+# }
+
+
+
+
 styles <- '
 @import url("https://fonts.googleapis.com/css?family=Ubuntu:400,500,700&display=swap");
 *,
@@ -11,6 +40,7 @@ styles <- '
 *:after{
   box-sizing: inherit;
 }
+
 
 button:focus {
   outline-style: none;

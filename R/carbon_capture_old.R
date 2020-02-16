@@ -268,7 +268,8 @@ captura_carbono_bosques <- function(departamento, municipio, area_bosque, anos, 
   }
 
   if(!municipio %in% unique(data_mun$NOMBRE_ENT)){
-    stop("municipio must be one of: ", mun_data)
+    return(0)
+    #stop("municipio must be one of: ", mun_data)
   }
 
   data_mun <- data_mun %>% dplyr::filter(NOMBRE_ENT %in% municipio)

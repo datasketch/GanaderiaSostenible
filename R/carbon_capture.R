@@ -148,7 +148,7 @@ estimacion_co2 <- function(inputs, departamento, municipio, this_year = NULL, t_
 #' @param t Time
 #' @return None
 #' @examples
-#' captura_carbono_bosque_primario(departamento = 'Nariño', municipio = 'Córdoba',
+#' captura_carbono_bosque_primario(departamento = 'Caldas', municipio = 'Manizales',
 #'   area = 500)
 #' @export
 captura_carbono_bosque_primario <- function(departamento, municipio, area = 1, t = NULL){
@@ -166,7 +166,8 @@ captura_carbono_bosque_primario <- function(departamento, municipio, area = 1, t
   }
 
   if(!municipio %in% unique(data_mun$NOMBRE_ENT)){
-    stop("municipio must be one of: ", mun_data)
+    #return(0)
+    stop(municipio, " municipio must be one of: ", mun_data)
   }
 
   data_mun <- data_mun %>% dplyr::filter(NOMBRE_ENT %in% municipio) %>% pull(MeanCO2e)
