@@ -4,7 +4,8 @@ test_that("Input municipio",{
 
   library(tidyverse)
 
-  data_mun <- read_csv('inst/app/data/MunicipiosColombia_geo.csv', locale = readr::locale(encoding = "UTF-8"))
+  data_mun <- read_csv(system.file('app/data/MunicipiosColombia_geo.csv', package = "GanaderiaSostenible"),
+                       locale = readr::locale(encoding = "UTF-8"))
 
   dta_mun <- paste0(toupper(tolower(data_mun$DEPARTAMEN)), ' - ',
                     toupper(tolower(data_mun$NOMBRE_ENT)))
