@@ -4,7 +4,15 @@ test_that("Input municipio",{
 
   library(tidyverse)
 
-  lugar <- "Quindio - Montenegro"
+  data_mun <- read_csv('inst/app/data/MunicipiosColombia_geo.csv', locale = readr::locale(encoding = "UTF-8"))
+
+  dta_mun <- paste0(toupper(tolower(data_mun$DEPARTAMEN)), ' - ',
+                    toupper(tolower(data_mun$NOMBRE_ENT)))
+  l_m <-  setNames(dta_mun, remove_accents(toupper(dta_mun)))
+
+  lugar <- l_m["QUINDIO - MONTENEGRO"]
+
+  #lugar <- "Quindio - Montenegro"
   lugar <- strsplit(lugar, ' - ') %>% unlist()
   departamento <- lugar[1]
   municipio <- lugar[2]

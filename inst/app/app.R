@@ -550,8 +550,10 @@ max-width: 500px;
 }
 
 '
-source('info.R', local = TRUE)
-data_mun <- read_csv('data/MunicipiosColombia_geo.csv')
+source('info.R', encoding = "UTF-8", local = TRUE)
+data_mun <- read_csv('data/MunicipiosColombia_geo.csv', locale = readr::locale(encoding = "UTF-8"))
+#data_mun <- read_csv(system.file("helpers", "co2_municipios2.csv", package = "GanaderiaSostenible"))
+
 ui <- panelsPage( styles = styles,
                   header =  div(style="", class="topbar",
                                 img(class="topbar__img", src = "img/logo_GCS.png"),
@@ -707,7 +709,7 @@ server <- function(input, output, session) {
   output$debug <- renderText({
 
     lugar <- input$name_mun
-    lugar <- "Quindío - Montenegro"
+    lugar <- "Quindio - Montenegro"
 
     if (is.null(lugar)) return()
     if (lugar == "") return()
@@ -758,8 +760,15 @@ server <- function(input, output, session) {
     res <- app_results(inputs,  departamento = departamento, municipio = municipio)
     string <- capture.output(str(res))
 
-    out <- list(inputs = inputs, result = res)
+    out <- list(inputs = inputs, result = res,
+                d_bar = res$captura_general %>% filter(Tiempo <= as.numeric(format(Sys.Date(), "%Y"))) %>%
+                  select(Suelo, carbono) %>%
+                  dplyr::group_by(Suelo) %>%
+                  dplyr::summarise(carbono = sum(carbono, na.rm = T))
+                )
     string <- capture.output(str(out))
+
+
 
     string %>% paste0(collapse = "\n")
 
@@ -769,8 +778,9 @@ server <- function(input, output, session) {
 
 
   output$buscador <- renderUI({
-    dta_mun <- paste0(Hmisc::capitalize(tolower(data_mun$DEPARTAMEN)), ' - ', Hmisc::capitalize(tolower(data_mun$NOMBRE_ENT)))
-    l_m <-  setNames(dta_mun, toupper(dta_mun))
+    dta_mun <- paste0(toupper(tolower(data_mun$DEPARTAMEN)), ' - ',
+                      toupper(tolower(data_mun$NOMBRE_ENT)))
+    l_m <-  setNames(remove_accents(dta_mun), remove_accents(toupper(dta_mun)))
     searchInput('name_mun', l_m, 'Búsqueda por municipio')
   })
 
@@ -830,7 +840,7 @@ server <- function(input, output, session) {
   result <- reactive({
 
     if(!is.null(.GlobalEnv$.preset)){
-      lugar <- "Quindío - Montenegro"
+      lugar <- "Quindio - Montenegro"
 
     }else{
       lugar <- input$name_mun

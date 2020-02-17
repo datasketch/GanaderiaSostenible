@@ -92,7 +92,7 @@ test_that("TNC Example",{
 
   # Bosque primario
   area <- inputs$bosque_primario$value
-  captura_bosque_primario <- captura_carbono_bosque_primario(departamento = 'Quindío',
+  captura_bosque_primario <- captura_carbono_bosque_primario(departamento = 'Quindio',
                                                              municipio = 'MONTENEGRO', area = area)
   # expect_equal(emision.evitada, captura_bosque_primario)
 
