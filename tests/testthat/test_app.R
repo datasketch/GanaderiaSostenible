@@ -12,8 +12,8 @@ test_that("Input municipio",{
   l_m <-  setNames(dta_mun, remove_accents(toupper(dta_mun)))
 
   lugar <- l_m["QUINDIO - MONTENEGRO"]
-
-  #lugar <- "Quindio - Montenegro"
+  # TODO remove old code and test with l_m
+  lugar <- "Quindio - Montenegro"
   lugar <- strsplit(lugar, ' - ') %>% unlist()
   departamento <- lugar[1]
   municipio <- lugar[2]
