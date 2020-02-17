@@ -1,10 +1,22 @@
 ## Test environments
 * local Ubuntu 18. R version 3.6.2 (2019-12-12)
+* local Windows 10 v1803. R version 3.6.2 (2019-12-12)
+
 * Windows with devtools::check_win_*
-* rhub
+* rhub with devtools::check_rhub()
+
 
 ## R CMD check results
-There were no ERRORs, WARNINGs or NOTES on ubuntu locally
+There were no ERRORs, WARNINGs or NOTES locally on Ubuntu or Windows. 
+
+
+Platform: 	Windows Server 2008 R2 SP1, R-devel, 32/64 bit
+no ERRORs, WARNINGs, 1 NOTES
+
+CRAN Win Builder 
+Maintainer: 'Juan Pablo Marin Diaz <jpmarindiaz@gmail.com>'
+New submission
+
 
 
 Rhub 
@@ -15,21 +27,6 @@ Platform: 	Fedora Linux, R-devel, clang, gfortran
 NOTE
 Maintainer: ‘Juan Pablo Marin Diaz <jpmarindiaz@gmail.com>’
 New submission
-
-
-
-On windows devel. It seems that it cannot find the shinypanels package, which is new but I have been able to install it with install.packages("shinypanels")
-
-New submission
-* checking package namespace information ... OK
-* checking package dependencies ... ERROR
-Package required but not available: 'shinypanels'
-
-See section 'The DESCRIPTION file' in the 'Writing R Extensions'
-manual.
-* DONE
-Status: 1 ERROR, 1 NOTE
-
 
 
 
