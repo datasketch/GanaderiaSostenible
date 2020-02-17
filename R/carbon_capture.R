@@ -167,7 +167,7 @@ captura_carbono_bosque_primario <- function(departamento, municipio, area = 1, t
 
   if(!municipio %in% unique(data_mun$NOMBRE_ENT)){
     #return(0)
-    #stop(municipio, " must be one of: ", mun_data)
+    stop(municipio, " must be one of: ", mun_data)
   }
 
   data_mun <- data_mun %>% dplyr::filter(NOMBRE_ENT %in% municipio) %>% pull(MeanCO2e)
