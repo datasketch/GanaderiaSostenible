@@ -10,25 +10,32 @@
 There were no ERRORs, WARNINGs or NOTES locally on Ubuntu or Windows. 
 
 
+CRAN Win Builder 
+
 Platform: 	Windows Server 2008 R2 SP1, R-devel, 32/64 bit
 no ERRORs, WARNINGs, 1 NOTES
-
-CRAN Win Builder 
 Maintainer: 'Juan Pablo Marin Diaz <jpmarindiaz@gmail.com>'
 New submission
 
 
 
-Rhub 
-Build ID: 	GanaderiaSostenible_0.1.0.tar.gz-24eada5c56f84528a8430adaff39f647
-Platform: 	Fedora Linux, R-devel, clang, gfortran
-* checking CRAN incoming feasibility ... 
+Rhub
+no ERRORs, WARNINGs, 1 NOTES
 
-NOTE
+Platform: 	Ubuntu Linux
+* checking CRAN incoming feasibility ... NOTE
 Maintainer: ‘Juan Pablo Marin Diaz <jpmarindiaz@gmail.com>’
 New submission
 
+Platform: 	Fedora Linux, R-devel, clang, gfortran
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: ‘Juan Pablo Marin Diaz <jpmarindiaz@gmail.com>’
+New submission
 
+Platform: 	Windows Server 2008 R2 SP1, R-devel, 32/64 bit
+* checking CRAN incoming feasibility ... NOTE
+Maintainer: 'Juan Pablo Marin Diaz <jpmarindiaz@gmail.com>'
+New submission
 
 ## Reverse dependencies
 

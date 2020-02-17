@@ -8,6 +8,10 @@ Authors@R:
            email = "jpmarindiaz@gmail.com")
 Description: Provides an interface to calculate carbon capture in Colombia and 
     estimations of bird biodiversity for given regions and land coverage types.
+    The package includes a web shiny app for non-tech end users to provide the
+    area numbers of land converage types of their farms (forests, pastures, etc)
+    and the tool returns carbon captures and bird species estimates in Colombia, 
+    available also as functions with a 20 year span for estimations.
 License: MIT + file LICENSE
 ByteCompile: true
 Encoding: UTF-8
